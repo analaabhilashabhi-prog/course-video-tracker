@@ -1,0 +1,14 @@
+{
+  "name": "course-video-tracker",
+  "version": "1.0.0",
+  "description": "Course Videos Production Pipeline Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.0",
+    "express": "^4.18.2"
+  }
+}
