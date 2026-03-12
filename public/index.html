@@ -8,280 +8,296 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-:root{--bg:#0a0a0f;--bg2:#12121a;--card:#1a1a24;--card2:#22222e;--orange:#ff6b35;--red:#ff3366;--green:#00d4aa;--blue:#4d9fff;--purple:#a855f7;--yellow:#fbbf24;--text:#fff;--text2:#94a3b8;--text3:#64748b;--border:rgba(255,255,255,0.08)}
+:root{--bg:#0a0a0f;--bg2:#12121a;--card:#1a1a24;--card2:#22222e;--orange:#ff6b35;--red:#ff3366;--green:#00d4aa;--blue:#4d9fff;--purple:#a855f7;--yellow:#fbbf24;--cyan:#22d3ee;--text:#fff;--text2:#94a3b8;--text3:#64748b;--border:rgba(255,255,255,0.08)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg-pattern{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 20% -20%,rgba(255,107,53,0.15),transparent),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(168,85,247,0.1),transparent)}
-.container{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:1.5rem 2rem}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(10,10,15,0.9);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
-.nav-brand{display:flex;align-items:center;gap:12px}
-.nav-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center}
-.nav-brand h1{font-size:17px;font-weight:800;letter-spacing:-0.5px}
-.nav-brand small{font-size:11px;color:var(--text3);display:block;margin-top:1px}
-.toggle-wrap{display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.toggle-btn{padding:10px 24px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Outfit',sans-serif;transition:all .3s;display:flex;align-items:center;gap:6px}
-.toggle-btn:hover{color:var(--text2)}
-.toggle-btn.active{background:linear-gradient(135deg,var(--orange),var(--red));color:#000}
-.page{display:none;animation:fadeIn .4s ease}.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.bg-pattern{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 50% at 20% -20%,rgba(255,107,53,0.12),transparent),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(168,85,247,0.08),transparent)}
+.wrap{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:1.5rem 2rem}
+/* Nav */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:rgba(10,10,15,0.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center}
+.nav-brand h1{font-size:16px;font-weight:800}
+.nav-brand small{font-size:10px;color:var(--text3);display:block}
+.tog{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.tog button{padding:8px 20px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Outfit';transition:.3s;display:flex;align-items:center;gap:5px}
+.tog button:hover{color:var(--text2)}
+.tog button.active{background:linear-gradient(135deg,var(--orange),var(--red));color:#000}
+.sync{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:.65rem;font-weight:600}
+.sync.saved{background:rgba(0,212,170,0.15);color:var(--green)}
+.sync.saving{background:rgba(251,191,36,0.15);color:var(--yellow)}
+.page{display:none;animation:fadeIn .3s ease}.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .loading{text-align:center;padding:4rem;color:var(--text3)}
-.loading .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-.sync-indicator{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:100px;font-size:.7rem;font-weight:600;transition:all .3s}
-.sync-indicator.saving{background:rgba(251,191,36,0.15);color:var(--yellow)}
-.sync-indicator.saved{background:rgba(0,212,170,0.15);color:var(--green)}
-.sync-indicator.error{background:rgba(255,51,102,0.15);color:var(--red)}
-.course-section{margin-bottom:3rem}
-.course-title-bar{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:12px 0;border-bottom:2px solid var(--border)}
-.course-title-bar h2{font-size:1.35rem;font-weight:800;background:linear-gradient(135deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.course-badge{background:rgba(255,107,53,0.12);color:var(--orange);padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
-.warn-badge{background:rgba(255,51,102,0.12);color:var(--red);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;display:none}
-.warn-badge.show{display:inline-block}
-.stage-block{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.25rem;overflow-x:auto;margin-bottom:.75rem}
-.stage-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-.stage-label{font-size:.9rem;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
-.btn-add{padding:4px 12px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.8px;border:none;font-family:'Outfit',sans-serif;color:#000;transition:all .2s}
-.btn-add:hover{transform:scale(1.05);filter:brightness(1.1)}
-table{width:100%;border-collapse:collapse;min-width:400px}
-th{padding:8px 10px;text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.015);font-weight:700;white-space:nowrap}
-td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;font-size:13px}
-tr:hover{background:rgba(255,255,255,0.015)}
-tr.total-row{background:rgba(255,107,53,0.04)}
-tr.total-row td{font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--orange);border-top:2px solid rgba(255,107,53,0.2)}
-.inp{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:5px 6px;color:var(--text);font-size:12px;text-align:center;outline:none;font-family:'JetBrains Mono',monospace;transition:border .2s}
-.inp:focus{border-color:var(--orange)}
-.inp-name{font-family:'Outfit',sans-serif;width:110px;text-align:left}
-.inp-num{width:58px}
-.vr{color:var(--red);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
-.vg{color:var(--green);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700}
-.btn-del{background:rgba(255,51,102,0.15);color:var(--red);border:1px solid rgba(255,51,102,0.2);border-radius:6px;width:24px;height:24px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;transition:all .2s}
-.btn-del:hover{background:var(--red);color:#fff}
-.stages-flex{display:flex;gap:1.25rem;flex-wrap:wrap}.stages-flex>.stage-block{flex:1;min-width:280px}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-bottom:2.5rem}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.25rem;position:relative;overflow:hidden;transition:all .3s}
-.stat-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.15);box-shadow:0 16px 32px rgba(0,0,0,0.3)}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--card-accent),transparent)}
-.stat-card.c-o{--card-accent:var(--orange)}.stat-card.c-g{--card-accent:var(--green)}.stat-card.c-r{--card-accent:var(--red)}.stat-card.c-b{--card-accent:var(--blue)}.stat-card.c-p{--card-accent:var(--purple)}.stat-card.c-y{--card-accent:var(--yellow)}
-.stat-label{font-size:.8rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem}
-.stat-value{font-size:2.2rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--card-accent)}
-.stat-sub{font-size:.85rem;color:var(--text2);margin-top:.4rem}
-.section-header{display:flex;align-items:center;gap:.75rem;margin:2.5rem 0 1.25rem}
-.section-header h2{font-size:1.35rem;font-weight:600;display:flex;align-items:center;gap:8px}
-.section-header::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-.pipeline{display:flex;gap:0;margin:1.5rem 0;overflow-x:auto;padding:.75rem 0}
-.pip-stage{flex:1;min-width:150px;text-align:center;position:relative}
-.pip-stage::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:1.4rem}
-.pip-stage:last-child::after{display:none}
-.pip-icon{width:52px;height:52px;margin:0 auto .6rem;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--card);border:2px solid var(--border)}
-.pip-title{font-weight:600;font-size:.9rem;margin-bottom:.2rem}
-.pip-count{font-family:'JetBrains Mono',monospace;font-size:1.15rem;font-weight:700;color:var(--blue)}
-.pip-pend{font-size:.8rem;color:var(--red)}.pip-dep{font-size:.65rem;color:var(--text3);margin-top:2px}
-.slicer-section{margin-bottom:1.5rem}
-.slicer-label{font-size:.85rem;color:var(--text3);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:1px}
-.course-slicers{display:flex;gap:.4rem;flex-wrap:wrap}
-.slicer-btn{padding:.5rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--text2);font-size:.8rem;font-weight:500;cursor:pointer;transition:all .3s;font-family:'Outfit',sans-serif}
-.slicer-btn:hover{background:var(--card2);color:var(--text)}
-.slicer-btn.active{background:var(--orange);border-color:var(--orange);color:#000;font-weight:600}
-.slicer-btn .cnt{display:inline-block;margin-left:.4rem;padding:.1rem .4rem;background:rgba(0,0,0,0.2);border-radius:100px;font-size:.7rem;font-family:'JetBrains Mono',monospace}
-.summary-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.25rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
-.sum-item{text-align:center}.sum-val{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700}.sum-lbl{font-size:.7rem;color:var(--text3);text-transform:uppercase}
-.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1rem}
-.person-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all .3s}
-.person-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);box-shadow:0 10px 24px rgba(0,0,0,0.2)}
-.p-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
-.p-avatar{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#000}
-.p-name{font-weight:600;font-size:1.05rem}.p-role{font-size:.7rem;color:var(--text3);margin-top:1px}
-.p-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;text-align:center}
-.p-stat{padding:.4rem;background:rgba(255,255,255,0.03);border-radius:7px}
-.p-stat-val{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:1.1rem}
-.p-stat-lbl{font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.3px}
-.progress-bar{width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-top:.75rem}
-.progress-fill{height:100%;border-radius:3px;transition:width .5s}
-.teams-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.25rem}
-.team-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem}
-.team-sh{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
-.team-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center}
-.team-title{font-size:1.05rem;font-weight:700}.team-sub{font-size:.75rem;color:var(--text3)}
-.team-badge{margin-left:auto;padding:.2rem .7rem;border-radius:100px;font-size:.75rem;font-weight:700;font-family:'JetBrains Mono',monospace}
-.team-dep{font-size:.6rem;color:var(--text3);margin-top:2px;text-align:right}
-.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem}
-.team-member{display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:9px;transition:all .2s}
-.team-member:hover{background:rgba(255,255,255,0.04);transform:translateX(3px)}
-.tm-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#000;flex-shrink:0}
-.tm-info{flex:1;min-width:0}.tm-name{font-weight:600;font-size:.85rem}.tm-course{font-size:.65rem;color:var(--text3)}
-.tm-count{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;flex-shrink:0}
-.no-data{padding:.75rem;color:var(--text3);font-size:.8rem;font-style:italic}
-.note{font-size:.65rem;color:var(--text3);margin-top:4px;padding-left:4px}
-@media(max-width:768px){.container{padding:1rem}.nav{flex-direction:column;gap:10px;padding:10px 16px}.stages-flex{flex-direction:column}.person-grid{grid-template-columns:1fr}.teams-row{grid-template-columns:1fr}.pipeline{flex-wrap:wrap}.pip-stage::after{display:none}}
-::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:4px}
+/* Dropdown */
+.dropdown-wrap{margin-bottom:1.5rem}
+.dropdown{padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Outfit';font-size:14px;font-weight:600;cursor:pointer;min-width:240px;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.dropdown option{background:var(--card);color:var(--text)}
+/* Tables */
+.course-section{margin-bottom:2.5rem}
+.course-hdr{display:flex;align-items:center;gap:12px;margin-bottom:1rem;padding:10px 0;border-bottom:2px solid var(--border)}
+.course-hdr h2{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:'JetBrains Mono'}
+.badge-o{background:rgba(255,107,53,0.12);color:var(--orange)}
+.stg{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;overflow-x:auto;margin-bottom:.6rem}
+.stg-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.stg-l{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:5px}
+.btn-a{padding:3px 10px;border-radius:6px;font-size:9px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.7px;border:none;font-family:'Outfit';color:#000;transition:.2s}
+.btn-a:hover{transform:scale(1.05)}
+table{width:100%;border-collapse:collapse;min-width:350px}
+th{padding:7px 8px;text-align:center;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);border-bottom:1px solid var(--border);background:rgba(255,255,255,0.015);font-weight:700;white-space:nowrap}
+td{padding:5px 7px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center;font-size:12px}
+tr:hover{background:rgba(255,255,255,0.012)}
+tr.tot{background:rgba(255,107,53,0.04)}
+tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--orange);border-top:2px solid rgba(255,107,53,0.2)}
+.i{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:4px 5px;color:var(--text);font-size:11px;text-align:center;outline:none;font-family:'JetBrains Mono';transition:border .2s}
+.i:focus{border-color:var(--orange)}
+.i-n{font-family:'Outfit';width:100px;text-align:left}
+.i-d{width:52px}
+.vr{color:var(--red);font-family:'JetBrains Mono';font-size:11px;font-weight:700}
+.vg{color:var(--green);font-family:'JetBrains Mono';font-size:11px;font-weight:700}
+.btn-x{background:rgba(255,51,102,0.12);color:var(--red);border:1px solid rgba(255,51,102,0.15);border-radius:5px;width:22px;height:22px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.btn-x:hover{background:var(--red);color:#fff}
+.sf{display:flex;gap:1rem;flex-wrap:wrap}.sf>.stg{flex:1;min-width:260px}
+.note{font-size:.6rem;color:var(--text3);margin-top:3px;padding-left:3px}
+/* Analytics */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;position:relative;overflow:hidden;transition:.3s}
+.sc:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.12)}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--ac),transparent)}
+.sc-l{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:.3rem}
+.sc-v{font-size:1.9rem;font-weight:700;font-family:'JetBrains Mono';color:var(--ac)}
+.sc-s{font-size:.78rem;color:var(--text2);margin-top:.3rem}
+.sh{display:flex;align-items:center;gap:.6rem;margin:2rem 0 1rem}
+.sh h2{font-size:1.2rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+/* Pipeline */
+.pip{display:flex;gap:0;margin:1rem 0;overflow-x:auto;padding:.5rem 0}
+.pip-s{flex:1;min-width:120px;text-align:center;position:relative}
+.pip-s::after{content:'→';position:absolute;right:-8px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:1.2rem}
+.pip-s:last-child::after{display:none}
+.pip-i{width:44px;height:44px;margin:0 auto .4rem;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1.5px solid var(--border)}
+.pip-t{font-weight:600;font-size:.8rem;margin-bottom:.15rem}
+.pip-c{font-family:'JetBrains Mono';font-size:1rem;font-weight:700;color:var(--blue)}
+.pip-p{font-size:.7rem;color:var(--red)}
+.pip-d{font-size:.58rem;color:var(--text3);margin-top:1px}
+/* Course filter */
+.cf{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.cf button{padding:.4rem .9rem;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--text2);font-size:.75rem;font-weight:500;cursor:pointer;transition:.3s;font-family:'Outfit'}
+.cf button:hover{background:var(--card2);color:var(--text)}
+.cf button.active{background:var(--orange);border-color:var(--orange);color:#000;font-weight:600}
+.cf button .cn{display:inline-block;margin-left:.3rem;padding:.08rem .35rem;background:rgba(0,0,0,0.2);border-radius:100px;font-size:.65rem;font-family:'JetBrains Mono'}
+/* Team sections */
+.team-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:1.25rem}
+.team-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+.team-ic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.team-t{font-size:1rem;font-weight:700}
+.team-s{font-size:.7rem;color:var(--text3)}
+.team-b{margin-left:auto;padding:.2rem .65rem;border-radius:100px;font-size:.7rem;font-weight:700;font-family:'JetBrains Mono'}
+.team-dep{font-size:.55rem;color:var(--text3);margin-top:1px;text-align:right}
+/* Person row with contribution bar */
+.pr{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:8px;margin-bottom:.4rem;transition:.2s}
+.pr:hover{background:rgba(255,255,255,0.04);transform:translateX(3px)}
+.pr-av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;color:#000;flex-shrink:0}
+.pr-info{flex:1;min-width:0}
+.pr-name{font-weight:600;font-size:.82rem}
+.pr-course{font-size:.6rem;color:var(--text3)}
+.pr-count{font-family:'JetBrains Mono';font-weight:700;font-size:.95rem;flex-shrink:0;min-width:35px;text-align:right}
+.pr-bar-wrap{width:60px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;flex-shrink:0;margin-left:.4rem}
+.pr-bar{height:100%;border-radius:3px}
+.pr-pct{font-size:.6rem;color:var(--text3);width:30px;text-align:right;flex-shrink:0}
+/* Person cards (VG only) */
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:.9rem}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:1.1rem;transition:.3s}
+.pc:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.12)}
+.pc-h{display:flex;align-items:center;gap:.65rem;margin-bottom:.65rem}
+.pc-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#000}
+.pc-n{font-weight:600;font-size:1rem}.pc-r{font-size:.65rem;color:var(--text3)}
+.pc-st{display:grid;grid-template-columns:repeat(5,1fr);gap:.35rem;text-align:center}
+.pc-s{padding:.3rem;background:rgba(255,255,255,0.03);border-radius:6px}
+.pc-sv{font-family:'JetBrains Mono';font-weight:600;font-size:1rem}
+.pc-sl{font-size:.58rem;color:var(--text3);text-transform:uppercase}
+.pbar{width:100%;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-top:.6rem}
+.pfill{height:100%;border-radius:2px;transition:width .5s}
+.nd{padding:.6rem;color:var(--text3);font-size:.75rem;font-style:italic}
+@media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px 14px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 </style>
 </head>
 <body>
 <div class="bg-pattern"></div>
 <nav class="nav">
-  <div class="nav-brand"><div class="nav-logo"><i data-lucide="film" style="width:20px;height:20px;color:#fff"></i></div><div><h1>Course Videos Status</h1><small>Production Pipeline Dashboard</small></div></div>
-  <div class="toggle-wrap"><button class="toggle-btn active" onclick="switchPage('tables')"><i data-lucide="table" style="width:14px;height:14px"></i> Data Tables</button><button class="toggle-btn" onclick="switchPage('analytics')"><i data-lucide="bar-chart-3" style="width:14px;height:14px"></i> Analytics</button></div>
-  <span class="sync-indicator saved" id="syncStatus"><i data-lucide="check-circle" style="width:12px;height:12px"></i> Synced</span>
+  <div class="nav-brand"><div class="nav-logo"><i data-lucide="film" style="width:18px;height:18px;color:#fff"></i></div><div><h1>Course Videos Status</h1><small>Production Pipeline Dashboard</small></div></div>
+  <div class="tog"><button class="active" onclick="sp('tables')"><i data-lucide="table" style="width:13px;height:13px"></i> Data Tables</button><button onclick="sp('analytics')"><i data-lucide="bar-chart-3" style="width:13px;height:13px"></i> Analytics</button></div>
+  <span class="sync saved" id="ss"><i data-lucide="check-circle" style="width:11px;height:11px"></i> Synced</span>
 </nav>
-<div class="container">
-  <div id="page-tables" class="page active"><div class="loading" id="tableLoading"><div class="spinner"></div>Loading data from database...</div><div id="tablesContent"></div></div>
-  <div id="page-analytics" class="page">
-    <div class="stats-grid" id="kpiGrid"></div>
-    <div class="section-header"><h2><i data-lucide="git-branch" style="width:20px;height:20px"></i> Production Pipeline</h2></div>
-    <div class="pipeline" id="pipelineRow"></div>
-    <div class="section-header"><h2><i data-lucide="video" style="width:20px;height:20px"></i> Video Generation Team</h2></div>
-    <div class="slicer-section"><div class="slicer-label">Filter by Course</div><div class="course-slicers" id="slicerBtns"></div></div>
-    <div class="summary-bar" id="summaryBar"></div>
-    <div class="person-grid" id="personGrid"></div>
-    <div class="section-header"><h2><i data-lucide="users" style="width:20px;height:20px"></i> Script & Audio · Masking · Voice Over</h2></div>
-    <div class="teams-row" id="teamsRow"></div>
-  </div>
+<div class="wrap">
+<div id="p-tables" class="page active">
+  <div class="dropdown-wrap"><select class="dropdown" id="courseDrop" onchange="renderTables()"><option value="all">All Courses</option></select></div>
+  <div class="loading" id="tl"><div class="spinner"></div>Loading from database...</div>
+  <div id="tc"></div>
+</div>
+<div id="p-analytics" class="page">
+  <div class="sg" id="kpi"></div>
+  <div class="sh"><h2><i data-lucide="git-branch" style="width:18px;height:18px"></i> Production Pipeline</h2></div>
+  <div class="pip" id="pipR"></div>
+  <div class="sh"><h2><i data-lucide="filter" style="width:18px;height:18px"></i> Filter</h2></div>
+  <div class="cf" id="cfR"></div>
+  <div class="sh"><h2><i data-lucide="video" style="width:18px;height:18px"></i> Team 1 — Video Generation</h2></div>
+  <div class="pg" id="vgCards"></div>
+  <div class="sh"><h2><i data-lucide="file-audio" style="width:18px;height:18px"></i> Team 2 — Script & Audio</h2></div>
+  <div id="t2"></div>
+  <div class="sh"><h2><i data-lucide="scissors" style="width:18px;height:18px"></i> Team 3 — Video Editing</h2></div>
+  <div id="t3"></div>
+  <div class="sh"><h2><i data-lucide="mic" style="width:18px;height:18px"></i> Team 4 — Voice Over</h2></div>
+  <div id="t4"></div>
+  <div class="sh"><h2><i data-lucide="folder-output" style="width:18px;height:18px"></i> Team 5 — Output</h2></div>
+  <div id="t5"></div>
+  <div class="sh"><h2><i data-lucide="upload-cloud" style="width:18px;height:18px"></i> Team 6 — Course Mapping</h2></div>
+  <div id="t6"></div>
+</div>
 </div>
 <script>
-let SB;
-try{const s=window.supabase||window.Supabase;if(!s)throw new Error('Supabase not loaded');
-SB=s.createClient('https://fsiqglbfrxmseetbbztf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaXFnbGJmcnhtc2VldGJienRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNDExODQsImV4cCI6MjA4ODcxNzE4NH0.QbQ0X6wVs6uJqDuxYTw7VuC9K0t-T4PH0u0f1XEmT5M');}catch(e){document.getElementById('tableLoading').innerHTML='<div style="color:var(--red)">Failed: '+e.message+'</div>'}
-
-let C=[],VG=[],AG=[],VE=[],VO=[],OUT=[];
-const sync=s=>{const e=document.getElementById('syncStatus');e.className='sync-indicator '+s;e.innerHTML=s==='saving'?'<i data-lucide="loader" style="width:12px;height:12px"></i> Saving...':s==='saved'?'<i data-lucide="check-circle" style="width:12px;height:12px"></i> Synced':'<i data-lucide="alert-circle" style="width:12px;height:12px"></i> Error';lucide.createIcons()};
-
-async function loadAll(){
-  try{if(!SB){document.getElementById('tableLoading').innerHTML='<div style="color:var(--red)">No DB connection</div>';return}
-  const a=await SB.from('courses').select('*'),b=await SB.from('video_gen').select('*'),c=await SB.from('audio_gen').select('*'),d=await SB.from('video_edit').select('*'),e=await SB.from('voice_over').select('*'),f=await SB.from('output').select('*');
+let SB;try{const s=window.supabase||window.Supabase;SB=s.createClient('https://fsiqglbfrxmseetbbztf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaXFnbGJmcnhtc2VldGJienRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNDExODQsImV4cCI6MjA4ODcxNzE4NH0.QbQ0X6wVs6uJqDuxYTw7VuC9K0t-T4PH0u0f1XEmT5M')}catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}
+let C=[],VG=[],AG=[],VE=[],VO=[],OUT=[],CM=[];
+const ss=s=>{const e=document.getElementById('ss');e.className='sync '+s;e.innerHTML=s==='saving'?'Saving...':'<i data-lucide="check-circle" style="width:11px;height:11px"></i> Synced';lucide.createIcons()};
+async function load(){try{
+  const a=await SB.from('courses').select('*'),b=await SB.from('video_gen').select('*'),c=await SB.from('audio_gen').select('*'),d=await SB.from('video_edit').select('*'),e=await SB.from('voice_over').select('*'),f=await SB.from('output').select('*'),g=await SB.from('course_mapping').select('*');
   if(a.error)throw new Error(a.error.message);
-  const srt=arr=>arr.sort((x,y)=>(x.sort_order||0)-(y.sort_order||0));
-  C=srt(a.data||[]);VG=srt(b.data||[]);AG=srt(c.data||[]);VE=srt(d.data||[]);VO=srt(e.data||[]);OUT=srt(f.data||[]);
-  document.getElementById('tableLoading').style.display='none';renderTables();
-  }catch(e){console.error(e);document.getElementById('tableLoading').innerHTML='<div style="color:var(--red)">Error: '+e.message+'</div>'}
-}
+  const s=arr=>arr.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  C=s(a.data||[]);VG=s(b.data||[]);AG=s(c.data||[]);VE=s(d.data||[]);VO=s(e.data||[]);OUT=s(f.data||[]);CM=s(g.data||[]);
+  // Populate dropdown
+  const dd=document.getElementById('courseDrop');dd.innerHTML='<option value="all">All Courses</option>';
+  C.forEach(c=>{dd.innerHTML+=`<option value="${c.id}">${c.name} (${c.total})</option>`});
+  document.getElementById('tl').style.display='none';renderTables();
+}catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}}
 
-let st;
-async function dbUp(t,id,d){sync('saving');clearTimeout(st);await SB.from(t).update(d).eq('id',id);st=setTimeout(()=>sync('saved'),500)}
-async function dbIn(t,d){sync('saving');const{data:r,error}=await SB.from(t).insert(d).select();if(error){sync('error');return null}sync('saved');return r?.[0]}
-async function dbDel(t,id){sync('saving');await SB.from(t).delete().eq('id',id);sync('saved')}
-
+let st;const dbU=async(t,id,d)=>{ss('saving');clearTimeout(st);await SB.from(t).update(d).eq('id',id);st=setTimeout(()=>ss('saved'),500)};
+const dbI=async(t,d)=>{ss('saving');const{data:r}=await SB.from(t).insert(d).select();ss('saved');return r?.[0]};
+const dbD=async(t,id)=>{ss('saving');await SB.from(t).delete().eq('id',id);ss('saved')};
 const S=(a,f)=>a.reduce((s,x)=>s+(Number(x[f])||0),0);
 const pC=v=>v>0?'vr':'vg';
-const GR=["linear-gradient(135deg,#ff6b35,#ff3366)","linear-gradient(135deg,#4d9fff,#a855f7)","linear-gradient(135deg,#00d4aa,#4d9fff)","linear-gradient(135deg,#a855f7,#ff3366)","linear-gradient(135deg,#fbbf24,#ff6b35)","linear-gradient(135deg,#00d4aa,#a855f7)","linear-gradient(135deg,#ff3366,#a855f7)","linear-gradient(135deg,#4d9fff,#00d4aa)","linear-gradient(135deg,#fbbf24,#ff3366)","linear-gradient(135deg,#a855f7,#4d9fff)","linear-gradient(135deg,#00d4aa,#fbbf24)","linear-gradient(135deg,#ff6b35,#fbbf24)"];
-const gm={};let gi=0;
-function G(n){if(!n)return GR[0];if(!gm[n]){gm[n]=GR[gi%GR.length];gi++}return gm[n]}
+const GR=["linear-gradient(135deg,#ff6b35,#ff3366)","linear-gradient(135deg,#4d9fff,#a855f7)","linear-gradient(135deg,#00d4aa,#4d9fff)","linear-gradient(135deg,#a855f7,#ff3366)","linear-gradient(135deg,#fbbf24,#ff6b35)","linear-gradient(135deg,#00d4aa,#a855f7)","linear-gradient(135deg,#ff3366,#a855f7)","linear-gradient(135deg,#4d9fff,#00d4aa)","linear-gradient(135deg,#fbbf24,#ff3366)","linear-gradient(135deg,#a855f7,#4d9fff)"];
+const gm={};let gi=0;function G(n){if(!n)return GR[0];if(!gm[n]){gm[n]=GR[gi%GR.length];gi++}return gm[n]}
 function I(n){if(!n)return'?';return n.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()}
-const gVg=id=>VG.filter(r=>r.course_id===id),gAg=id=>AG.filter(r=>r.course_id===id),gVe=id=>VE.filter(r=>r.course_id===id),gVo=id=>VO.filter(r=>r.course_id===id),gOut=id=>OUT.filter(r=>r.course_id===id);
+const g=(arr,id)=>arr.filter(r=>r.course_id===id);
 
-function switchPage(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+pg).classList.add('active');document.querySelectorAll('.toggle-btn').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')renderAnalytics();lucide.createIcons()}
+function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')renderA();lucide.createIcons()}
 
-// ═══ UPDATE HANDLERS WITH FULL VALIDATION ═══
-function updVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;
-  if(f==='person'){r.person=v;dbUp('video_gen',id,{person:v})}
-  else{r[f]=Math.max(0,Number(v)||0);
-    if(r.recv>r.count)r.recv=r.count;
-    if(r.code_recv>r.count)r.code_recv=r.count;
-    r.code_pend=Math.max(0,r.count-r.code_recv);
-    dbUp('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend})}
-  renderTables();lucide.createIcons()}
-
-function updS(t,arr,id,f,v,cid){const r=arr.find(x=>x.id===id);if(!r)return;
-  if(f==='person'){r.person=v;dbUp(t,id,{person:v})}
-  else{r[f]=Math.max(0,Number(v)||0);
-    // Cap: stage totals can't exceed their available pool
-    if(cid){const c=C.find(x=>x.id===cid);if(c){
-      const cv=gVg(cid);const vR=S(cv,'recv'),vCR=S(cv,'code_recv');
-      if(t==='audio_gen'){const others=AG.filter(x=>x.course_id===cid&&x.id!==id);const othersTotal=S(others,'count');if(othersTotal+r.count>vCR)r.count=Math.max(0,vCR-othersTotal)}
-      if(t==='video_edit'){const others=VE.filter(x=>x.course_id===cid&&x.id!==id);const othersTotal=S(others,'count');if(othersTotal+r.count>vR)r.count=Math.max(0,vR-othersTotal)}
-      if(t==='voice_over'){const aC=S(gAg(cid),'count'),eC=S(gVe(cid),'count'),avail=Math.min(aC,eC);const others=VO.filter(x=>x.course_id===cid&&x.id!==id);const othersTotal=S(others,'count');if(othersTotal+r.count>avail)r.count=Math.max(0,avail-othersTotal)}
-    }}
-    dbUp(t,id,{[f]:r[f]})}
-  renderTables();lucide.createIcons()}
-
-async function addVg(cid){const r=await dbIn('video_gen',{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:gVg(cid).length+1});if(r){VG.push(r);renderTables();lucide.createIcons()}}
-async function addS(t,arr,cid){const d=t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0}:{course_id:cid,person:'',count:0,sort_order:0};const r=await dbIn(t,d);if(r){arr.push(r);renderTables();lucide.createIcons()}}
-async function delVg(id){await dbDel('video_gen',id);VG=VG.filter(r=>r.id!==id);renderTables();lucide.createIcons()}
-async function delS(t,id){await dbDel(t,id);if(t==='audio_gen')AG=AG.filter(r=>r.id!==id);else if(t==='video_edit')VE=VE.filter(r=>r.id!==id);else if(t==='voice_over')VO=VO.filter(r=>r.id!==id);else if(t==='output')OUT=OUT.filter(r=>r.id!==id);renderTables();lucide.createIcons()}
+// ═══ UPDATE HANDLERS ═══
+function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend})}renderTables();lucide.createIcons()}
+function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const arr=arrs[t];const r=arr.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);dbU(t,id,{[f]:r[f]})}renderTables();lucide.createIcons()}
+async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0}:{course_id:cid,person:'',count:0,sort_order:0};const r=await dbI(t,d);if(r){arrs[t].push(r);renderTables();lucide.createIcons()}}
+async function dR(t,id){await dbD(t,id);const arrs={video_gen:'VG',audio_gen:'AG',video_edit:'VE',voice_over:'VO',output:'OUT',course_mapping:'CM'};if(t==='video_gen')VG=VG.filter(r=>r.id!==id);else if(t==='audio_gen')AG=AG.filter(r=>r.id!==id);else if(t==='video_edit')VE=VE.filter(r=>r.id!==id);else if(t==='voice_over')VO=VO.filter(r=>r.id!==id);else if(t==='output')OUT=OUT.filter(r=>r.id!==id);else if(t==='course_mapping')CM=CM.filter(r=>r.id!==id);renderTables();lucide.createIcons()}
 
 // ═══ RENDER TABLES ═══
-function renderTables(){let h='';C.forEach(c=>{
-  const cv=gVg(c.id),ca=gAg(c.id),ce=gVe(c.id),cvo=gVo(c.id),co=gOut(c.id);
-  const vR=S(cv,'recv'),vC=S(cv,'count'),vCR=S(cv,'code_recv'),vCP=S(cv,'code_pend');
-  const vP=c.total-vR;
-  const aC=S(ca,'count'),aP=Math.max(0,vCR-aC);
-  const eC=S(ce,'count'),eP=Math.max(0,vR-eC);
-  const voA=Math.min(aC,eC),voC=S(cvo,'count'),voP=Math.max(0,voA-voC);
-  const oC=S(co,'count'),oP=Math.max(0,voC-oC),oFS=S(co,'file_seg');
-  // Check if mapping exceeds total
-  const overMap=vC>c.total;
+function renderTables(){
+  const sel=document.getElementById('courseDrop').value;
+  const fc=sel==='all'?C:C.filter(c=>c.id===sel);
+  let h='';
+  fc.forEach(c=>{
+    const cv=g(VG,c.id),ca=g(AG,c.id),ce=g(VE,c.id),cvo=g(VO,c.id),co=g(OUT,c.id),ccm=g(CM,c.id);
+    const vR=S(cv,'recv'),vC=S(cv,'count'),vCR=S(cv,'code_recv'),vCP=S(cv,'code_pend');
+    const aC=S(ca,'count'),eC=S(ce,'count'),voC=S(cvo,'count'),voA=Math.min(aC,eC);
+    const oC=S(co,'count'),oFS=S(co,'file_seg'),oCmp=S(co,'compress');
+    const cmComp=S(ccm,'complete');
 
-  h+=`<div class="course-section"><div class="course-title-bar"><h2>${c.name}</h2><span class="course-badge">${c.total} Videos</span><span class="warn-badge ${overMap?'show':''}">Mapping (${vC}) exceeds total (${c.total})</span></div>`;
+    h+=`<div class="course-section"><div class="course-hdr"><h2>${c.name}</h2><span class="badge badge-o">${c.total} Videos</span></div>`;
+    // VG
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="video" style="width:14px;height:14px"></i> Video Generation</span><button class="btn-a" style="background:var(--green)" onclick="aR('video_gen','${c.id}')">+ Add</button></div><table><thead><tr><th>Generated By</th><th>Count</th><th>Received</th><th>Pending</th><th>.py Recv</th><th>.py Pend</th><th></th></tr></thead><tbody>`;
+    cv.forEach(r=>{const p=r.count-r.recv;h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uVg(${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uVg(${r.id},'count',this.value)"></td><td><input class="i i-d" type="number" min="0" max="${r.count}" value="${r.recv}" onchange="uVg(${r.id},'recv',this.value)"></td><td><span class="${pC(p)}">${p}</span></td><td><input class="i i-d" type="number" min="0" max="${r.count}" value="${r.code_recv}" onchange="uVg(${r.id},'code_recv',this.value)"></td><td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td><td><button class="btn-x" onclick="dR('video_gen',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${vC} / ${c.total}</td><td>${vR}</td><td><span class="${pC(c.total-vR)}">${c.total-vR}</span></td><td>${vCR}</td><td><span class="${pC(vCP)}">${vCP}</span></td><td></td></tr></tbody></table></div>`;
 
-  // VG TABLE
-  h+=`<div class="stage-block"><div class="stage-head"><span class="stage-label" style="color:var(--green)"><i data-lucide="video" style="width:16px;height:16px"></i> Video Generation</span><button class="btn-add" style="background:var(--green)" onclick="addVg('${c.id}')">+ Add Row</button></div><table><thead><tr><th>Generated By</th><th>Count</th><th>Received</th><th>Pending</th><th>.py Recv</th><th>.py Pend</th><th></th></tr></thead><tbody>`;
-  cv.forEach(r=>{const p=r.count-r.recv;
-    h+=`<tr><td><input class="inp inp-name" value="${r.person}" onchange="updVg(${r.id},'person',this.value)"></td><td><input class="inp inp-num" type="number" min="0" value="${r.count}" onchange="updVg(${r.id},'count',this.value)"></td><td><input class="inp inp-num" type="number" min="0" max="${r.count}" value="${r.recv}" onchange="updVg(${r.id},'recv',this.value)"></td><td><span class="${pC(p)}">${p}</span></td><td><input class="inp inp-num" type="number" min="0" max="${r.count}" value="${r.code_recv}" onchange="updVg(${r.id},'code_recv',this.value)"></td><td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td><td><button class="btn-del" onclick="delVg(${r.id})">×</button></td></tr>`});
-  h+=`<tr class="total-row"><td>Total</td><td>${vC} / ${c.total}</td><td>${vR}</td><td><span class="${pC(vP)}">${vP}</span></td><td>${vCR}</td><td><span class="${pC(vCP)}">${vCP}</span></td><td></td></tr></tbody></table></div>`;
-
-  h+=`<div class="stages-flex">`;
-  // SCRIPT & AUDIO
-  h+=`<div class="stage-block"><div class="stage-head"><span class="stage-label" style="color:var(--blue)"><i data-lucide="file-audio" style="width:16px;height:16px"></i> Script & Audio <span style="font-size:.75rem;opacity:.6;font-weight:400">(of ${vCR} .py)</span></span><button class="btn-add" style="background:var(--blue)" onclick="addS('audio_gen',AG,'${c.id}')">+ Add</button></div><table><thead><tr><th>Script & Audio</th><th>Count</th><th>Pending</th><th></th></tr></thead><tbody>`;
-  ca.forEach(r=>{h+=`<tr><td><input class="inp inp-name" value="${r.person}" onchange="updS('audio_gen',AG,${r.id},'person',this.value,'${c.id}')"></td><td><input class="inp inp-num" type="number" min="0" value="${r.count}" onchange="updS('audio_gen',AG,${r.id},'count',this.value,'${c.id}')"></td><td></td><td><button class="btn-del" onclick="delS('audio_gen',${r.id})">×</button></td></tr>`});
-  h+=`<tr class="total-row"><td>Total</td><td>${aC} / ${vCR}</td><td><span class="${pC(aP)}">${aP}</span></td><td></td></tr></tbody></table><div class="note">Pending = .py files (${vCR}) − audio done (${aC})</div></div>`;
-
-  // MASKING
-  h+=`<div class="stage-block"><div class="stage-head"><span class="stage-label" style="color:var(--yellow)"><i data-lucide="scissors" style="width:16px;height:16px"></i> Video Editing <span style="font-size:.75rem;opacity:.6;font-weight:400">(of ${vR} recv)</span></span><button class="btn-add" style="background:var(--yellow)" onclick="addS('video_edit',VE,'${c.id}')">+ Add</button></div><table><thead><tr><th>Masking By</th><th>Count</th><th>Pending</th><th></th></tr></thead><tbody>`;
-  ce.forEach(r=>{h+=`<tr><td><input class="inp inp-name" value="${r.person}" onchange="updS('video_edit',VE,${r.id},'person',this.value,'${c.id}')"></td><td><input class="inp inp-num" type="number" min="0" value="${r.count}" onchange="updS('video_edit',VE,${r.id},'count',this.value,'${c.id}')"></td><td></td><td><button class="btn-del" onclick="delS('video_edit',${r.id})">×</button></td></tr>`});
-  h+=`<tr class="total-row"><td>Total</td><td>${eC} / ${vR}</td><td><span class="${pC(eP)}">${eP}</span></td><td></td></tr></tbody></table><div class="note">Pending = recv (${vR}) − masking (${eC})</div></div>`;
-
-  // VOICE OVER
-  h+=`<div class="stage-block"><div class="stage-head"><span class="stage-label" style="color:var(--purple)"><i data-lucide="mic" style="width:16px;height:16px"></i> Voice Over <span style="font-size:.75rem;opacity:.6;font-weight:400">(of ${voA} ready)</span></span><button class="btn-add" style="background:var(--purple)" onclick="addS('voice_over',VO,'${c.id}')">+ Add</button></div><table><thead><tr><th>Voice Over</th><th>Count</th><th>Pending</th><th></th></tr></thead><tbody>`;
-  cvo.forEach(r=>{h+=`<tr><td><input class="inp inp-name" value="${r.person}" onchange="updS('voice_over',VO,${r.id},'person',this.value,'${c.id}')"></td><td><input class="inp inp-num" type="number" min="0" value="${r.count}" onchange="updS('voice_over',VO,${r.id},'count',this.value,'${c.id}')"></td><td></td><td><button class="btn-del" onclick="delS('voice_over',${r.id})">×</button></td></tr>`});
-  h+=`<tr class="total-row"><td>Total</td><td>${voC} / ${voA}</td><td><span class="${pC(voP)}">${voP}</span></td><td></td></tr></tbody></table><div class="note">Pending = min(audio ${aC}, mask ${eC}) − VO (${voC})</div></div>`;
-  h+=`</div>`;
-
-  // OUTPUT
-  if(co.length>0&&(oC>0||oFS>0)){
-    h+=`<div class="stage-block" style="margin-top:.75rem"><div class="stage-head"><span class="stage-label" style="color:var(--orange)"><i data-lucide="folder-output" style="width:16px;height:16px"></i> Output</span><button class="btn-add" style="background:var(--orange)" onclick="addS('output',OUT,'${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>File Seg</th><th>Compress</th><th></th></tr></thead><tbody>`;
-    co.forEach(r=>{h+=`<tr><td><input class="inp inp-name" value="${r.person}" onchange="updS('output',OUT,${r.id},'person',this.value,'${c.id}')"></td><td><input class="inp inp-num" type="number" min="0" value="${r.count}" onchange="updS('output',OUT,${r.id},'count',this.value,'${c.id}')"></td><td></td><td><input class="inp inp-num" type="number" min="0" value="${r.file_seg||0}" onchange="updS('output',OUT,${r.id},'file_seg',this.value,'${c.id}')"></td><td><input class="inp inp-num" type="number" min="0" value="${r.compress||0}" onchange="updS('output',OUT,${r.id},'compress',this.value,'${c.id}')"></td><td><button class="btn-del" onclick="delS('output',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="total-row"><td>Total</td><td>${oC}</td><td><span class="${pC(oP)}">${oP}</span></td><td>${oFS}</td><td>${S(co,'compress')}</td><td></td></tr></tbody></table></div>`}
-  h+=`</div>`});
-  document.getElementById('tablesContent').innerHTML=h;lucide.createIcons()}
+    h+=`<div class="sf">`;
+    // Audio
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--blue)"><i data-lucide="file-audio" style="width:14px;height:14px"></i> Script & Audio <span style="font-size:.7rem;opacity:.5">(of ${vCR})</span></span><button class="btn-a" style="background:var(--blue)" onclick="aR('audio_gen','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th></th></tr></thead><tbody>`;
+    ca.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('audio_gen',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('audio_gen',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('audio_gen',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${aC} / ${vCR}</td><td></td></tr></tbody></table></div>`;
+    // Masking
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--yellow)"><i data-lucide="scissors" style="width:14px;height:14px"></i> Video Editing <span style="font-size:.7rem;opacity:.5">(of ${vR})</span></span><button class="btn-a" style="background:var(--yellow)" onclick="aR('video_edit','${c.id}')">+ Add</button></div><table><thead><tr><th>Masking By</th><th>Count</th><th></th></tr></thead><tbody>`;
+    ce.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('video_edit',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${eC} / ${vR}</td><td></td></tr></tbody></table></div>`;
+    // VO
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--purple)"><i data-lucide="mic" style="width:14px;height:14px"></i> Voice Over <span style="font-size:.7rem;opacity:.5">(of ${voA})</span></span><button class="btn-a" style="background:var(--purple)" onclick="aR('voice_over','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th></th></tr></thead><tbody>`;
+    cvo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('voice_over',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('voice_over',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('voice_over',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td></tr></tbody></table></div>`;
+    h+=`</div>`;
+    // Output
+    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--orange)"><i data-lucide="folder-output" style="width:14px;height:14px"></i> Output</span><button class="btn-a" style="background:var(--orange)" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>File Seg</th><th>Compress</th><th></th></tr></thead><tbody>`;
+    co.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"></td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${oC}</td><td>${oFS}</td><td>${oCmp}</td><td></td></tr></tbody></table></div>`;
+    // Course Mapping
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--cyan)"><i data-lucide="upload-cloud" style="width:14px;height:14px"></i> Course Mapping <span style="font-size:.7rem;opacity:.5">(of ${oCmp})</span></span><button class="btn-a" style="background:var(--cyan)" onclick="aR('course_mapping','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Complete</th><th>Pending</th><th></th></tr></thead><tbody>`;
+    ccm.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('course_mapping',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.complete}" onchange="uS('course_mapping',${r.id},'complete',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.pending}" onchange="uS('course_mapping',${r.id},'pending',this.value)"></td><td><button class="btn-x" onclick="dR('course_mapping',${r.id})">×</button></td></tr>`});
+    const cmTotal=S(ccm,'complete');
+    h+=`<tr class="tot"><td>Total</td><td>${cmTotal} / ${oCmp}</td><td>${Math.max(0,oCmp-cmTotal)}</td><td></td></tr></tbody></table></div></div>`;
+    h+=`</div>`;
+  });
+  document.getElementById('tc').innerHTML=h;lucide.createIcons()}
 
 // ═══ ANALYTICS ═══
 let aF='all';
 function afc(){return aF==='all'?C:C.filter(c=>c.id===aF)}
-function afIds(){return afc().map(c=>c.id)}
-function tots(){const ids=afIds(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id));
-  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),cp:S(fv,'code_pend'),au:S(fa,'count'),mk:S(fe,'count'),vo:S(fvo,'count')}}
+function afI(){return afc().map(c=>c.id)}
+function T(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
+  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),cp:S(fv,'code_pend'),au:S(fa,'count'),mk:S(fe,'count'),vo:S(fvo,'count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),cmp:S(fo,'compress'),map:S(fcm,'complete')}}
 
-function renderAnalytics(){const t=tots(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
-  document.getElementById('kpiGrid').innerHTML=`<div class="stat-card c-o"><div class="stat-label">Total Videos</div><div class="stat-value">${t.tot}</div><div class="stat-sub">${aF==='all'?'Across '+C.length+' courses':afc()[0]?.name}</div></div><div class="stat-card c-g"><div class="stat-label">Videos Received</div><div class="stat-value">${t.recv}</div><div class="stat-sub">${pct}% completion</div></div><div class="stat-card c-r"><div class="stat-label">Pending</div><div class="stat-value">${t.pend}</div><div class="stat-sub">In progress</div></div><div class="stat-card c-b"><div class="stat-label">.py Submitted</div><div class="stat-value">${t.cr}</div><div class="stat-sub">${t.cp} pending</div></div><div class="stat-card c-p"><div class="stat-label">Script & Audio</div><div class="stat-value">${t.au}</div><div class="stat-sub">${t.au} / ${t.cr} .py available</div></div><div class="stat-card c-y"><div class="stat-label">Masking Done</div><div class="stat-value">${t.mk}</div><div class="stat-sub">${t.mk} / ${t.recv} videos received</div></div>`;
+function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
 
-  document.getElementById('pipelineRow').innerHTML=`<div class="pip-stage"><div class="pip-icon"><i data-lucide="video" style="width:22px;height:22px;color:var(--green)"></i></div><div class="pip-title">Video Gen</div><div class="pip-count">${t.recv} / ${t.tot}</div><div class="pip-pend">${t.pend>0?t.pend+' pending':'all done'}</div></div><div class="pip-stage"><div class="pip-icon"><i data-lucide="file-code" style="width:22px;height:22px;color:var(--blue)"></i></div><div class="pip-title">.py File</div><div class="pip-count">${t.cr} / ${t.tot}</div><div class="pip-pend">${t.cp>0?t.cp+' pending':'all done'}</div></div><div class="pip-stage"><div class="pip-icon"><i data-lucide="file-audio" style="width:22px;height:22px;color:var(--blue)"></i></div><div class="pip-title">Script & Audio</div><div class="pip-count">${t.au} / ${t.cr}</div><div class="pip-pend">${t.cr-t.au>0?(t.cr-t.au)+' pending':'all done'}</div><div class="pip-dep">Needs .py file</div></div><div class="pip-stage"><div class="pip-icon"><i data-lucide="scissors" style="width:22px;height:22px;color:var(--yellow)"></i></div><div class="pip-title">Masking</div><div class="pip-count">${t.mk} / ${t.recv}</div><div class="pip-pend">${t.recv-t.mk>0?(t.recv-t.mk)+' pending':'all done'}</div><div class="pip-dep">Needs video only</div></div><div class="pip-stage"><div class="pip-icon"><i data-lucide="mic" style="width:22px;height:22px;color:var(--purple)"></i></div><div class="pip-title">Voice Over</div><div class="pip-count">${t.vo} / ${voA}</div><div class="pip-pend">${voA-t.vo>0?(voA-t.vo)+' pending':'all done'}</div><div class="pip-dep">Needs audio + masking</div></div>`;
+function teamCard(ic,title,sub,data,done,avail,dep,clr){
+  const total=data.reduce((s,p)=>s+p.val,0)||1;
+  let h=`<div class="team-card"><div class="team-hdr"><div class="team-ic" style="background:${clr}15;border:1px solid ${clr}25">${ic}</div><div><div class="team-t">${title}</div><div class="team-s">${sub}</div></div><div style="margin-left:auto;text-align:right"><div class="team-b" style="background:${clr}20;color:${clr}">${done} / ${avail}</div><div class="team-dep">${dep}</div></div></div>`;
+  if(!data.length)h+=`<div class="nd">No data yet</div>`;
+  else data.forEach(p=>{const pct=Math.round((p.val/total)*100);
+    h+=`<div class="pr"><div class="pr-av" style="background:${G(p.name)}">${I(p.name)}</div><div class="pr-info"><div class="pr-name">${p.name}</div><div class="pr-course">${p.courses.join(' · ')}</div></div><div class="pr-count" style="color:${clr}">${p.val}</div><div class="pr-bar-wrap"><div class="pr-bar" style="width:${pct}%;background:${clr}"></div></div><div class="pr-pct">${pct}%</div></div>`});
+  h+=`</div>`;return h}
 
-  let sh=`<button class="slicer-btn ${aF==='all'?'active':''}" onclick="setAF('all')">All <span class="cnt">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
-  C.forEach(c=>{sh+=`<button class="slicer-btn ${aF===c.id?'active':''}" onclick="setAF('${c.id}')">${c.name} <span class="cnt">${c.total}</span></button>`});
-  document.getElementById('slicerBtns').innerHTML=sh;
-  document.getElementById('summaryBar').innerHTML=`<div class="sum-item"><div class="sum-val" style="color:var(--orange)">${t.tot}</div><div class="sum-lbl">Total</div></div><div class="sum-item"><div class="sum-val" style="color:var(--green)">${t.recv}</div><div class="sum-lbl">Received</div></div><div class="sum-item"><div class="sum-val" style="color:var(--red)">${t.pend}</div><div class="sum-lbl">Pending</div></div><div class="sum-item"><div class="sum-val" style="color:var(--purple)">${t.cr}</div><div class="sum-lbl">.py Done</div></div><div class="sum-item"><div class="sum-val" style="color:var(--yellow)">${t.cp}</div><div class="sum-lbl">.py Pend</div></div><div class="sum-item"><div class="sum-val" style="color:var(--blue)">${pct}%</div><div class="sum-lbl">Completion</div></div>`;
-
-  // Person cards
-  const ids=afIds(),fv=VG.filter(r=>ids.includes(r.course_id));const pM={};
+function renderA(){
+  const t=T(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
+  // KPIs
+  document.getElementById('kpi').innerHTML=`
+    <div class="sc" style="--ac:var(--orange)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
+    <div class="sc" style="--ac:var(--green)"><div class="sc-l">Received</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}%</div></div>
+    <div class="sc" style="--ac:var(--red)"><div class="sc-l">Pending</div><div class="sc-v">${t.pend}</div><div class="sc-s">In progress</div></div>
+    <div class="sc" style="--ac:var(--blue)"><div class="sc-l">.py Submitted</div><div class="sc-v">${t.cr}</div><div class="sc-s">${t.cp} pending</div></div>
+    <div class="sc" style="--ac:var(--purple)"><div class="sc-l">Voice Over</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
+    <div class="sc" style="--ac:var(--cyan)"><div class="sc-l">Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.cmp}</div></div>`;
+  // Pipeline
+  document.getElementById('pipR').innerHTML=`
+    <div class="pip-s"><div class="pip-i"><i data-lucide="video" style="width:20px;height:20px;color:var(--green)"></i></div><div class="pip-t">Video Gen</div><div class="pip-c">${t.recv}/${t.tot}</div><div class="pip-p">${t.pend>0?t.pend+' pend':' done'}</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="file-code" style="width:20px;height:20px;color:var(--blue)"></i></div><div class="pip-t">.py File</div><div class="pip-c">${t.cr}/${t.tot}</div><div class="pip-p">${t.cp>0?t.cp+' pend':' done'}</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="file-audio" style="width:20px;height:20px;color:var(--blue)"></i></div><div class="pip-t">Script&Audio</div><div class="pip-c">${t.au}/${t.cr}</div><div class="pip-p">${t.cr-t.au>0?(t.cr-t.au)+' pend':' done'}</div><div class="pip-d">needs .py</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="scissors" style="width:20px;height:20px;color:var(--yellow)"></i></div><div class="pip-t">Masking</div><div class="pip-c">${t.mk}/${t.recv}</div><div class="pip-p">${t.recv-t.mk>0?(t.recv-t.mk)+' pend':' done'}</div><div class="pip-d">needs video</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="mic" style="width:20px;height:20px;color:var(--purple)"></i></div><div class="pip-t">Voice Over</div><div class="pip-c">${t.vo}/${voA}</div><div class="pip-p">${voA-t.vo>0?(voA-t.vo)+' pend':' done'}</div><div class="pip-d">audio+mask</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="folder-output" style="width:20px;height:20px;color:var(--orange)"></i></div><div class="pip-t">Output</div><div class="pip-c">${t.cmp}/${t.vo}</div><div class="pip-p">${t.vo-t.cmp>0?(t.vo-t.cmp)+' pend':' done'}</div><div class="pip-d">compress</div></div>
+    <div class="pip-s"><div class="pip-i"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--cyan)"></i></div><div class="pip-t">Mapping</div><div class="pip-c">${t.map}/${t.cmp}</div><div class="pip-p">${t.cmp-t.map>0?(t.cmp-t.map)+' pend':' done'}</div><div class="pip-d">final step</div></div>`;
+  // Course filter
+  let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All <span class="cn">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
+  C.forEach(c=>{cf+=`<button class="${aF===c.id?'active':''}" onclick="sAF('${c.id}')">${c.name} <span class="cn">${c.total}</span></button>`});
+  document.getElementById('cfR').innerHTML=cf;
+  // Team 1 — VG Cards
+  const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id));const pM={};
   fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=r.code_pend});
   const pA=Object.entries(pM).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count);
   let ph='';pA.forEach(p=>{const pc2=p.count>0?Math.round((p.recv/p.count)*100):0,bc=pc2>=75?'var(--green)':pc2>=40?'var(--yellow)':'var(--red)';
-    ph+=`<div class="person-card"><div class="p-header"><div class="p-avatar" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="p-name">${p.name}</div><div class="p-role">Video Generation</div></div></div><div class="p-stats"><div class="p-stat"><div class="p-stat-val" style="color:var(--blue)">${p.count}</div><div class="p-stat-lbl">Count</div></div><div class="p-stat"><div class="p-stat-val" style="color:var(--green)">${p.recv}</div><div class="p-stat-lbl">Received</div></div><div class="p-stat"><div class="p-stat-val" style="color:var(--red)">${p.pend}</div><div class="p-stat-lbl">Pending</div></div><div class="p-stat"><div class="p-stat-val" style="color:var(--purple)">${p.cr}</div><div class="p-stat-lbl">.py Done</div></div><div class="p-stat"><div class="p-stat-val" style="color:${p.cp>0?'var(--yellow)':'var(--green)'}">${p.cp}</div><div class="p-stat-lbl">.py Pend</div></div></div><div class="progress-bar"><div class="progress-fill" style="width:${pc2}%;background:${bc}"></div></div></div>`});
-  document.getElementById('personGrid').innerHTML=ph;
-
-  // Teams
-  function agg(arr){const m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,courses:[]};m[r.person].count+=r.count||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
-  const ad=agg(AG),md=agg(VE),vd=agg(VO),at2=ad.reduce((s,p)=>s+p.count,0),mt=md.reduce((s,p)=>s+p.count,0),vt=vd.reduce((s,p)=>s+p.count,0);
-  function bld(ic,ti,sub,data,done,avail,dep,rgb,bg){let h=`<div class="team-section"><div class="team-sh"><div class="team-icon" style="${bg}">${ic}</div><div><div class="team-title">${ti}</div><div class="team-sub">${sub}</div></div><div style="margin-left:auto;text-align:right"><div class="team-badge" style="background:rgba(${rgb},0.15);color:rgb(${rgb})">${done} / ${avail}</div><div class="team-dep">${dep}</div></div></div><div class="team-grid">`;if(!data.length)h+=`<div class="no-data">No data yet</div>`;else data.forEach(p=>{h+=`<div class="team-member"><div class="tm-avatar" style="background:${G(p.name)}">${I(p.name)}</div><div class="tm-info"><div class="tm-name">${p.name}</div><div class="tm-course">${p.courses.join(' · ')}</div></div><div class="tm-count" style="color:rgb(${rgb})">${p.count}</div></div>`});h+='</div></div>';return h}
-
-  document.getElementById('teamsRow').innerHTML=
-    bld('<i data-lucide="file-audio" style="width:18px;height:18px;color:var(--blue)"></i>','Script & Audio','Script & Audio Team',ad,at2,t.cr,'depends on .py files','77,159,255','background:linear-gradient(135deg,rgba(77,159,255,0.2),rgba(77,159,255,0.05));border:1px solid rgba(77,159,255,0.15)')+
-    bld('<i data-lucide="scissors" style="width:18px;height:18px;color:var(--yellow)"></i>','Video Editing','Masking Team',md,mt,t.recv,'depends on videos received','251,191,36','background:linear-gradient(135deg,rgba(251,191,36,0.2),rgba(251,191,36,0.05));border:1px solid rgba(251,191,36,0.15)')+
-    bld('<i data-lucide="mic" style="width:18px;height:18px;color:var(--purple)"></i>','Voice Over','VO Team',vd,vt,voA,'needs audio + masking','168,85,247','background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(168,85,247,0.05));border:1px solid rgba(168,85,247,0.15)');
+    ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st"><div class="pc-s"><div class="pc-sv" style="color:var(--blue)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Recv</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pend</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--purple)">${p.cr}</div><div class="pc-sl">.py</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--yellow)':'var(--green)'}">${p.cp}</div><div class="pc-sl">.py P</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div></div>`});
+  document.getElementById('vgCards').innerHTML=ph;
+  // Teams 2-6
+  const ad=teamAgg(AG),md=teamAgg(VE),vd=teamAgg(VO);
+  const od=teamAgg(OUT,'count');// owl coder count
+  const cmd=teamAgg(CM,'complete');
+  document.getElementById('t2').innerHTML=teamCard('<i data-lucide="file-audio" style="width:16px;height:16px;color:var(--blue)"></i>','Script & Audio','Generates audio from .py files',ad,t.au,t.cr,'needs .py files','var(--blue)');
+  document.getElementById('t3').innerHTML=teamCard('<i data-lucide="scissors" style="width:16px;height:16px;color:var(--yellow)"></i>','Video Editing','Masking team',md,t.mk,t.recv,'needs videos received','var(--yellow)');
+  document.getElementById('t4').innerHTML=teamCard('<i data-lucide="mic" style="width:16px;height:16px;color:var(--purple)"></i>','Voice Over','Adds voice to edited video',vd,t.vo,voA,'needs audio + masking','var(--purple)');
+  document.getElementById('t5').innerHTML=teamCard('<i data-lucide="folder-output" style="width:16px;height:16px;color:var(--orange)"></i>','Output','File segregation & compress',od,t.cmp,t.vo,'needs voice over done','var(--orange)');
+  document.getElementById('t6').innerHTML=teamCard('<i data-lucide="upload-cloud" style="width:16px;height:16px;color:var(--cyan)"></i>','Course Mapping','Upload to website',cmd,t.map,t.cmp,'needs compressed files','var(--cyan)');
   lucide.createIcons()}
 
-function setAF(id){aF=id;renderAnalytics()}
-function setupRT(){SB.channel('db-changes').on('postgres_changes',{event:'*',schema:'public'},()=>{loadAll()}).subscribe()}
-loadAll().then(()=>{setupRT();lucide.createIcons()});
+function sAF(id){aF=id;renderA()}
+function setupRT(){SB.channel('changes').on('postgres_changes',{event:'*',schema:'public'},()=>{load()}).subscribe()}
+load().then(()=>{setupRT();lucide.createIcons()});
 </script>
 </body>
 </html>
