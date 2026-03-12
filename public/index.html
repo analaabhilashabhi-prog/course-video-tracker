@@ -225,9 +225,9 @@ function renderTables(){
     h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td></tr></tbody></table></div>`;
     h+=`</div>`;
     // Output
-    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--orange)"><i data-lucide="folder-output" style="width:14px;height:14px"></i> Output</span><button class="btn-a" style="background:var(--orange)" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>File Seg</th><th>Compress</th><th></th></tr></thead><tbody>`;
-    co.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"></td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${oC}</td><td>${oFS}</td><td>${oCmp}</td><td></td></tr></tbody></table></div>`;
+    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--orange)"><i data-lucide="folder-output" style="width:14px;height:14px"></i> Output <span style="font-size:.7rem;opacity:.5">(of ${voC} VO done)</span></span><button class="btn-a" style="background:var(--orange)" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>File Seg</th><th>Compress</th><th></th></tr></thead><tbody>`;
+    co.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td></td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"></td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${oC} / ${voC}</td><td><span class="${pC(Math.max(0,voC-oC))}">${Math.max(0,voC-oC)}</span></td><td>${oFS}</td><td>${oCmp}</td><td></td></tr></tbody></table></div>`;
     // Course Mapping
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--cyan)"><i data-lucide="upload-cloud" style="width:14px;height:14px"></i> Course Mapping <span style="font-size:.7rem;opacity:.5">(of ${oCmp})</span></span><button class="btn-a" style="background:var(--cyan)" onclick="aR('course_mapping','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Complete</th><th>Pending</th><th></th></tr></thead><tbody>`;
     ccm.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('course_mapping',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.complete}" onchange="uS('course_mapping',${r.id},'complete',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.pending}" onchange="uS('course_mapping',${r.id},'pending',this.value)"></td><td><button class="btn-x" onclick="dR('course_mapping',${r.id})">×</button></td></tr>`});
@@ -246,13 +246,29 @@ function T(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.fi
 
 function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
 
-function teamCard(ic,title,sub,data,done,avail,dep,clr){
+// Multi-field aggregation for output (file_seg + compress separately)
+function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
+
+// Card style for teams 2-4,6 (name + count + contribution bar)
+function teamCards(data,done,avail,dep,clr){
   const total=data.reduce((s,p)=>s+p.val,0)||1;
-  let h=`<div class="team-card"><div class="team-hdr"><div class="team-ic" style="background:${clr}15;border:1px solid ${clr}25">${ic}</div><div><div class="team-t">${title}</div><div class="team-s">${sub}</div></div><div style="margin-left:auto;text-align:right"><div class="team-b" style="background:${clr}20;color:${clr}">${done} / ${avail}</div><div class="team-dep">${dep}</div></div></div>`;
+  let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const pct=Math.round((p.val/total)*100);
-    h+=`<div class="pr"><div class="pr-av" style="background:${G(p.name)}">${I(p.name)}</div><div class="pr-info"><div class="pr-name">${p.name}</div><div class="pr-course">${p.courses.join(' · ')}</div></div><div class="pr-count" style="color:${clr}">${p.val}</div><div class="pr-bar-wrap"><div class="pr-bar" style="width:${pct}%;background:${clr}"></div></div><div class="pr-pct">${pct}%</div></div>`});
+  else data.forEach(p=>{const pct=Math.round((p.val/total)*100);const barW=avail>0?Math.round((p.val/avail)*100):0;
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:${clr}">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text2)">${pct}%</div><div class="pc-sl">Share</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text2)">${avail}</div><div class="pc-sl">Available</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${clr}"></div></div></div>`});
   h+=`</div>`;return h}
+
+// Card style for Team 5 — Output (shows count + file seg + compress)
+function outCards(data,t){
+  let h=`<div class="pg">`;
+  if(!data.length)h+=`<div class="nd">No data yet</div>`;
+  else data.forEach(p=>{const barW=t.vo>0?Math.round((p.cmp/t.vo)*100):0;
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--orange)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--blue)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.cmp}</div><div class="pc-sl">Compress</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text2)">${t.vo}</div><div class="pc-sl">Available</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:var(--orange)"></div></div></div>`});
+  h+=`</div>`;return h}
+
+// Team header badge
+function tBadge(done,avail,dep,clr){
+  return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)"><div style="padding:.2rem .65rem;border-radius:100px;font-size:.7rem;font-weight:700;font-family:'JetBrains Mono';background:${clr}20;color:${clr}">${done} / ${avail}</div><span style="font-size:.6rem;color:var(--text3)">${dep}</span></div>`}
 
 function renderA(){
   const t=T(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
@@ -286,13 +302,13 @@ function renderA(){
   document.getElementById('vgCards').innerHTML=ph;
   // Teams 2-6
   const ad=teamAgg(AG),md=teamAgg(VE),vd=teamAgg(VO);
-  const od=teamAgg(OUT,'count');// owl coder count
+  const od=outAgg();
   const cmd=teamAgg(CM,'complete');
-  document.getElementById('t2').innerHTML=teamCard('<i data-lucide="file-audio" style="width:16px;height:16px;color:var(--blue)"></i>','Script & Audio','Generates audio from .py files',ad,t.au,t.cr,'needs .py files','var(--blue)');
-  document.getElementById('t3').innerHTML=teamCard('<i data-lucide="scissors" style="width:16px;height:16px;color:var(--yellow)"></i>','Video Editing','Masking team',md,t.mk,t.recv,'needs videos received','var(--yellow)');
-  document.getElementById('t4').innerHTML=teamCard('<i data-lucide="mic" style="width:16px;height:16px;color:var(--purple)"></i>','Voice Over','Adds voice to edited video',vd,t.vo,voA,'needs audio + masking','var(--purple)');
-  document.getElementById('t5').innerHTML=teamCard('<i data-lucide="folder-output" style="width:16px;height:16px;color:var(--orange)"></i>','Output','File segregation & compress',od,t.cmp,t.vo,'needs voice over done','var(--orange)');
-  document.getElementById('t6').innerHTML=teamCard('<i data-lucide="upload-cloud" style="width:16px;height:16px;color:var(--cyan)"></i>','Course Mapping','Upload to website',cmd,t.map,t.cmp,'needs compressed files','var(--cyan)');
+  document.getElementById('t2').innerHTML=tBadge(t.au,t.cr,'needs .py files','var(--blue)')+teamCards(ad,t.au,t.cr,'needs .py files','var(--blue)');
+  document.getElementById('t3').innerHTML=tBadge(t.mk,t.recv,'needs videos received','var(--yellow)')+teamCards(md,t.mk,t.recv,'needs videos received','var(--yellow)');
+  document.getElementById('t4').innerHTML=tBadge(t.vo,voA,'needs audio + masking','var(--purple)')+teamCards(vd,t.vo,voA,'needs audio + masking','var(--purple)');
+  document.getElementById('t5').innerHTML=tBadge(t.cmp,t.vo,'needs voice over done','var(--orange)')+outCards(od,t);
+  document.getElementById('t6').innerHTML=tBadge(t.map,t.cmp,'needs compressed files','var(--cyan)')+teamCards(cmd,t.map,t.cmp,'needs compressed files','var(--cyan)');
   lucide.createIcons()}
 
 function sAF(id){aF=id;renderA()}
