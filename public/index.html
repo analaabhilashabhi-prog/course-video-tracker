@@ -10,7 +10,7 @@
 <style>
 /* ═══ THEME VARIABLES ═══ */
 [data-theme="dark"]{--bg:#080b12;--bg2:#0e1219;--card:#141820;--card2:#1a2030;--border:rgba(255,255,255,0.07);--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--green:#22c55e;--green2:#16a34a;--greenBg:rgba(34,197,94,0.1);--yellow:#eab308;--yellow2:#ca8a04;--yellowBg:rgba(234,179,8,0.1);--red:#ef4444;--redBg:rgba(239,68,68,0.1);--accent:#22c55e;--tipBg:rgba(10,14,22,0.97)}
-[data-theme="light"]{--bg:#f8faf9;--bg2:#f0f4f1;--card:#ffffff;--card2:#f5f7f6;--border:rgba(0,0,0,0.08);--text:#1a2e1a;--text2:#4a5e4a;--text3:#7a8e7a;--green:#16a34a;--green2:#15803d;--greenBg:rgba(22,163,74,0.08);--yellow:#ca8a04;--yellow2:#a16207;--yellowBg:rgba(202,138,4,0.08);--red:#dc2626;--redBg:rgba(220,38,38,0.08);--accent:#16a34a;--tipBg:rgba(255,255,255,0.97)}
+[data-theme="light"]{--bg:#f5f7f5;--bg2:#eaefe9;--card:#ffffff;--card2:#f0f4ef;--border:rgba(0,0,0,0.06);--text:#1a2e1a;--text2:#5a6e5a;--text3:#8a9e8a;--green:#15803d;--green2:#166534;--greenBg:rgba(21,128,61,0.06);--yellow:#a16207;--yellow2:#854d0e;--yellowBg:rgba(161,98,7,0.06);--red:#b91c1c;--redBg:rgba(185,28,28,0.06);--accent:#15803d;--tipBg:rgba(255,255,255,0.98)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
 .wrap{max-width:1700px;margin:0 auto;padding:1.5rem 2rem}
@@ -72,16 +72,16 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 
 /* ═══ ANALYTICS ═══ */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem;margin-bottom:2rem}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;position:relative;overflow:hidden;transition:.3s;cursor:default}
-.sc:hover{transform:translateY(-2px);border-color:var(--green)}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;position:relative;overflow:hidden;transition:border .3s;cursor:default}
+.sc:hover{border-color:var(--green)}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-clr)}
 .sc-l{font-size:.85rem;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.4rem;font-weight:600}
 .sc-v{font-size:2.5rem;font-weight:800;font-family:'JetBrains Mono';color:var(--sc-clr)}
-.sc-s{font-size:.9rem;color:var(--text2);margin-top:.3rem}
-/* KPI tooltip */
-.sc .ktip{display:none;margin-top:.6rem;padding:.5rem .7rem;background:var(--bg2);border:1px solid var(--border);border-radius:7px;font-size:.78rem;color:var(--text2);line-height:1.6}
-.sc:hover .ktip{display:block}
-.ktip b{color:var(--text)}.ktip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:700}
+.sc-s{font-size:.9rem;color:var(--text2);margin-top:.3rem;font-weight:700}
+/* KPI tooltip — smooth expand */
+.sc .ktip{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .35s ease,margin .35s ease;opacity:0;margin-top:0;padding:0 .7rem;background:var(--bg2);border-radius:7px;font-size:.8rem;color:var(--text2);line-height:1.7}
+.sc:hover .ktip{max-height:120px;opacity:1;margin-top:.6rem;padding:.55rem .7rem;border:1px solid var(--border)}
+.ktip b{color:var(--text);font-weight:700}.ktip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800;font-size:.85rem}
 
 .sh{display:flex;align-items:center;gap:.7rem;margin:2.5rem 0 1.25rem}
 .sh h2{font-size:1.4rem;font-weight:700;display:flex;align-items:center;gap:8px}
@@ -95,12 +95,12 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pip-i{width:48px;height:48px;margin:0 auto .5rem;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--card);border:2px solid var(--border)}
 .pip-t{font-weight:700;font-size:1rem;margin-bottom:.2rem}
 .pip-c{font-family:'JetBrains Mono';font-size:1.4rem;font-weight:800;color:var(--green)}
-.pip-p{font-size:.88rem;color:var(--red);font-weight:600}
+.pip-p{font-size:.88rem;color:var(--red);font-weight:700}
 .pip-d{font-size:.75rem;color:var(--text3);margin-top:3px}
-/* Pipeline tooltip */
-.pip-tip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;background:var(--tipBg);border:1px solid var(--border);border-radius:9px;padding:.6rem .8rem;font-size:.78rem;color:var(--text2);line-height:1.7;white-space:nowrap;z-index:60;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
-.pip-s:hover .pip-tip{display:block}
-.pip-tip b{color:var(--text)}.pip-tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:700}
+/* Pipeline tooltip — overlay, no layout shift */
+.pip-tip{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:8px;background:var(--tipBg);border:1px solid var(--border);border-radius:9px;padding:.6rem .8rem;font-size:.8rem;color:var(--text2);line-height:1.7;white-space:nowrap;z-index:60;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,0.12);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;transform:translateX(-50%) translateY(4px)}
+.pip-s:hover .pip-tip{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.pip-tip b{color:var(--text);font-weight:700}.pip-tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800;font-size:.85rem}
 
 /* ═══ COURSE FILTER ═══ */
 .cf{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
@@ -111,27 +111,27 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 
 /* ═══ PERSON CARDS ═══ */
 .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:1rem}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:.3s;position:relative}
-.pc:hover{transform:translateY(-2px);border-color:var(--green)}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;position:relative}
+.pc:hover{border-color:var(--green)}
 .pc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
 .pc-av{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#fff;background:var(--green)}
 .pc-n{font-weight:700;font-size:1.15rem}
 .pc-r{font-size:.82rem;color:var(--text3);margin-top:2px}
 .pc-st{display:grid;gap:.4rem;text-align:center}
 .pc-s{padding:.45rem;background:var(--bg2);border-radius:7px}
-.pc-sv{font-family:'JetBrains Mono';font-weight:700;font-size:1.3rem}
+.pc-sv{font-family:'JetBrains Mono';font-weight:800;font-size:1.3rem}
 .pc-sl{font-size:.75rem;color:var(--text3);text-transform:uppercase;margin-top:2px;font-weight:600}
 .pbar{width:100%;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
 .pfill{height:100%;border-radius:3px;transition:width .5s}
-/* Card tooltip */
-.pc .tip{display:none;margin-top:.65rem;padding:.55rem .75rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:.8rem;color:var(--text2);line-height:1.65}
-.pc:hover .tip{display:block}
-.tip b{color:var(--text);font-weight:600}.tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:700}
+/* Card tooltip — smooth expand inside card */
+.pc .tip{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .35s ease,margin .35s ease,padding .35s ease;opacity:0;margin-top:0;padding:0 .75rem;background:var(--bg2);border-radius:8px;font-size:.82rem;color:var(--text2);line-height:1.7}
+.pc:hover .tip{max-height:100px;opacity:1;margin-top:.65rem;padding:.55rem .75rem;border:1px solid var(--border)}
+.tip b{color:var(--text);font-weight:700}.tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800;font-size:.85rem}
 
 /* Badge */
 .tbadge{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
-.tbadge-v{padding:.3rem .8rem;border-radius:100px;font-size:.85rem;font-weight:700;font-family:'JetBrains Mono';background:var(--greenBg);color:var(--green)}
-.tbadge-d{font-size:.78rem;color:var(--text3)}
+.tbadge-v{padding:.3rem .8rem;border-radius:100px;font-size:.9rem;font-weight:800;font-family:'JetBrains Mono';background:var(--greenBg);color:var(--green)}
+.tbadge-d{font-size:.82rem;color:var(--text3);font-weight:600}
 .nd{padding:.7rem;color:var(--text3);font-size:.85rem;font-style:italic}
 
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px 14px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}}
