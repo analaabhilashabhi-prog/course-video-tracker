@@ -13,7 +13,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
 .wrap{max-width:1700px;margin:0 auto;padding:1.5rem 2rem}
-
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .nav-brand{display:flex;align-items:center;gap:12px}
 .nav-logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--green),var(--yellow));display:flex;align-items:center;justify-content:center}
@@ -26,16 +25,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .thm:hover{border-color:var(--green);color:var(--green)}
 .sync{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:600}
 .sync.saved{background:var(--gB);color:var(--green)}.sync.saving{background:var(--yB);color:var(--yellow)}
-
 .page{display:none;animation:fadeIn .3s}.page.active{display:block}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .loading{text-align:center;padding:4rem;color:var(--text3)}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .dropdown{padding:11px 40px 11px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter';font-size:15px;font-weight:600;cursor:pointer;min-width:260px;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;margin-bottom:1.5rem}
-
-/* Tables */
 .csec{margin-bottom:2.5rem}
 .chdr{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding-bottom:10px;border-bottom:2px solid var(--border)}
 .chdr h2{font-size:1.5rem;font-weight:800;color:var(--green)}
@@ -58,7 +53,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .vg{color:var(--green);font-family:'JetBrains Mono';font-size:14px;font-weight:800}
 .btn-x{background:var(--rB);color:var(--red);border:none;border-radius:6px;width:24px;height:24px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto}
 .btn-x:hover{background:var(--red);color:#fff}
-/* +/- buttons */
 .pm{display:flex;align-items:center;gap:3px;justify-content:center}
 .pm button{width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';transition:.2s}
 .pm button:hover{background:var(--green);color:#fff;border-color:var(--green)}
@@ -66,31 +60,32 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .sf{display:flex;gap:1rem;flex-wrap:wrap}.sf>.stg{flex:1;min-width:260px}
 
 /* Analytics */
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1rem;margin-bottom:2rem}
-.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border .3s;cursor:default}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border .3s;cursor:default;position:relative;overflow:hidden}
 .sc:hover{border-color:var(--green)}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-clr);position:absolute}
-.sc{position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-clr)}
 .sc-l{font-size:.88rem;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.4rem;font-weight:700}
 .sc-v{font-size:2.6rem;font-weight:900;font-family:'JetBrains Mono';color:var(--sc-clr)}
 .sc-s{font-size:.95rem;color:var(--text2);margin-top:.3rem;font-weight:700}
-
 .sh{display:flex;align-items:center;gap:.7rem;margin:2.5rem 0 1.25rem}
 .sh h2{font-size:1.4rem;font-weight:700;display:flex;align-items:center;gap:8px}
 .sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
 
-/* Pipeline — clean, no tooltips */
-.pip{display:flex;gap:0;margin:1.25rem 0;overflow-x:auto;padding:.6rem 0}
-.pip-s{flex:1;min-width:135px;text-align:center;position:relative}
-.pip-s::after{content:'→';position:absolute;right:-8px;top:40%;color:var(--text3);font-size:1.3rem}
+/* Pipeline */
+.pip{display:flex;gap:0;margin:1.25rem 0;overflow-x:auto;padding:.6rem 0 2.5rem}
+.pip-s{flex:1;min-width:135px;text-align:center;position:relative;cursor:default}
+.pip-s::after{content:'→';position:absolute;right:-8px;top:35%;color:var(--text3);font-size:1.3rem}
 .pip-s:last-child::after{display:none}
-.pip-i{width:48px;height:48px;margin:0 auto .5rem;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--card);border:2px solid var(--border)}
+.pip-i{width:48px;height:48px;margin:0 auto .5rem;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--card);border:2px solid var(--border);transition:border-color .3s}
 .pip-t{font-weight:700;font-size:1.05rem;margin-bottom:.2rem}
-.pip-c{font-family:'JetBrains Mono';font-size:1.5rem;font-weight:900;color:var(--green)}
-.pip-p{font-size:.9rem;color:var(--red);font-weight:700}
+.pip-c{font-family:'JetBrains Mono';font-size:1.5rem;font-weight:900}
+.pip-p{font-size:.9rem;font-weight:700}
 .pip-d{font-size:.78rem;color:var(--text3);margin-top:3px;font-weight:500}
+/* Pipeline hover tooltip - shows who worked */
+.pip-hover{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;background:var(--tipBg);border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;font-size:.8rem;color:var(--text2);line-height:1.7;white-space:nowrap;z-index:60;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,0.15);opacity:0;pointer-events:none;transition:opacity .25s}
+.pip-s:hover .pip-hover{opacity:1;pointer-events:auto}
+.pip-hover b{color:var(--text);font-weight:700}.pip-hover .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800}
 
-/* Course filter */
 .cf{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .cf button{padding:.55rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--text2);font-size:.88rem;font-weight:500;cursor:pointer;transition:.3s;font-family:'Inter'}
 .cf button:hover{background:var(--card2);color:var(--text);border-color:var(--green)}
@@ -99,7 +94,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 
 /* Person cards */
 .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1rem}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;overflow:hidden}
 .pc:hover{border-color:var(--green)}
 .pc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
 .pc-av{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#fff}
@@ -110,17 +105,15 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pc-sl{font-size:.78rem;color:var(--text3);text-transform:uppercase;margin-top:3px;font-weight:600}
 .pbar{width:100%;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
 .pfill{height:100%;border-radius:3px;transition:width .5s}
-/* Card tooltip — fade only, no layout shift */
-.pc .tip{position:absolute;bottom:0;left:0;right:0;background:var(--tipBg);border-top:1px solid var(--border);border-radius:0 0 12px 12px;padding:.6rem .9rem;font-size:.82rem;color:var(--text2);line-height:1.7;opacity:0;transition:opacity .3s;pointer-events:none}
-.pc:hover .tip{opacity:1;pointer-events:auto}
+/* Card tooltip */
+.pc .tip{max-height:0;overflow:hidden;background:var(--bg2);border-radius:0 0 10px 10px;padding:0 .9rem;font-size:.82rem;color:var(--text2);line-height:1.7;transition:max-height .45s cubic-bezier(0.4,0,0.2,1),padding .35s ease,border-color .3s ease,opacity .35s ease;opacity:0;margin:0 -1.2rem -1.2rem;border-top:1px solid transparent}
+.pc:hover .tip{max-height:120px;padding:.75rem .9rem;border-top:1px solid var(--border);opacity:1}
 .tip b{color:var(--text);font-weight:700}.tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800}
 
-/* Badge */
 .tbadge{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
 .tbadge-v{padding:.35rem .9rem;border-radius:100px;font-size:.95rem;font-weight:800;font-family:'JetBrains Mono';background:var(--gB);color:var(--green)}
 .tbadge-d{font-size:.85rem;color:var(--text3);font-weight:600}
 .nd{padding:.7rem;color:var(--text3);font-size:.88rem;font-style:italic}
-.note{font-size:.68rem;color:var(--text3);margin-top:4px;padding-left:3px}
 
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
@@ -183,66 +176,44 @@ const S=(a,f)=>a.reduce((s,x)=>s+(Number(x[f])||0),0);
 const pC=v=>v>0?'vr':'vg';
 const GM={};let GI=0;function G(n){if(!n)return'var(--green)';if(!GM[n]){const c=['#22c55e','#16a34a','#eab308','#ca8a04','#f59e0b','#84cc16','#10b981','#14b8a6'];GM[n]=c[GI%c.length];GI++}return GM[n]}
 function I(n){if(!n)return'?';return n.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()}
-const g=(arr,id)=>arr.filter(r=>r.course_id===id);
+const gg=(arr,id)=>arr.filter(r=>r.course_id===id);
 
 function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')rA();lucide.createIcons()}
 
-// +/- for VG
 function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend});rT();lucide.createIcons()}
 function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend})}rT();lucide.createIcons()}
 function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);dbU(t,id,{[f]:r[f]})}rT();lucide.createIcons()}
 async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0}:{course_id:cid,person:'',count:0,sort_order:0};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
 async function dR(t,id){await dbD(t,id);const m={video_gen:()=>VG=VG.filter(r=>r.id!==id),audio_gen:()=>AG=AG.filter(r=>r.id!==id),video_edit:()=>VE=VE.filter(r=>r.id!==id),voice_over:()=>VO=VO.filter(r=>r.id!==id),output:()=>OUT=OUT.filter(r=>r.id!==id),course_mapping:()=>CM=CM.filter(r=>r.id!==id)};m[t]();rT();lucide.createIcons()}
 
-// ═══ RENDER TABLES ═══
+// ═══ TABLES (same as before) ═══
 function rT(){
-  const sel=document.getElementById('cDrop').value;
-  const fc=sel==='all'?C:C.filter(c=>c.id===sel);
-  let h='';
+  const sel=document.getElementById('cDrop').value;const fc=sel==='all'?C:C.filter(c=>c.id===sel);let h='';
   fc.forEach(c=>{
-    const cv=g(VG,c.id),ca=g(AG,c.id),ce=g(VE,c.id),cvo=g(VO,c.id),co=g(OUT,c.id),ccm=g(CM,c.id);
+    const cv=gg(VG,c.id),ca=gg(AG,c.id),ce=gg(VE,c.id),cvo=gg(VO,c.id),co=gg(OUT,c.id),ccm=gg(CM,c.id);
     const vR=S(cv,'recv'),vC=S(cv,'count'),vCR=S(cv,'code_recv'),vCP=S(cv,'code_pend');
     const aC=S(ca,'count'),eC=S(ce,'count'),voC=S(cvo,'count'),voA=Math.min(aC,eC);
     const oC=S(co,'count'),oCmp=S(co,'compress'),oFS=S(co,'file_seg'),cmC=S(ccm,'complete');
-
     h+=`<div class="csec"><div class="chdr"><h2>${c.name}</h2><span class="badge">${c.total} Videos</span></div>`;
-
-    // VG with +/- buttons
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="video" style="width:16px;height:16px"></i> Video Generation</span><button class="btn-a" onclick="aR('video_gen','${c.id}')">+ Add Row</button></div><table><thead><tr><th>Generated By</th><th>Count</th><th>Video Received</th><th>Pending</th><th>Python Code Received</th><th>Python Code Pending</th><th></th></tr></thead><tbody>`;
-    cv.forEach(r=>{const p=r.count-r.recv;
-      h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uVg(${r.id},'person',this.value)"></td>
-      <td><div class="pm"><button onclick="incVg(${r.id},'count',-1)">−</button><span>${r.count}</span><button onclick="incVg(${r.id},'count',1)">+</button></div></td>
-      <td><div class="pm"><button onclick="incVg(${r.id},'recv',-1)">−</button><span>${r.recv}</span><button onclick="incVg(${r.id},'recv',1)">+</button></div></td>
-      <td><span class="${pC(p)}">${p}</span></td>
-      <td><div class="pm"><button onclick="incVg(${r.id},'code_recv',-1)">−</button><span>${r.code_recv}</span><button onclick="incVg(${r.id},'code_recv',1)">+</button></div></td>
-      <td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td>
-      <td><button class="btn-x" onclick="dR('video_gen',${r.id})">×</button></td></tr>`});
+    cv.forEach(r=>{const p=r.count-r.recv;h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uVg(${r.id},'person',this.value)"></td><td><div class="pm"><button onclick="incVg(${r.id},'count',-1)">−</button><span>${r.count}</span><button onclick="incVg(${r.id},'count',1)">+</button></div></td><td><div class="pm"><button onclick="incVg(${r.id},'recv',-1)">−</button><span>${r.recv}</span><button onclick="incVg(${r.id},'recv',1)">+</button></div></td><td><span class="${pC(p)}">${p}</span></td><td><div class="pm"><button onclick="incVg(${r.id},'code_recv',-1)">−</button><span>${r.code_recv}</span><button onclick="incVg(${r.id},'code_recv',1)">+</button></div></td><td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td><td><button class="btn-x" onclick="dR('video_gen',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${vC} / ${c.total}</td><td>${vR}</td><td><span class="${pC(c.total-vR)}">${c.total-vR}</span></td><td>${vCR}</td><td><span class="${pC(vCP)}">${vCP}</span></td><td></td></tr></tbody></table></div>`;
-
     h+=`<div class="sf">`;
-    // Audio Script
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--yellow)"><i data-lucide="file-audio" style="width:16px;height:16px"></i> Audio Script<span class="sub">(of ${vCR} .py files)</span></span><button class="btn-a" onclick="aR('audio_gen','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th></th></tr></thead><tbody>`;
     ca.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('audio_gen',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('audio_gen',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('audio_gen',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${aC} / ${vCR}</td><td></td></tr></tbody></table></div>`;
-    // Masking
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--yellow)"><i data-lucide="scissors" style="width:16px;height:16px"></i> Video Editing<span class="sub">(of ${vR} received)</span></span><button class="btn-a" onclick="aR('video_edit','${c.id}')">+ Add</button></div><table><thead><tr><th>Masking By</th><th>Count</th><th></th></tr></thead><tbody>`;
     ce.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('video_edit',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${eC} / ${vR}</td><td></td></tr></tbody></table></div>`;
-    // VO
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="mic" style="width:16px;height:16px"></i> Voice Over<span class="sub">(of ${voA} ready)</span></span><button class="btn-a" onclick="aR('voice_over','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th></th></tr></thead><tbody>`;
     cvo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('voice_over',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('voice_over',${r.id},'count',this.value)"></td><td><button class="btn-x" onclick="dR('voice_over',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td></tr></tbody></table></div>`;
-    h+=`</div>`;
-    // Output (Compress FIRST → File Seg) + Mapping
-    h+=`<div class="sf">`;
-    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="folder-output" style="width:16px;height:16px"></i> Output<span class="sub">(of ${voC} VO done)</span></span><button class="btn-a" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>Compress</th><th>File Segregation</th><th></th></tr></thead><tbody>`;
+    h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td></tr></tbody></table></div></div>`;
+    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="folder-output" style="width:16px;height:16px"></i> Output<span class="sub">(of ${voC} VO done)</span></span><button class="btn-a" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>Compress</th><th>File Segregation</th><th></th></tr></thead><tbody>`;
     co.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"></td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${oC} / ${voC}</td><td><span class="${pC(Math.max(0,voC-oC))}">${Math.max(0,voC-oC)}</span></td><td>${oCmp}</td><td>${oFS}</td><td></td></tr></tbody></table></div>`;
-    // Course Mapping
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="upload-cloud" style="width:16px;height:16px"></i> Course Mapping<span class="sub">(of ${oFS} file seg done)</span></span><button class="btn-a" onclick="aR('course_mapping','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Complete</th><th>Pending</th><th></th></tr></thead><tbody>`;
     ccm.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('course_mapping',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.complete}" onchange="uS('course_mapping',${r.id},'complete',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.pending}" onchange="uS('course_mapping',${r.id},'pending',this.value)"></td><td><button class="btn-x" onclick="dR('course_mapping',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${cmC} / ${oFS}</td><td><span class="${pC(Math.max(0,oFS-cmC))}">${Math.max(0,oFS-cmC)}</span></td><td></td></tr></tbody></table></div></div>`;
-    h+=`</div>`;
+    h+=`<tr class="tot"><td>Total</td><td>${cmC} / ${oFS}</td><td><span class="${pC(Math.max(0,oFS-cmC))}">${Math.max(0,oFS-cmC)}</span></td><td></td></tr></tbody></table></div></div></div>`;
   });
   document.getElementById('tc').innerHTML=h;lucide.createIcons()}
 
@@ -253,10 +224,15 @@ function afI(){return afc().map(c=>c.id)}
 function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
   return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),au:S(fa,'count'),mk:S(fe,'count'),vo:S(fvo,'count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),cmp:S(fo,'compress'),map:S(fcm,'complete')}}
 
+// Aggregate workers per stage for hover tooltip
+function workers(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person&&r[field]>0).forEach(r=>{if(!m[r.person])m[r.person]=0;m[r.person]+=r[field]});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<b>${n}</b>: <span class="n">${v}</span>`).join('<br>')||'No data'}
+function outWorkers(field){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person&&(r[field]||0)>0).forEach(r=>{if(!m[r.person])m[r.person]=0;m[r.person]+=r[field]||0});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<b>${n}</b>: <span class="n">${v}</span>`).join('<br>')||'No data'}
+
 function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
 function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
 
-function teamCards(data,done,avail,tipText,clr){
+// Team cards — NO contribution %, NO delete button
+function teamCards(data,done,avail,tipText){
   const pendT=Math.max(0,avail-done);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
@@ -268,7 +244,7 @@ function outCards(data,t){
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
   else data.forEach(p=>{const barW=t.vo>0?Math.round((p.cmp/t.vo)*100):0;
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Segregation</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${pendT}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip"><b>Flow:</b> VO done → Compress (<span class="n">${t.cmp}</span>) → File Seg (<span class="n">${t.fs}</span>). Pending: <span class="n">${pendT}</span></div></div>`});
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip"><b>Flow:</b> VO done → Compress (<span class="n">${t.cmp}</span>) → File Seg (<span class="n">${t.fs}</span>). Pending: <span class="n">${pendT}</span></div></div>`});
   h+=`</div>`;return h}
 function tBdg(d,a,dep){return `<div class="tbadge"><div class="tbadge-v">${d} / ${a}</div><div class="tbadge-d">${dep}</div></div>`}
 
@@ -276,34 +252,37 @@ function rA(){
   const t=T2(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
   const pyP=Math.max(0,t.recv-t.cr),auP=Math.max(0,t.cr-t.au),mkP=Math.max(0,t.recv-t.mk),voP=Math.max(0,voA-t.vo),outP=Math.max(0,t.vo-t.cmp),mapP=Math.max(0,t.fs-t.map);
 
-  // KPIs: Total Videos, Videos Received, Python Code Received, Audio Script Done, Video Editing Done, Voice Over Done, Courses Mapped
+  // Dynamic color helper
+  const clr=(d,a)=>d>=a&&a>0?'var(--green)':d>0?'var(--yellow)':'var(--red)';
+  const ptxt=(pend)=>pend>0?`<span style="color:var(--red)">${pend} pending</span>`:`<span style="color:var(--green)">done</span>`;
+
+  // 7 KPIs: Total, Received, Python Code, Audio Script, Video Editing, Voice Over, Mapped
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
-    <div class="sc" style="--sc-clr:${t.pend>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
-    <div class="sc" style="--sc-clr:${pyP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
-    <div class="sc" style="--sc-clr:${auP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr} .py files</div></div>
-    <div class="sc" style="--sc-clr:${mkP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv} videos</div></div>
-    <div class="sc" style="--sc-clr:${voP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA} available</div></div>
-    <div class="sc" style="--sc-clr:${mapP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.fs} file seg done</div></div>`;
+    <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.map,t.fs)}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.fs}</div></div>`;
 
-  // Pipeline — clean, dynamic colors: green if done, red/yellow if pending
-  const pClr=(d,a)=>d>=a?'var(--green)':'var(--yellow)';
-  const pTxt=(pend)=>pend>0?`<span style="color:var(--red);font-weight:700">${pend} pending</span>`:`<span style="color:var(--green);font-weight:700">done</span>`;
+  // Pipeline with GREEN/RED colors + hover showing who worked
+  const vgW=workers(VG,'recv'),pyW=workers(VG,'code_recv'),auW=workers(AG),mkW=workers(VE),voW=workers(VO),outW=outWorkers('compress'),mapW=workers(CM,'complete');
   document.getElementById('pipR').innerHTML=`
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${pClr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${pClr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${pTxt(t.pend)}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${pClr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${pClr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${pTxt(pyP)}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${pClr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${pClr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${pTxt(auP)}</div><div class="pip-d">needs .py file</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${pClr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${pClr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${pTxt(mkP)}</div><div class="pip-d">needs video</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${pClr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${pClr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${pTxt(voP)}</div><div class="pip-d">audio + masking</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${pClr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${pClr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${pTxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.map,t.fs)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${pClr(t.map,t.fs)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${pClr(t.map,t.fs)}">${t.map} / ${t.fs}</div><div class="pip-p">${pTxt(mapP)}</div><div class="pip-d">final step</div></div>`;
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${clr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${clr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${ptxt(t.pend)}</div><div class="pip-hover">${vgW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${clr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${clr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${ptxt(pyP)}</div><div class="pip-hover">${pyW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${clr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${clr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${ptxt(auP)}</div><div class="pip-d">needs .py file</div><div class="pip-hover">${auW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${ptxt(mkP)}</div><div class="pip-d">needs video</div><div class="pip-hover">${mkW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${ptxt(voP)}</div><div class="pip-d">audio + masking</div><div class="pip-hover">${voW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div><div class="pip-hover">${outW}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.map,t.fs)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${clr(t.map,t.fs)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${clr(t.map,t.fs)}">${t.map} / ${t.fs}</div><div class="pip-p">${ptxt(mapP)}</div><div class="pip-d">final step</div><div class="pip-hover">${mapW}</div></div>`;
 
   // Course filter
   let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All Courses <span class="cn">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
   C.forEach(c=>{cf+=`<button class="${aF===c.id?'active':''}" onclick="sAF('${c.id}')">${c.name} <span class="cn">${c.total}</span></button>`});
   document.getElementById('cfR').innerHTML=cf;
 
-  // Team 1 — VG Cards
+  // Team 1 — VG Cards (with pending, no delete in analytics)
   const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id));const pM={};
   fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=Math.max(0,r.recv-r.code_recv)});
   const pA=Object.entries(pM).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count);
@@ -311,13 +290,13 @@ function rA(){
     ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st" style="grid-template-columns:repeat(5,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--text)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Received</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cr}</div><div class="pc-sl">Py Code Recv</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--red)':'var(--green)'}">${p.cp}</div><div class="pc-sl">Py Code Pend</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div><div class="tip"><b>${p.name}</b> mapped to <span class="n">${p.count}</span> videos. Received <span class="n">${p.recv}</span> (${pc2}%). Python code for <span class="n">${p.cr}</span>, pending <span class="n">${p.cp}</span>.</div></div>`});
   document.getElementById('vgC').innerHTML=ph;
 
-  // Teams 2-6
+  // Teams 2-6 — NO contribution %, NO delete
   const ad=teamAgg(AG),md=teamAgg(VE),vd=teamAgg(VO),od=outAgg(),cmd=teamAgg(CM,'complete');
-  document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code (.py files)')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> <span class="n">${t.cr}</span> .py files available → <span class="n">${t.au}</span> audio done → <span class="n">${auP}</span> pending`,'var(--yellow)');
-  document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Received')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> <span class="n">${t.recv}</span> videos received → <span class="n">${t.mk}</span> edited → <span class="n">${mkP}</span> pending`,'var(--yellow)');
-  document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking')+teamCards(vd,t.vo,voA,`<b>Voice Over:</b> min(audio <span class="n">${t.au}</span>, masking <span class="n">${t.mk}</span>) = <span class="n">${voA}</span> available → <span class="n">${t.vo}</span> done → <span class="n">${voP}</span> pending`,'var(--green)');
+  document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code (.py files)')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> <span class="n">${t.cr}</span> .py files → <span class="n">${t.au}</span> done → <span class="n">${auP}</span> pending`);
+  document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Received')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> <span class="n">${t.recv}</span> received → <span class="n">${t.mk}</span> done → <span class="n">${mkP}</span> pending`);
+  document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking')+teamCards(vd,t.vo,voA,`<b>Voice Over:</b> min(audio <span class="n">${t.au}</span>, masking <span class="n">${t.mk}</span>) = <span class="n">${voA}</span> → <span class="n">${t.vo}</span> done → <span class="n">${voP}</span> pending`);
   document.getElementById('t5').innerHTML=tBdg(t.fs,t.vo,'Compress → File Segregation')+outCards(od,t);
-  document.getElementById('t6').innerHTML=tBdg(t.map,t.fs,'Needs File Segregation done')+teamCards(cmd,t.map,t.fs,`<b>Mapping:</b> <span class="n">${t.fs}</span> files segregated → <span class="n">${t.map}</span> mapped to website → <span class="n">${mapP}</span> pending`,'var(--green)');
+  document.getElementById('t6').innerHTML=tBdg(t.map,t.fs,'Needs File Segregation done')+teamCards(cmd,t.map,t.fs,`<b>Mapping:</b> <span class="n">${t.fs}</span> segregated → <span class="n">${t.map}</span> mapped → <span class="n">${mapP}</span> pending`);
   lucide.createIcons()}
 
 function sAF(id){aF=id;rA()}
