@@ -121,9 +121,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .upd-status{font-size:.72rem;font-weight:600;margin-top:.5rem;padding:.3rem .6rem;border-radius:6px;display:inline-flex;align-items:center;gap:4px}
 .upd-status.updated{background:var(--gB);color:var(--green)}
 .upd-status.stale{background:var(--border);color:var(--text3)}
-/* Snapshot button */
-.snap-btn{padding:8px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text2);font-family:'Inter';transition:.3s;display:flex;align-items:center;gap:6px;margin-bottom:1.5rem}
-.snap-btn:hover{border-color:var(--yellow);color:var(--yellow);background:var(--yB)}
 
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
@@ -141,7 +138,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 <div class="wrap">
 <div id="p-tables" class="page active">
   <select class="dropdown" id="cDrop" onchange="rT()"><option value="all">All Courses</option></select>
-  <button class="snap-btn" onclick="saveSnapshot()"><i data-lucide="save" style="width:14px;height:14px"></i> Save Today as Yesterday (Snapshot)</button>
   <div class="loading" id="tl"><div class="spinner"></div>Loading from database...</div>
   <div id="tc"></div>
 </div>
@@ -191,26 +187,26 @@ const gg=(arr,id)=>arr.filter(r=>r.course_id===id);
 
 function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')rA();lucide.createIcons()}
 
-function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=new Date().toISOString().split('T')[0];dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:r.last_updated});rT();lucide.createIcons()}
-function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=new Date().toISOString().split('T')[0];dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:r.last_updated})}rT();lucide.createIcons()}
-function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);r.last_updated=new Date().toISOString().split('T')[0];dbU(t,id,{[f]:r[f],last_updated:r.last_updated})}rT();lucide.createIcons()}
-async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0}:{course_id:cid,person:'',count:0,sort_order:0};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
+function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;
+  // Auto-snapshot: if last_updated is not today, save current as prev before changing
+  if(r.last_updated&&r.last_updated!==today){r.prev_recv=r.recv;r.prev_code_recv=r.code_recv;dbU('video_gen',id,{prev_recv:r.recv,prev_code_recv:r.code_recv})}
+  r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today});rT();lucide.createIcons()}
+function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{
+  if(r.last_updated&&r.last_updated!==today){r.prev_recv=r.recv;r.prev_code_recv=r.code_recv;dbU('video_gen',id,{prev_recv:r.recv,prev_code_recv:r.code_recv})}
+  r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today})}rT();lucide.createIcons()}
+function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{
+  // Auto-snapshot for other tables
+  if(r.last_updated&&r.last_updated!==today){
+    const prevD={};
+    if(t==='audio_gen'||t==='video_edit'||t==='voice_over'){prevD.prev_count=r.count;r.prev_count=r.count}
+    if(t==='output'){prevD.prev_compress=r.compress;prevD.prev_file_seg=r.file_seg;r.prev_compress=r.compress;r.prev_file_seg=r.file_seg}
+    if(t==='course_mapping'){prevD.prev_complete=r.complete;r.prev_complete=r.complete}
+    if(Object.keys(prevD).length)dbU(t,id,prevD);
+  }
+  r[f]=Math.max(0,Number(v)||0);r.last_updated=today;dbU(t,id,{[f]:r[f],last_updated:today})}rT();lucide.createIcons()}
+async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0,last_updated:today}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0,last_updated:today}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0,last_updated:today}:{course_id:cid,person:'',count:0,sort_order:0,last_updated:today};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
 async function dR(t,id){await dbD(t,id);const m={video_gen:()=>VG=VG.filter(r=>r.id!==id),audio_gen:()=>AG=AG.filter(r=>r.id!==id),video_edit:()=>VE=VE.filter(r=>r.id!==id),voice_over:()=>VO=VO.filter(r=>r.id!==id),output:()=>OUT=OUT.filter(r=>r.id!==id),course_mapping:()=>CM=CM.filter(r=>r.id!==id)};m[t]();rT();lucide.createIcons()}
 
-// Snapshot — save current as yesterday
-async function saveSnapshot(){
-  if(!confirm('Save current counts as yesterday? This will overwrite previous snapshot.'))return;
-  sy('saving');
-  for(const r of VG){await SB.from('video_gen').update({prev_recv:r.recv,prev_code_recv:r.code_recv}).eq('id',r.id);r.prev_recv=r.recv;r.prev_code_recv=r.code_recv}
-  for(const r of AG){await SB.from('audio_gen').update({prev_count:r.count}).eq('id',r.id);r.prev_count=r.count}
-  for(const r of VE){await SB.from('video_edit').update({prev_count:r.count}).eq('id',r.id);r.prev_count=r.count}
-  for(const r of VO){await SB.from('voice_over').update({prev_count:r.count}).eq('id',r.id);r.prev_count=r.count}
-  for(const r of OUT){await SB.from('output').update({prev_compress:r.compress,prev_file_seg:r.file_seg}).eq('id',r.id);r.prev_compress=r.compress;r.prev_file_seg=r.file_seg}
-  for(const r of CM){await SB.from('course_mapping').update({prev_complete:r.complete}).eq('id',r.id);r.prev_complete=r.complete}
-  sy('saved');rT();if(document.getElementById('p-analytics').classList.contains('active'))rA();
-  alert('Snapshot saved! Tomorrow you can compare changes.');
-}
-// Date lock
 function setDate(t,id,val){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;r.submit_date=val;dbU(t,id,{submit_date:val});rT();lucide.createIcons()}
 // Diff badge helper
 function diffB(curr,prev){const d=curr-(prev||0);if(d>0)return `<span class="diff up">↑${d}</span>`;if(d<0)return `<span class="diff down">↓${Math.abs(d)}</span>`;return ''}
