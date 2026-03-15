@@ -72,7 +72,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
 
 /* Pipeline */
-.pip{display:flex;gap:0;margin:1.25rem 0;overflow-x:auto;padding:.6rem 0 2.5rem}
+.pip{display:flex;gap:0;margin:1.25rem 0;overflow-x:auto;padding:.6rem 0}
 .pip-s{flex:1;min-width:135px;text-align:center;position:relative;cursor:default}
 .pip-s::after{content:'→';position:absolute;right:-8px;top:35%;color:var(--text3);font-size:1.3rem}
 .pip-s:last-child::after{display:none}
@@ -81,10 +81,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pip-c{font-family:'JetBrains Mono';font-size:1.5rem;font-weight:900}
 .pip-p{font-size:.9rem;font-weight:700}
 .pip-d{font-size:.78rem;color:var(--text3);margin-top:3px;font-weight:500}
-/* Pipeline hover tooltip - shows who worked */
-.pip-hover{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;background:var(--tipBg);border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;font-size:.8rem;color:var(--text2);line-height:1.7;white-space:nowrap;z-index:60;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,0.15);opacity:0;pointer-events:none;transition:opacity .25s}
-.pip-s:hover .pip-hover{opacity:1;pointer-events:auto}
-.pip-hover b{color:var(--text);font-weight:700}.pip-hover .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800}
 
 .cf{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .cf button{padding:.55rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--text2);font-size:.88rem;font-weight:500;cursor:pointer;transition:.3s;font-family:'Inter'}
@@ -93,7 +89,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .cf button .cn{display:inline-block;margin-left:.35rem;padding:.1rem .45rem;background:rgba(0,0,0,0.15);border-radius:100px;font-size:.75rem;font-family:'JetBrains Mono';font-weight:700}
 
 /* Person cards */
-.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1rem}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:1rem}
 .pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;overflow:hidden}
 .pc:hover{border-color:var(--green)}
 .pc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
@@ -101,7 +97,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pc-n{font-weight:800;font-size:1.2rem}.pc-r{font-size:.85rem;color:var(--text3);margin-top:2px;font-weight:500}
 .pc-st{display:grid;gap:.4rem;text-align:center}
 .pc-s{padding:.5rem;background:var(--bg2);border-radius:8px}
-.pc-sv{font-family:'JetBrains Mono';font-weight:900;font-size:1.35rem}
+.pc-sv{font-family:'JetBrains Mono';font-weight:900;font-size:1.2rem;white-space:nowrap}
 .pc-sl{font-size:.78rem;color:var(--text3);text-transform:uppercase;margin-top:3px;font-weight:600}
 .pbar{width:100%;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
 .pfill{height:100%;border-radius:3px;transition:width .5s}
@@ -224,10 +220,6 @@ function afI(){return afc().map(c=>c.id)}
 function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
   return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),au:S(fa,'count'),mk:S(fe,'count'),vo:S(fvo,'count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),cmp:S(fo,'compress'),map:S(fcm,'complete')}}
 
-// Aggregate workers per stage for hover tooltip
-function workers(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person&&r[field]>0).forEach(r=>{if(!m[r.person])m[r.person]=0;m[r.person]+=r[field]});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<b>${n}</b>: <span class="n">${v}</span>`).join('<br>')||'No data'}
-function outWorkers(field){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person&&(r[field]||0)>0).forEach(r=>{if(!m[r.person])m[r.person]=0;m[r.person]+=r[field]||0});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<b>${n}</b>: <span class="n">${v}</span>`).join('<br>')||'No data'}
-
 function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
 function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
 
@@ -266,16 +258,15 @@ function rA(){
     <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.map,t.fs)}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.fs}</div></div>`;
 
-  // Pipeline with GREEN/RED colors + hover showing who worked
-  const vgW=workers(VG,'recv'),pyW=workers(VG,'code_recv'),auW=workers(AG),mkW=workers(VE),voW=workers(VO),outW=outWorkers('compress'),mapW=workers(CM,'complete');
+  // Pipeline with GREEN/RED colors — no hover tooltips
   document.getElementById('pipR').innerHTML=`
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${clr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${clr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${ptxt(t.pend)}</div><div class="pip-hover">${vgW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${clr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${clr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${ptxt(pyP)}</div><div class="pip-hover">${pyW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${clr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${clr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${ptxt(auP)}</div><div class="pip-d">needs .py file</div><div class="pip-hover">${auW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${ptxt(mkP)}</div><div class="pip-d">needs video</div><div class="pip-hover">${mkW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${ptxt(voP)}</div><div class="pip-d">audio + masking</div><div class="pip-hover">${voW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div><div class="pip-hover">${outW}</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.map,t.fs)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${clr(t.map,t.fs)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${clr(t.map,t.fs)}">${t.map} / ${t.fs}</div><div class="pip-p">${ptxt(mapP)}</div><div class="pip-d">final step</div><div class="pip-hover">${mapW}</div></div>`;
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${clr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${clr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${ptxt(t.pend)}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${clr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${clr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${ptxt(pyP)}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${clr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${clr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${ptxt(auP)}</div><div class="pip-d">needs .py file</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${ptxt(mkP)}</div><div class="pip-d">needs video</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${ptxt(voP)}</div><div class="pip-d">audio + masking</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.map,t.fs)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${clr(t.map,t.fs)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${clr(t.map,t.fs)}">${t.map} / ${t.fs}</div><div class="pip-p">${ptxt(mapP)}</div><div class="pip-d">final step</div></div>`;
 
   // Course filter
   let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All Courses <span class="cn">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
