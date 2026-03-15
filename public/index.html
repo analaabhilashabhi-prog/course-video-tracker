@@ -66,7 +66,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .sf{display:flex;gap:1rem;flex-wrap:wrap}.sf>.stg{flex:1;min-width:260px}
 
 /* Analytics */
-.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem;margin-bottom:2rem}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1rem;margin-bottom:2rem}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border .3s;cursor:default}
 .sc:hover{border-color:var(--green)}
 .sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-clr);position:absolute}
@@ -99,7 +99,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 
 /* Person cards */
 .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1rem}
-.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;overflow:hidden}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s}
 .pc:hover{border-color:var(--green)}
 .pc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem}
 .pc-av{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:#fff}
@@ -110,10 +110,9 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pc-sl{font-size:.78rem;color:var(--text3);text-transform:uppercase;margin-top:3px;font-weight:600}
 .pbar{width:100%;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
 .pfill{height:100%;border-radius:3px;transition:width .5s}
-
-/* Card tooltip — smooth expand on hover */
-.pc .tip{max-height:0;overflow:hidden;background:var(--bg2);border-radius:0 0 10px 10px;padding:0 .9rem;font-size:.82rem;color:var(--text2);line-height:1.7;transition:max-height .45s cubic-bezier(0.4,0,0.2,1),padding .35s ease,border-color .3s ease,opacity .35s ease;opacity:0;margin:0 -1.2rem -1.2rem;border-top:1px solid transparent}
-.pc:hover .tip{max-height:120px;padding:.75rem .9rem;border-top:1px solid var(--border);opacity:1}
+/* Card tooltip — fade only, no layout shift */
+.pc .tip{position:absolute;bottom:0;left:0;right:0;background:var(--tipBg);border-top:1px solid var(--border);border-radius:0 0 12px 12px;padding:.6rem .9rem;font-size:.82rem;color:var(--text2);line-height:1.7;opacity:0;transition:opacity .3s;pointer-events:none}
+.pc:hover .tip{opacity:1;pointer-events:auto}
 .tip b{color:var(--text);font-weight:700}.tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800}
 
 /* Badge */
@@ -258,11 +257,11 @@ function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.inclu
 function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
 
 function teamCards(data,done,avail,tipText,clr){
-  const total=data.reduce((s,p)=>s+p.val,0)||1;const pendT=Math.max(0,avail-done);
+  const pendT=Math.max(0,avail-done);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const pct=Math.round((p.val/total)*100);const barW=avail>0?Math.round((p.val/avail)*100):0;
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${pendT}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${pct}%</div><div class="pc-sl">Contribution</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3)">${done}/${avail}</div><div class="pc-sl">Total Progress</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip">${tipText}</div></div>`});
+  else data.forEach(p=>{const barW=avail>0?Math.round((p.val/avail)*100):0;
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3)">${done} / ${avail}</div><div class="pc-sl">Total Progress</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip">${tipText}</div></div>`});
   h+=`</div>`;return h}
 function outCards(data,t){
   const pendT=Math.max(0,t.vo-t.cmp);
@@ -277,24 +276,27 @@ function rA(){
   const t=T2(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
   const pyP=Math.max(0,t.recv-t.cr),auP=Math.max(0,t.cr-t.au),mkP=Math.max(0,t.recv-t.mk),voP=Math.max(0,voA-t.vo),outP=Math.max(0,t.vo-t.cmp),mapP=Math.max(0,t.fs-t.map);
 
-  // KPIs
+  // KPIs: Total Videos, Videos Received, Python Code Received, Audio Script Done, Video Editing Done, Voice Over Done, Courses Mapped
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
-    <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
-    <div class="sc" style="--sc-clr:var(--yellow)"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP} pending</div></div>
-    <div class="sc" style="--sc-clr:var(--yellow)"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr} .py files</div></div>
-    <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA} available</div></div>
-    <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.fs} file seg done</div></div>`;
+    <div class="sc" style="--sc-clr:${t.pend>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
+    <div class="sc" style="--sc-clr:${pyP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
+    <div class="sc" style="--sc-clr:${auP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr} .py files</div></div>
+    <div class="sc" style="--sc-clr:${mkP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv} videos</div></div>
+    <div class="sc" style="--sc-clr:${voP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA} available</div></div>
+    <div class="sc" style="--sc-clr:${mapP>0?'var(--yellow)':'var(--green)'}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.fs} file seg done</div></div>`;
 
-  // Pipeline
+  // Pipeline — clean, dynamic colors: green if done, red/yellow if pending
+  const pClr=(d,a)=>d>=a?'var(--green)':'var(--yellow)';
+  const pTxt=(pend)=>pend>0?`<span style="color:var(--red);font-weight:700">${pend} pending</span>`:`<span style="color:var(--green);font-weight:700">done</span>`;
   document.getElementById('pipR').innerHTML=`
-    <div class="pip-s"><div class="pip-i"><i data-lucide="video" style="width:20px;height:20px;color:var(--green)"></i></div><div class="pip-t">Video Gen</div><div class="pip-c">${t.recv} / ${t.tot}</div><div class="pip-p">${t.pend>0?t.pend+' pending':'done'}</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="file-code" style="width:20px;height:20px;color:var(--yellow)"></i></div><div class="pip-t">Python Code</div><div class="pip-c">${t.cr} / ${t.recv}</div><div class="pip-p">${pyP>0?pyP+' pending':'done'}</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="file-audio" style="width:20px;height:20px;color:var(--yellow)"></i></div><div class="pip-t">Audio Script</div><div class="pip-c">${t.au} / ${t.cr}</div><div class="pip-p">${auP>0?auP+' pending':'done'}</div><div class="pip-d">needs .py file</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="scissors" style="width:20px;height:20px;color:var(--yellow)"></i></div><div class="pip-t">Video Editing</div><div class="pip-c">${t.mk} / ${t.recv}</div><div class="pip-p">${mkP>0?mkP+' pending':'done'}</div><div class="pip-d">needs video</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="mic" style="width:20px;height:20px;color:var(--green)"></i></div><div class="pip-t">Voice Over</div><div class="pip-c">${t.vo} / ${voA}</div><div class="pip-p">${voP>0?voP+' pending':'done'}</div><div class="pip-d">audio + masking</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="folder-output" style="width:20px;height:20px;color:var(--green)"></i></div><div class="pip-t">Output</div><div class="pip-c">${t.fs} / ${t.vo}</div><div class="pip-p">${outP>0?outP+' pending':'done'}</div><div class="pip-d">compress → file seg</div></div>
-    <div class="pip-s"><div class="pip-i"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:var(--green)"></i></div><div class="pip-t">Mapping</div><div class="pip-c">${t.map} / ${t.fs}</div><div class="pip-p">${mapP>0?mapP+' pending':'done'}</div><div class="pip-d">final step</div></div>`;
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${pClr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${pClr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${pTxt(t.pend)}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${pClr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${pClr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${pTxt(pyP)}</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${pClr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${pClr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${pTxt(auP)}</div><div class="pip-d">needs .py file</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${pClr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${pClr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${pTxt(mkP)}</div><div class="pip-d">needs video</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${pClr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${pClr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${pTxt(voP)}</div><div class="pip-d">audio + masking</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${pClr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${pClr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${pTxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${pClr(t.map,t.fs)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${pClr(t.map,t.fs)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${pClr(t.map,t.fs)}">${t.map} / ${t.fs}</div><div class="pip-p">${pTxt(mapP)}</div><div class="pip-d">final step</div></div>`;
 
   // Course filter
   let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All Courses <span class="cn">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
