@@ -267,7 +267,7 @@ let aF='all';
 function afc(){return aF==='all'?C:C.filter(c=>c.id===aF)}
 function afI(){return afc().map(c=>c.id)}
 function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
-  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),prevRecv:S(fv,'prev_recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),prevCr:S(fv,'prev_code_recv'),au:S(fa,'count'),prevAu:S(fa,'prev_count'),mk:S(fe,'count'),prevMk:S(fe,'prev_count'),vo:S(fvo,'count'),prevVo:S(fvo,'prev_count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),prevFs:S(fo,'prev_file_seg'),cmp:S(fo,'compress'),prevCmp:S(fo,'prev_compress'),map:S(fcm,'complete'),prevMap:S(fcm,'prev_complete')}}
+  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),prevRecv:S(fv,'prev_recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),prevCr:S(fv,'prev_code_recv'),au:S(fa,'count'),prevAu:S(fa,'prev_count'),mk:S(fe,'count'),prevMk:S(fe,'prev_count'),vo:S(fvo,'count'),prevVo:S(fvo,'prev_count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),prevFs:S(fo,'prev_file_seg'),cmp:S(fo,'compress'),prevCmp:S(fo,'prev_compress'),map:S(fcm,'complete'),prevMap:S(fcm,'prev_complete'),ldVg:latestDate(fv),ldPy:latestDate(fv),ldAu:latestDate(fa),ldMk:latestDate(fe),ldVo:latestDate(fvo),ldOut:latestDate(fo),ldMap:latestDate(fcm)}}
 
 function teamAgg(arr,field='count',prevField='prev_count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,prev:0,courses:[],lastDate:''};m[r.person].val+=r[field]||0;m[r.person].prev+=r[prevField]||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
 function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,prevCmp:0,prevFs:0,courses:[],lastDate:''};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;m[r.person].prevCmp+=r.prev_compress||0;m[r.person].prevFs+=r.prev_file_seg||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
@@ -297,15 +297,18 @@ function rA(){
   const clr=(d,a)=>d>=a&&a>0?'var(--green)':d>0?'var(--yellow)':'var(--red)';
   const ptxt=(pend)=>pend>0?`<span style="color:var(--red)">${pend} pending</span>`:`<span style="color:var(--green)">done</span>`;
 
-  // 7 KPIs with diff badges
+  // Helper for KPI update badge
+  const kUpd=(curr,prev,ld)=>{const d=curr-(prev||0);if(d>0)return `<div class="upd-status updated" style="margin-top:.4rem">↑${d} · ${fmtDate(ld)}</div>`;if(ld)return `<div class="upd-status stale" style="margin-top:.4rem">No update since ${fmtDate(ld)}</div>`;return ''};
+
+  // 7 KPIs with diff badges + update status
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv} ${diffB(t.recv,t.prevRecv)}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr} ${diffB(t.cr,t.prevCr)}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au} ${diffB(t.au,t.prevAu)}</div><div class="sc-s">${t.au} / ${t.cr}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk} ${diffB(t.mk,t.prevMk)}</div><div class="sc-s">${t.mk} / ${t.recv}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo} ${diffB(t.vo,t.prevVo)}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.map,t.fs)}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map} ${diffB(t.map,t.prevMap)}</div><div class="sc-s">${t.map} / ${t.fs}</div></div>`;
+    <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Received</div><div class="sc-v">${t.recv} ${diffB(t.recv,t.prevRecv)}</div><div class="sc-s">${pct}% of ${t.tot}</div>${kUpd(t.recv,t.prevRecv,t.ldVg)}</div>
+    <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr} ${diffB(t.cr,t.prevCr)}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div>${kUpd(t.cr,t.prevCr,t.ldPy)}</div>
+    <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au} ${diffB(t.au,t.prevAu)}</div><div class="sc-s">${t.au} / ${t.cr}</div>${kUpd(t.au,t.prevAu,t.ldAu)}</div>
+    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk} ${diffB(t.mk,t.prevMk)}</div><div class="sc-s">${t.mk} / ${t.recv}</div>${kUpd(t.mk,t.prevMk,t.ldMk)}</div>
+    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo} ${diffB(t.vo,t.prevVo)}</div><div class="sc-s">${t.vo} / ${voA}</div>${kUpd(t.vo,t.prevVo,t.ldVo)}</div>
+    <div class="sc" style="--sc-clr:${clr(t.map,t.fs)}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map} ${diffB(t.map,t.prevMap)}</div><div class="sc-s">${t.map} / ${t.fs}</div>${kUpd(t.map,t.prevMap,t.ldMap)}</div>`;
 
   // Pipeline with GREEN/RED colors — no hover tooltips
   document.getElementById('pipR').innerHTML=`
