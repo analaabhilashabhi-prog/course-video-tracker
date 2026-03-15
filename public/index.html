@@ -117,6 +117,10 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .diff.up{background:var(--gB);color:var(--green)}
 .diff.down{background:var(--rB);color:var(--red)}
 .diff.same{background:var(--border);color:var(--text3)}
+/* Update status on cards */
+.upd-status{font-size:.72rem;font-weight:600;margin-top:.5rem;padding:.3rem .6rem;border-radius:6px;display:inline-flex;align-items:center;gap:4px}
+.upd-status.updated{background:var(--gB);color:var(--green)}
+.upd-status.stale{background:var(--border);color:var(--text3)}
 /* Snapshot button */
 .snap-btn{padding:8px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text2);font-family:'Inter';transition:.3s;display:flex;align-items:center;gap:6px;margin-bottom:1.5rem}
 .snap-btn:hover{border-color:var(--yellow);color:var(--yellow);background:var(--yB)}
@@ -187,9 +191,9 @@ const gg=(arr,id)=>arr.filter(r=>r.course_id===id);
 
 function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')rA();lucide.createIcons()}
 
-function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend});rT();lucide.createIcons()}
-function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend})}rT();lucide.createIcons()}
-function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);dbU(t,id,{[f]:r[f]})}rT();lucide.createIcons()}
+function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=new Date().toISOString().split('T')[0];dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:r.last_updated});rT();lucide.createIcons()}
+function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=new Date().toISOString().split('T')[0];dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:r.last_updated})}rT();lucide.createIcons()}
+function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);r.last_updated=new Date().toISOString().split('T')[0];dbU(t,id,{[f]:r[f],last_updated:r.last_updated})}rT();lucide.createIcons()}
 async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0}:{course_id:cid,person:'',count:0,sort_order:0};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
 async function dR(t,id){await dbD(t,id);const m={video_gen:()=>VG=VG.filter(r=>r.id!==id),audio_gen:()=>AG=AG.filter(r=>r.id!==id),video_edit:()=>VE=VE.filter(r=>r.id!==id),voice_over:()=>VO=VO.filter(r=>r.id!==id),output:()=>OUT=OUT.filter(r=>r.id!==id),course_mapping:()=>CM=CM.filter(r=>r.id!==id)};m[t]();rT();lucide.createIcons()}
 
@@ -213,6 +217,18 @@ function diffB(curr,prev){const d=curr-(prev||0);if(d>0)return `<span class="dif
 // Date cell helper — just calendar, no lock
 function dateCell(t,id,val){
   return `<input class="i i-date" type="date" value="${val||''}" onchange="setDate('${t}',${id},this.value)">`}
+
+// Date format helper
+function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[dt.getMonth()]+' '+dt.getDate()}
+const today=new Date().toISOString().split('T')[0];
+// Update status badge for analytics cards
+function updBadge(lastDate,diff){
+  if(!lastDate)return '';
+  if(diff>0)return `<div class="upd-status updated">↑${diff} · ${fmtDate(lastDate)}</div>`;
+  return `<div class="upd-status stale">No update since ${fmtDate(lastDate)}</div>`;
+}
+// Get latest update date from array of rows
+function latestDate(arr,field='last_updated'){let d='';arr.forEach(r=>{if(r[field]&&r[field]>d)d=r[field]});return d}
 
 // ═══ TABLES ═══
 function rT(){
@@ -253,23 +269,23 @@ function afI(){return afc().map(c=>c.id)}
 function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
   return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),prevRecv:S(fv,'prev_recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),prevCr:S(fv,'prev_code_recv'),au:S(fa,'count'),prevAu:S(fa,'prev_count'),mk:S(fe,'count'),prevMk:S(fe,'prev_count'),vo:S(fvo,'count'),prevVo:S(fvo,'prev_count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),prevFs:S(fo,'prev_file_seg'),cmp:S(fo,'compress'),prevCmp:S(fo,'prev_compress'),map:S(fcm,'complete'),prevMap:S(fcm,'prev_complete')}}
 
-function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
-function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
+function teamAgg(arr,field='count',prevField='prev_count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,prev:0,courses:[],lastDate:''};m[r.person].val+=r[field]||0;m[r.person].prev+=r[prevField]||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
+function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,prevCmp:0,prevFs:0,courses:[],lastDate:''};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;m[r.person].prevCmp+=r.prev_compress||0;m[r.person].prevFs+=r.prev_file_seg||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
 
 // Team cards — NO contribution %, NO delete button
 function teamCards(data,done,avail,tipText){
   const pendT=Math.max(0,avail-done);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const barW=avail>0?Math.round((p.val/avail)*100):0;
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3)">${done} / ${avail}</div><div class="pc-sl">Total Progress</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip">${tipText}</div></div>`});
+  else data.forEach(p=>{const barW=avail>0?Math.round((p.val/avail)*100):0;const diff=p.val-(p.prev||0);
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3);white-space:nowrap">${done} / ${avail}</div><div class="pc-sl">Total Progress</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${updBadge(p.lastDate,diff)}<div class="tip">${tipText}</div></div>`});
   h+=`</div>`;return h}
 function outCards(data,t){
   const pendT=Math.max(0,t.vo-t.cmp);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const barW=t.vo>0?Math.round((p.cmp/t.vo)*100):0;
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div><div class="tip"><b>Flow:</b> VO done → Compress (<span class="n">${t.cmp}</span>) → File Seg (<span class="n">${t.fs}</span>). Pending: <span class="n">${pendT}</span></div></div>`});
+  else data.forEach(p=>{const barW=t.vo>0?Math.round((p.cmp/t.vo)*100):0;const diff=p.cmp-(p.prevCmp||0);
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${updBadge(p.lastDate,diff)}<div class="tip"><b>Flow:</b> VO done → Compress (<span class="n">${t.cmp}</span>) → File Seg (<span class="n">${t.fs}</span>). Pending: <span class="n">${pendT}</span></div></div>`});
   h+=`</div>`;return h}
 function tBdg(d,a,dep){return `<div class="tbadge"><div class="tbadge-v">${d} / ${a}</div><div class="tbadge-d">${dep}</div></div>`}
 
@@ -308,14 +324,14 @@ function rA(){
 
   // Team 1 — VG Cards (with pending, no delete in analytics)
   const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id));const pM={};
-  fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=Math.max(0,r.recv-r.code_recv)});
+  fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0,prevRecv:0,lastDate:''};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=Math.max(0,r.recv-r.code_recv);pM[r.person].prevRecv+=r.prev_recv||0;if(r.last_updated&&r.last_updated>pM[r.person].lastDate)pM[r.person].lastDate=r.last_updated});
   const pA=Object.entries(pM).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count);
-  let ph='';pA.forEach(p=>{const pc2=p.count>0?Math.round((p.recv/p.count)*100):0,bc=pc2>=75?'var(--green)':pc2>=40?'var(--yellow)':'var(--red)';
-    ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st" style="grid-template-columns:repeat(5,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--text)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Received</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cr}</div><div class="pc-sl">Py Code Recv</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--red)':'var(--green)'}">${p.cp}</div><div class="pc-sl">Py Code Pend</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div><div class="tip"><b>${p.name}</b> mapped to <span class="n">${p.count}</span> videos. Received <span class="n">${p.recv}</span> (${pc2}%). Python code for <span class="n">${p.cr}</span>, pending <span class="n">${p.cp}</span>.</div></div>`});
+  let ph='';pA.forEach(p=>{const pc2=p.count>0?Math.round((p.recv/p.count)*100):0,bc=pc2>=75?'var(--green)':pc2>=40?'var(--yellow)':'var(--red)';const vDiff=p.recv-(p.prevRecv||0);
+    ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st" style="grid-template-columns:repeat(5,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--text)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Received</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cr}</div><div class="pc-sl">Py Code Recv</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--red)':'var(--green)'}">${p.cp}</div><div class="pc-sl">Py Code Pend</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div>${updBadge(p.lastDate,vDiff)}<div class="tip"><b>${p.name}</b> mapped to <span class="n">${p.count}</span> videos. Received <span class="n">${p.recv}</span> (${pc2}%). Python code for <span class="n">${p.cr}</span>, pending <span class="n">${p.cp}</span>.</div></div>`});
   document.getElementById('vgC').innerHTML=ph;
 
   // Teams 2-6 — NO contribution %, NO delete
-  const ad=teamAgg(AG),md=teamAgg(VE),vd=teamAgg(VO),od=outAgg(),cmd=teamAgg(CM,'complete');
+  const ad=teamAgg(AG,'count','prev_count'),md=teamAgg(VE,'count','prev_count'),vd=teamAgg(VO,'count','prev_count'),od=outAgg(),cmd=teamAgg(CM,'complete','prev_complete');
   document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code (.py files)')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> <span class="n">${t.cr}</span> .py files → <span class="n">${t.au}</span> done → <span class="n">${auP}</span> pending`);
   document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Received')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> <span class="n">${t.recv}</span> received → <span class="n">${t.mk}</span> done → <span class="n">${mkP}</span> pending`);
   document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking')+teamCards(vd,t.vo,voA,`<b>Voice Over:</b> min(audio <span class="n">${t.au}</span>, masking <span class="n">${t.mk}</span>) = <span class="n">${voA}</span> → <span class="n">${t.vo}</span> done → <span class="n">${voP}</span> pending`);
