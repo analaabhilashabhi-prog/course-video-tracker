@@ -8,8 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-[data-theme="dark"]{--bg:#080b12;--bg2:#0e1219;--card:#141820;--card2:#1a2030;--border:rgba(255,255,255,0.07);--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--green:#22c55e;--green2:#16a34a;--gB:rgba(34,197,94,0.1);--yellow:#eab308;--yellow2:#ca8a04;--yB:rgba(234,179,8,0.1);--red:#ef4444;--rB:rgba(239,68,68,0.1);--tipBg:rgba(10,14,22,0.97);--blue:#3b82f6;--blueB:rgba(59,130,246,0.1)}
-[data-theme="light"]{--bg:#f4f6f4;--bg2:#e8ede7;--card:#ffffff;--card2:#eff3ee;--border:rgba(0,0,0,0.06);--text:#1a2e1a;--text2:#5a6e5a;--text3:#8a9e8a;--green:#15803d;--green2:#166534;--gB:rgba(21,128,61,0.06);--yellow:#a16207;--yellow2:#854d0e;--yB:rgba(161,98,7,0.06);--red:#b91c1c;--rB:rgba(185,28,28,0.06);--tipBg:rgba(255,255,255,0.98);--blue:#2563eb;--blueB:rgba(37,99,235,0.06)}
+[data-theme="dark"]{--bg:#080b12;--bg2:#0e1219;--card:#141820;--card2:#1a2030;--border:rgba(255,255,255,0.07);--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--green:#22c55e;--green2:#16a34a;--gB:rgba(34,197,94,0.1);--yellow:#eab308;--yellow2:#ca8a04;--yB:rgba(234,179,8,0.1);--red:#ef4444;--rB:rgba(239,68,68,0.1);--tipBg:rgba(10,14,22,0.97);--blue:#3b82f6;--blueB:rgba(59,130,246,0.1);--purple:#a855f7;--purpleB:rgba(168,85,247,0.1)}
+[data-theme="light"]{--bg:#f4f6f4;--bg2:#e8ede7;--card:#ffffff;--card2:#eff3ee;--border:rgba(0,0,0,0.06);--text:#1a2e1a;--text2:#5a6e5a;--text3:#8a9e8a;--green:#15803d;--green2:#166534;--gB:rgba(21,128,61,0.06);--yellow:#a16207;--yellow2:#854d0e;--yB:rgba(161,98,7,0.06);--red:#b91c1c;--rB:rgba(185,28,28,0.06);--tipBg:rgba(255,255,255,0.98);--blue:#2563eb;--blueB:rgba(37,99,235,0.06);--purple:#7c3aed;--purpleB:rgba(124,58,237,0.06)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
 .wrap{max-width:1700px;margin:0 auto;padding:1.5rem 2rem}
@@ -58,8 +58,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pm button:hover{background:var(--green);color:#fff;border-color:var(--green)}
 .pm span{min-width:36px;text-align:center;font-family:'JetBrains Mono';font-weight:800;font-size:14px}
 .sf{display:flex;gap:1rem;flex-wrap:wrap}.sf>.stg{flex:1;min-width:260px}
-
-/* Duration card */
 .dur-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin-bottom:.7rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
 .dur-card .dur-icon{width:44px;height:44px;border-radius:11px;background:var(--blueB);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .dur-card .dur-label{font-size:.85rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
@@ -69,8 +67,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .dur-inputs .i-dur:focus{border-color:var(--blue)}
 .dur-inputs .dur-sep{font-family:'JetBrains Mono';font-weight:900;font-size:1.2rem;color:var(--text3)}
 .dur-inputs label{font-size:.7rem;color:var(--text3);text-transform:uppercase;font-weight:600;text-align:center;display:block;margin-top:2px}
-
-/* Analytics */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border .3s;cursor:default;position:relative;overflow:hidden}
 .sc:hover{border-color:var(--green)}
@@ -81,8 +77,6 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .sh{display:flex;align-items:center;gap:.7rem;margin:2.5rem 0 1.25rem}
 .sh h2{font-size:1.4rem;font-weight:700;display:flex;align-items:center;gap:8px}
 .sh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-
-/* Pipeline */
 .pip{display:flex;gap:0;margin:1.25rem 0;overflow-x:auto;padding:.6rem 0}
 .pip-s{flex:1;min-width:135px;text-align:center;position:relative;cursor:default}
 .pip-s::after{content:'→';position:absolute;right:-8px;top:35%;color:var(--text3);font-size:1.3rem}
@@ -92,14 +86,11 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pip-c{font-family:'JetBrains Mono';font-size:1.5rem;font-weight:900}
 .pip-p{font-size:.9rem;font-weight:700}
 .pip-d{font-size:.78rem;color:var(--text3);margin-top:3px;font-weight:500}
-
 .cf{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .cf button{padding:.55rem 1.1rem;background:var(--card);border:1px solid var(--border);border-radius:100px;color:var(--text2);font-size:.88rem;font-weight:500;cursor:pointer;transition:.3s;font-family:'Inter'}
 .cf button:hover{background:var(--card2);color:var(--text);border-color:var(--green)}
 .cf button.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
 .cf button .cn{display:inline-block;margin-left:.35rem;padding:.1rem .45rem;background:rgba(0,0,0,0.15);border-radius:100px;font-size:.75rem;font-family:'JetBrains Mono';font-weight:700}
-
-/* Person cards */
 .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:1rem}
 .pc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;overflow:hidden}
 .pc:hover{border-color:var(--green)}
@@ -112,27 +103,15 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .pc-sl{font-size:.78rem;color:var(--text3);text-transform:uppercase;margin-top:3px;font-weight:600}
 .pbar{width:100%;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
 .pfill{height:100%;border-radius:3px;transition:width .5s}
-/* Card tooltip */
+.contrib{display:inline-flex;align-items:center;gap:4px;margin-top:.5rem;padding:.3rem .7rem;border-radius:6px;font-size:.78rem;font-weight:700;background:var(--purpleB);color:var(--purple)}
 .pc .tip{max-height:0;overflow:hidden;background:var(--bg2);border-radius:0 0 10px 10px;padding:0 .9rem;font-size:.82rem;color:var(--text2);line-height:1.7;transition:max-height .45s cubic-bezier(0.4,0,0.2,1),padding .35s ease,border-color .3s ease,opacity .35s ease;opacity:0;margin:0 -1.2rem -1.2rem;border-top:1px solid transparent}
 .pc:hover .tip{max-height:120px;padding:.75rem .9rem;border-top:1px solid var(--border);opacity:1}
 .tip b{color:var(--text);font-weight:700}.tip .n{color:var(--green);font-family:'JetBrains Mono';font-weight:800}
-
 .tbadge{display:flex;align-items:center;gap:10px;margin-bottom:1.1rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
 .tbadge-v{padding:.35rem .9rem;border-radius:100px;font-size:.95rem;font-weight:800;font-family:'JetBrains Mono';background:var(--gB);color:var(--green)}
 .tbadge-d{font-size:.85rem;color:var(--text3);font-weight:600}
 .nd{padding:.7rem;color:var(--text3);font-size:.88rem;font-style:italic}
-/* Date field */
 .i-date{width:105px;font-family:'Inter';font-size:12px;font-weight:500}
-/* Diff badge */
-.diff{display:inline-block;font-size:.65rem;font-weight:700;font-family:'JetBrains Mono';padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle}
-.diff.up{background:var(--gB);color:var(--green)}
-.diff.down{background:var(--rB);color:var(--red)}
-.diff.same{background:var(--border);color:var(--text3)}
-/* Update status on cards */
-.upd-status{font-size:.72rem;font-weight:600;margin-top:.5rem;padding:.3rem .6rem;border-radius:6px;display:inline-flex;align-items:center;gap:4px}
-.upd-status.updated{background:var(--gB);color:var(--green)}
-.upd-status.stale{background:var(--border);color:var(--text3)}
-
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 </style>
@@ -166,6 +145,8 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div id="t3"></div>
   <div class="sh"><h2><i data-lucide="mic" style="width:20px;height:20px"></i> Team 4 — Voice Over</h2></div>
   <div id="t4"></div>
+  <div class="sh"><h2><i data-lucide="zap" style="width:20px;height:20px"></i> Editing + Voice Over (New Method)</h2></div>
+  <div id="tNew"></div>
   <div class="sh"><h2><i data-lucide="folder-output" style="width:20px;height:20px"></i> Team 5 — Output</h2></div>
   <div id="t5"></div>
   <div class="sh"><h2><i data-lucide="upload-cloud" style="width:20px;height:20px"></i> Team 6 — Course Mapping</h2></div>
@@ -175,20 +156,14 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 <script>
 function toggleTheme(){const h=document.documentElement;const c=h.getAttribute('data-theme');h.setAttribute('data-theme',c==='dark'?'light':'dark');document.getElementById('thI').setAttribute('data-lucide',c==='dark'?'moon':'sun');lucide.createIcons()}
 let SB;try{const s=window.supabase||window.Supabase;SB=s.createClient('https://fsiqglbfrxmseetbbztf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaXFnbGJmcnhtc2VldGJienRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNDExODQsImV4cCI6MjA4ODcxNzE4NH0.QbQ0X6wVs6uJqDuxYTw7VuC9K0t-T4PH0u0f1XEmT5M')}catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}
-let C=[],VG=[],AG=[],VE=[],VO=[],OUT=[],CM=[],DUR=[];
+let C=[],VG=[],AG=[],VE=[],VO=[],OUT=[],CM=[],DUR=[],VEVO=[];
 const sy=s=>{const e=document.getElementById('ss');e.className='sync '+s;e.innerHTML=s==='saving'?'Saving...':'<i data-lucide="check-circle" style="width:12px;height:12px"></i> Synced';lucide.createIcons()};
 async function load(){try{
-  const a=await SB.from('courses').select('*'),b=await SB.from('video_gen').select('*'),c=await SB.from('audio_gen').select('*'),d=await SB.from('video_edit').select('*'),e=await SB.from('voice_over').select('*'),f=await SB.from('output').select('*'),h=await SB.from('course_mapping').select('*'),durR=await SB.from('course_duration').select('*');
+  const a=await SB.from('courses').select('*'),b=await SB.from('video_gen').select('*'),c=await SB.from('audio_gen').select('*'),d=await SB.from('video_edit').select('*'),e=await SB.from('voice_over').select('*'),f=await SB.from('output').select('*'),h=await SB.from('course_mapping').select('*'),durR=await SB.from('course_duration').select('*'),vevoR=await SB.from('video_edit_vo').select('*');
   if(a.error)throw new Error(a.error.message);
   const s=arr=>arr.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
-  C=s(a.data||[]);VG=s(b.data||[]);AG=s(c.data||[]);VE=s(d.data||[]);VO=s(e.data||[]);OUT=s(f.data||[]);CM=s(h.data||[]);DUR=durR.data||[];
-  // Auto-create duration rows for courses that don't have one
-  for(const course of C){
-    if(!DUR.find(d=>d.course_id===course.id)){
-      const nr=await dbI('course_duration',{course_id:course.id,hours:0,minutes:0,seconds:0});
-      if(nr)DUR.push(nr);
-    }
-  }
+  C=s(a.data||[]);VG=s(b.data||[]);AG=s(c.data||[]);VE=s(d.data||[]);VO=s(e.data||[]);OUT=s(f.data||[]);CM=s(h.data||[]);DUR=durR.data||[];VEVO=s(vevoR.data||[]);
+  for(const course of C){if(!DUR.find(d=>d.course_id===course.id)){const nr=await dbI('course_duration',{course_id:course.id,hours:0,minutes:0,seconds:0});if(nr)DUR.push(nr)}}
   const dd=document.getElementById('cDrop');dd.innerHTML='<option value="all">All Courses</option>';
   C.forEach(c=>{dd.innerHTML+=`<option value="${c.id}">${c.name} (${c.total})</option>`});
   document.getElementById('tl').style.display='none';rT();
@@ -202,88 +177,60 @@ const pC=v=>v>0?'vr':'vg';
 const GM={};let GI=0;function G(n){if(!n)return'var(--green)';if(!GM[n]){const c=['#22c55e','#16a34a','#eab308','#ca8a04','#f59e0b','#84cc16','#10b981','#14b8a6'];GM[n]=c[GI%c.length];GI++}return GM[n]}
 function I(n){if(!n)return'?';return n.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()}
 const gg=(arr,id)=>arr.filter(r=>r.course_id===id);
-
-// Duration helpers
-function getDur(courseId){return DUR.find(d=>d.course_id===courseId)||{hours:0,minutes:0,seconds:0}}
-function fmtDur(h,m,s){const parts=[];if(h>0)parts.push(h+'h');if(m>0||h>0)parts.push(m+'m');parts.push(s+'s');return parts.join(' ')}
+function getDur(cid){return DUR.find(d=>d.course_id===cid)||{hours:0,minutes:0,seconds:0}}
+function fmtDur(h,m,s){const p=[];if(h>0)p.push(h+'h');if(m>0||h>0)p.push(m+'m');p.push(s+'s');return p.join(' ')}
 function fmtDurFull(h,m,s){return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
-function totalDurSec(courseIds){let tot=0;courseIds.forEach(id=>{const d=getDur(id);tot+=(d.hours||0)*3600+(d.minutes||0)*60+(d.seconds||0)});return tot}
-function secToHMS(tot){const h=Math.floor(tot/3600);const m=Math.floor((tot%3600)/60);const s=tot%60;return{h,m,s}}
-function uDur(courseId,field,val){
-  const d=DUR.find(r=>r.course_id===courseId);if(!d)return;
-  let v=Math.max(0,Number(val)||0);
-  if(field==='minutes'&&v>59)v=59;
-  if(field==='seconds'&&v>59)v=59;
-  d[field]=v;
-  dbU('course_duration',d.id,{[field]:v});
-  rT();lucide.createIcons();
-}
-
+function totalDurSec(ids){let t=0;ids.forEach(id=>{const d=getDur(id);t+=(d.hours||0)*3600+(d.minutes||0)*60+(d.seconds||0)});return t}
+function secToHMS(t){return{h:Math.floor(t/3600),m:Math.floor((t%3600)/60),s:t%60}}
+function uDur(cid,f,v){const d=DUR.find(r=>r.course_id===cid);if(!d)return;let val=Math.max(0,Number(v)||0);if(f==='minutes'&&val>59)val=59;if(f==='seconds'&&val>59)val=59;d[f]=val;dbU('course_duration',d.id,{[f]:val});rT();lucide.createIcons()}
 function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')rA();lucide.createIcons()}
-
-function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;
-  if(r.last_updated&&r.last_updated!==today){r.prev_recv=r.recv;r.prev_code_recv=r.code_recv;dbU('video_gen',id,{prev_recv:r.recv,prev_code_recv:r.code_recv})}
-  r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today});rT();lucide.createIcons()}
-function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{
-  if(r.last_updated&&r.last_updated!==today){r.prev_recv=r.recv;r.prev_code_recv=r.code_recv;dbU('video_gen',id,{prev_recv:r.recv,prev_code_recv:r.code_recv})}
-  r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today})}rT();lucide.createIcons()}
-function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{
-  if(r.last_updated&&r.last_updated!==today){
-    const prevD={};
-    if(t==='audio_gen'||t==='video_edit'||t==='voice_over'){prevD.prev_count=r.count;r.prev_count=r.count}
-    if(t==='output'){prevD.prev_compress=r.compress;prevD.prev_file_seg=r.file_seg;r.prev_compress=r.compress;r.prev_file_seg=r.file_seg}
-    if(t==='course_mapping'){prevD.prev_complete=r.complete;r.prev_complete=r.complete}
-    if(Object.keys(prevD).length)dbU(t,id,prevD);
-  }
-  r[f]=Math.max(0,Number(v)||0);r.last_updated=today;dbU(t,id,{[f]:r[f],last_updated:today})}rT();lucide.createIcons()}
-async function aR(t,cid){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0,last_updated:today}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0,last_updated:today}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,sort_order:0,last_updated:today}:{course_id:cid,person:'',count:0,sort_order:0,last_updated:today};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
-async function dR(t,id){await dbD(t,id);const m={video_gen:()=>VG=VG.filter(r=>r.id!==id),audio_gen:()=>AG=AG.filter(r=>r.id!==id),video_edit:()=>VE=VE.filter(r=>r.id!==id),voice_over:()=>VO=VO.filter(r=>r.id!==id),output:()=>OUT=OUT.filter(r=>r.id!==id),course_mapping:()=>CM=CM.filter(r=>r.id!==id)};m[t]();rT();lucide.createIcons()}
-
-function setDate(t,id,val){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM};const r=arrs[t].find(x=>x.id===id);if(!r)return;r.submit_date=val;dbU(t,id,{submit_date:val});rT();lucide.createIcons()}
-function diffB(curr,prev){const d=curr-(prev||0);if(d>0)return `<span class="diff up">↑${d}</span>`;if(d<0)return `<span class="diff down">↓${Math.abs(d)}</span>`;return ''}
-function dateCell(t,id,val){
-  return `<input class="i i-date" type="date" value="${val||''}" onchange="setDate('${t}',${id},this.value)">`}
-function fmtDate(d){if(!d)return'';const dt=new Date(d+'T00:00:00');const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return m[dt.getMonth()]+' '+dt.getDate()}
+function incVg(id,f,delta){const r=VG.find(x=>x.id===id);if(!r)return;r[f]=Math.max(0,(r[f]||0)+delta);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today});rT();lucide.createIcons()}
+function uVg(id,f,v){const r=VG.find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU('video_gen',id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);if(r.recv>r.count)r.recv=r.count;if(r.code_recv>r.count)r.code_recv=r.count;r.code_pend=Math.max(0,r.count-r.code_recv);r.last_updated=today;dbU('video_gen',id,{count:r.count,recv:r.recv,code_recv:r.code_recv,code_pend:r.code_pend,last_updated:today})}rT();lucide.createIcons()}
+function uS(t,id,f,v){const arrs={audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM,video_edit_vo:VEVO};const r=arrs[t].find(x=>x.id===id);if(!r)return;if(f==='person'){r.person=v;dbU(t,id,{person:v})}else{r[f]=Math.max(0,Number(v)||0);r.last_updated=today;dbU(t,id,{[f]:r[f],last_updated:today})}rT();lucide.createIcons()}
+async function aR(t,cid){const d=t==='video_gen'?{course_id:cid,person:'',count:0,recv:0,code_recv:0,code_pend:0,sort_order:0,last_updated:today}:t==='output'?{course_id:cid,person:'',count:0,file_seg:0,compress:0,sort_order:0,last_updated:today}:t==='course_mapping'?{course_id:cid,person:'',complete:0,pending:0,uploaded:0,sort_order:0,last_updated:today}:{course_id:cid,person:'',count:0,sort_order:0,last_updated:today};const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM,video_edit_vo:VEVO};const r=await dbI(t,d);if(r){arrs[t].push(r);rT();lucide.createIcons()}}
+async function dR(t,id){await dbD(t,id);const m={video_gen:()=>VG=VG.filter(r=>r.id!==id),audio_gen:()=>AG=AG.filter(r=>r.id!==id),video_edit:()=>VE=VE.filter(r=>r.id!==id),voice_over:()=>VO=VO.filter(r=>r.id!==id),output:()=>OUT=OUT.filter(r=>r.id!==id),course_mapping:()=>CM=CM.filter(r=>r.id!==id),video_edit_vo:()=>VEVO=VEVO.filter(r=>r.id!==id)};m[t]();rT();lucide.createIcons()}
+function setDate(t,id,val){const arrs={video_gen:VG,audio_gen:AG,video_edit:VE,voice_over:VO,output:OUT,course_mapping:CM,video_edit_vo:VEVO};const r=arrs[t].find(x=>x.id===id);if(!r)return;r.submit_date=val;dbU(t,id,{submit_date:val})}
+function dateCell(t,id,val){return `<input class="i i-date" type="date" value="${val||''}" onchange="setDate('${t}',${id},this.value)">`}
 const today=new Date().toISOString().split('T')[0];
-function updBadge(lastDate,diff){
-  if(!lastDate)return '';
-  if(diff>0)return `<div class="upd-status updated">↑${diff} · ${fmtDate(lastDate)}</div>`;
-  return `<div class="upd-status stale">No update since ${fmtDate(lastDate)}</div>`;
-}
-function latestDate(arr,field='last_updated'){let d='';arr.forEach(r=>{if(r[field]&&r[field]>d)d=r[field]});return d}
 
 // ═══ TABLES ═══
 function rT(){
   const sel=document.getElementById('cDrop').value;const fc=sel==='all'?C:C.filter(c=>c.id===sel);let h='';
   fc.forEach(c=>{
-    const cv=gg(VG,c.id),ca=gg(AG,c.id),ce=gg(VE,c.id),cvo=gg(VO,c.id),co=gg(OUT,c.id),ccm=gg(CM,c.id);
+    const cv=gg(VG,c.id),ca=gg(AG,c.id),ce=gg(VE,c.id),cvo=gg(VO,c.id),co=gg(OUT,c.id),ccm=gg(CM,c.id),cvevo=gg(VEVO,c.id);
     const vR=S(cv,'recv'),vC=S(cv,'count'),vCR=S(cv,'code_recv'),vCP=S(cv,'code_pend');
     const aC=S(ca,'count'),eC=S(ce,'count'),voC=S(cvo,'count'),voA=Math.min(aC,eC);
     const oC=S(co,'count'),oCmp=S(co,'compress'),oFS=S(co,'file_seg'),cmC=S(ccm,'complete');
+    const vevoC=S(cvevo,'count'),totalVoDone=voC+vevoC;
     const dur=getDur(c.id);
     h+=`<div class="csec"><div class="chdr"><h2>${c.name}</h2><span class="badge">${c.total} Videos</span></div>`;
-    // Duration card at top
     h+=`<div class="dur-card"><div class="dur-icon"><i data-lucide="clock" style="width:22px;height:22px;color:var(--blue)"></i></div><div><div class="dur-label">Total Video Duration</div><div class="dur-display">${fmtDurFull(dur.hours||0,dur.minutes||0,dur.seconds||0)}</div></div><div class="dur-inputs"><div><input class="i-dur" type="number" min="0" value="${dur.hours||0}" onchange="uDur('${c.id}','hours',this.value)"><label>Hours</label></div><div class="dur-sep">:</div><div><input class="i-dur" type="number" min="0" max="59" value="${dur.minutes||0}" onchange="uDur('${c.id}','minutes',this.value)"><label>Min</label></div><div class="dur-sep">:</div><div><input class="i-dur" type="number" min="0" max="59" value="${dur.seconds||0}" onchange="uDur('${c.id}','seconds',this.value)"><label>Sec</label></div></div></div>`;
+    // Video Gen
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="video" style="width:16px;height:16px"></i> Video Generation</span><button class="btn-a" onclick="aR('video_gen','${c.id}')">+ Add Row</button></div><table><thead><tr><th>Generated By</th><th>Count</th><th>Videos Sent</th><th>Pending</th><th>Python Code Received</th><th>Python Code Pending</th><th>Submit Date</th><th></th></tr></thead><tbody>`;
-    cv.forEach(r=>{const p=r.count-r.recv;const dR2=diffB(r.recv,r.prev_recv);const dCR=diffB(r.code_recv,r.prev_code_recv);
-      h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uVg(${r.id},'person',this.value)"></td><td><div class="pm"><button onclick="incVg(${r.id},'count',-1)">−</button><span>${r.count}</span><button onclick="incVg(${r.id},'count',1)">+</button></div></td><td><div class="pm"><button onclick="incVg(${r.id},'recv',-1)">−</button><span>${r.recv}</span><button onclick="incVg(${r.id},'recv',1)">+</button></div>${dR2}</td><td><span class="${pC(p)}">${p}</span></td><td><div class="pm"><button onclick="incVg(${r.id},'code_recv',-1)">−</button><span>${r.code_recv}</span><button onclick="incVg(${r.id},'code_recv',1)">+</button></div>${dCR}</td><td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td><td>${dateCell('video_gen',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_gen',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${vC} / ${c.total}</td><td>${vR}</td><td><span class="${pC(c.total-vR)}">${c.total-vR}</span></td><td>${vCR}</td><td><span class="${pC(vCP)}">${vCP}</span></td><td></td></tr></tbody></table></div>`;
+    cv.forEach(r=>{const p=r.count-r.recv;h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uVg(${r.id},'person',this.value)"></td><td><div class="pm"><button onclick="incVg(${r.id},'count',-1)">−</button><span>${r.count}</span><button onclick="incVg(${r.id},'count',1)">+</button></div></td><td><div class="pm"><button onclick="incVg(${r.id},'recv',-1)">−</button><span>${r.recv}</span><button onclick="incVg(${r.id},'recv',1)">+</button></div></td><td><span class="${pC(p)}">${p}</span></td><td><div class="pm"><button onclick="incVg(${r.id},'code_recv',-1)">−</button><span>${r.code_recv}</span><button onclick="incVg(${r.id},'code_recv',1)">+</button></div></td><td><span class="${pC(r.code_pend)}">${r.code_pend}</span></td><td>${dateCell('video_gen',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_gen',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${vC} / ${c.total}</td><td>${vR}</td><td><span class="${pC(c.total-vR)}">${c.total-vR}</span></td><td>${vCR}</td><td><span class="${pC(vCP)}">${vCP}</span></td><td></td><td></td></tr></tbody></table></div>`;
+    // Audio, Video Edit, Voice Over
     h+=`<div class="sf">`;
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--yellow)"><i data-lucide="file-audio" style="width:16px;height:16px"></i> Audio Script<span class="sub">(of ${vCR} .py files)</span></span><button class="btn-a" onclick="aR('audio_gen','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
-    ca.forEach(r=>{const d=diffB(r.count,r.prev_count);h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('audio_gen',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('audio_gen',${r.id},'count',this.value)"> ${d}</td><td>${dateCell('audio_gen',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('audio_gen',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${aC} / ${vCR}</td><td></td></tr></tbody></table></div>`;
+    ca.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('audio_gen',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('audio_gen',${r.id},'count',this.value)"></td><td>${dateCell('audio_gen',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('audio_gen',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${aC} / ${vCR}</td><td></td><td></td></tr></tbody></table></div>`;
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--yellow)"><i data-lucide="scissors" style="width:16px;height:16px"></i> Video Editing<span class="sub">(of ${vR} received)</span></span><button class="btn-a" onclick="aR('video_edit','${c.id}')">+ Add</button></div><table><thead><tr><th>Masking By</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
-    ce.forEach(r=>{const d=diffB(r.count,r.prev_count);h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit',${r.id},'count',this.value)"> ${d}</td><td>${dateCell('video_edit',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_edit',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${eC} / ${vR}</td><td></td></tr></tbody></table></div>`;
+    ce.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit',${r.id},'count',this.value)"></td><td>${dateCell('video_edit',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_edit',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${eC} / ${vR}</td><td></td><td></td></tr></tbody></table></div>`;
     h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="mic" style="width:16px;height:16px"></i> Voice Over<span class="sub">(of ${voA} ready)</span></span><button class="btn-a" onclick="aR('voice_over','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
-    cvo.forEach(r=>{const d=diffB(r.count,r.prev_count);h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('voice_over',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('voice_over',${r.id},'count',this.value)"> ${d}</td><td>${dateCell('voice_over',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('voice_over',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td></tr></tbody></table></div></div>`;
-    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="folder-output" style="width:16px;height:16px"></i> Output<span class="sub">(of ${voC} VO done)</span></span><button class="btn-a" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>Compress</th><th>File Seg</th><th>Date</th><th></th></tr></thead><tbody>`;
-    co.forEach(r=>{const dC=diffB(r.compress,r.prev_compress);const dF=diffB(r.file_seg,r.prev_file_seg);h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"> ${dC}</td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"> ${dF}</td><td>${dateCell('output',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
-    h+=`<tr class="tot"><td>Total</td><td>${oC} / ${voC}</td><td><span class="${pC(Math.max(0,voC-oC))}">${Math.max(0,voC-oC)}</span></td><td>${oCmp}</td><td>${oFS}</td><td></td></tr></tbody></table></div>`;
-    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="upload-cloud" style="width:16px;height:16px"></i> Course Mapping<span class="sub">(of ${oFS} file seg done)</span></span><button class="btn-a" onclick="aR('course_mapping','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Uploaded to OneDrive</th><th>Mapped</th><th>Pending</th><th>Date</th><th></th></tr></thead><tbody>`;
+    cvo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('voice_over',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('voice_over',${r.id},'count',this.value)"></td><td>${dateCell('voice_over',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('voice_over',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td><td></td></tr></tbody></table></div></div>`;
+    // NEW METHOD
+    h+=`<div class="stg" style="border-color:var(--purple);border-width:2px"><div class="stg-h"><span class="stg-l" style="color:var(--purple)"><i data-lucide="zap" style="width:16px;height:16px"></i> Editing + Voice Over (New Method)<span class="sub">(parallel workflow)</span></span><button class="btn-a" style="background:var(--purple)" onclick="aR('video_edit_vo','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
+    cvevo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit_vo',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit_vo',${r.id},'count',this.value)"></td><td>${dateCell('video_edit_vo',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_edit_vo',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${vevoC}</td><td></td><td></td></tr></tbody></table></div>`;
+    // Output & Mapping
+    h+=`<div class="sf"><div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="folder-output" style="width:16px;height:16px"></i> Output<span class="sub">(of ${totalVoDone} VO done)</span></span><button class="btn-a" onclick="aR('output','${c.id}')">+ Add</button></div><table><thead><tr><th>Owl Coder</th><th>Count</th><th>Pending</th><th>Compress</th><th>File Seg</th><th>Date</th><th></th></tr></thead><tbody>`;
+    co.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('output',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('output',${r.id},'count',this.value)"></td><td></td><td><input class="i i-d" type="number" min="0" value="${r.compress||0}" onchange="uS('output',${r.id},'compress',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.file_seg||0}" onchange="uS('output',${r.id},'file_seg',this.value)"></td><td>${dateCell('output',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('output',${r.id})">×</button></td></tr>`});
+    h+=`<tr class="tot"><td>Total</td><td>${oC} / ${totalVoDone}</td><td><span class="${pC(Math.max(0,totalVoDone-oC))}">${Math.max(0,totalVoDone-oC)}</span></td><td>${oCmp}</td><td>${oFS}</td><td></td><td></td></tr></tbody></table></div>`;
     const cmUpl=S(ccm,'uploaded');
-    ccm.forEach(r=>{const d=diffB(r.complete,r.prev_complete);const dU=diffB(r.uploaded,r.prev_uploaded);h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('course_mapping',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.uploaded||0}" onchange="uS('course_mapping',${r.id},'uploaded',this.value)"> ${dU}</td><td><input class="i i-d" type="number" min="0" value="${r.complete}" onchange="uS('course_mapping',${r.id},'complete',this.value)"> ${d}</td><td><input class="i i-d" type="number" min="0" value="${r.pending}" onchange="uS('course_mapping',${r.id},'pending',this.value)"></td><td>${dateCell('course_mapping',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('course_mapping',${r.id})">×</button></td></tr>`});
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--green)"><i data-lucide="upload-cloud" style="width:16px;height:16px"></i> Course Mapping<span class="sub">(of ${oFS} file seg)</span></span><button class="btn-a" onclick="aR('course_mapping','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Uploaded</th><th>Mapped</th><th>Pending</th><th>Date</th><th></th></tr></thead><tbody>`;
+    ccm.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('course_mapping',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.uploaded||0}" onchange="uS('course_mapping',${r.id},'uploaded',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.complete}" onchange="uS('course_mapping',${r.id},'complete',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.pending}" onchange="uS('course_mapping',${r.id},'pending',this.value)"></td><td>${dateCell('course_mapping',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('course_mapping',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${cmUpl} / ${oFS}</td><td>${cmC} / ${cmUpl}</td><td><span class="${pC(Math.max(0,cmUpl-cmC))}">${Math.max(0,cmUpl-cmC)}</span></td><td></td><td></td></tr></tbody></table></div></div></div>`;
   });
   document.getElementById('tc').innerHTML=h;lucide.createIcons()}
@@ -292,88 +239,77 @@ function rT(){
 let aF='all';
 function afc(){return aF==='all'?C:C.filter(c=>c.id===aF)}
 function afI(){return afc().map(c=>c.id)}
-function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id));
-  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),prevRecv:S(fv,'prev_recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),prevCr:S(fv,'prev_code_recv'),au:S(fa,'count'),prevAu:S(fa,'prev_count'),mk:S(fe,'count'),prevMk:S(fe,'prev_count'),vo:S(fvo,'count'),prevVo:S(fvo,'prev_count'),oC:S(fo,'count'),fs:S(fo,'file_seg'),prevFs:S(fo,'prev_file_seg'),cmp:S(fo,'compress'),prevCmp:S(fo,'prev_compress'),upl:S(fcm,'uploaded'),prevUpl:S(fcm,'prev_uploaded'),map:S(fcm,'complete'),prevMap:S(fcm,'prev_complete'),ldVg:latestDate(fv),ldPy:latestDate(fv),ldAu:latestDate(fa),ldMk:latestDate(fe),ldVo:latestDate(fvo),ldOut:latestDate(fo),ldMap:latestDate(fcm)}}
-
-function teamAgg(arr,field='count',prevField='prev_count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,prev:0,courses:[],lastDate:''};m[r.person].val+=r[field]||0;m[r.person].prev+=r[prevField]||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
-function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,prevCmp:0,prevFs:0,courses:[],lastDate:''};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;m[r.person].prevCmp+=r.prev_compress||0;m[r.person].prevFs+=r.prev_file_seg||0;if(r.last_updated&&r.last_updated>m[r.person].lastDate)m[r.person].lastDate=r.last_updated;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
-
+function T2(){const ids=afI(),fv=VG.filter(r=>ids.includes(r.course_id)),fa=AG.filter(r=>ids.includes(r.course_id)),fe=VE.filter(r=>ids.includes(r.course_id)),fvo=VO.filter(r=>ids.includes(r.course_id)),fo=OUT.filter(r=>ids.includes(r.course_id)),fcm=CM.filter(r=>ids.includes(r.course_id)),fvevo=VEVO.filter(r=>ids.includes(r.course_id));
+  const voOld=S(fvo,'count'),vevoNew=S(fvevo,'count');
+  return{tot:afc().reduce((s,c)=>s+c.total,0),recv:S(fv,'recv'),pend:fv.reduce((s,r)=>s+(r.count-r.recv),0),cr:S(fv,'code_recv'),au:S(fa,'count'),mk:S(fe,'count'),vo:voOld,vevo:vevoNew,totalVo:voOld+vevoNew,oC:S(fo,'count'),fs:S(fo,'file_seg'),cmp:S(fo,'compress'),upl:S(fcm,'uploaded'),map:S(fcm,'complete')}}
+function teamAgg(arr,field='count'){const ids=afI(),m={};arr.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={val:0,courses:[]};m[r.person].val+=r[field]||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.val-a.val)}
+function outAgg(){const ids=afI(),m={};OUT.filter(r=>ids.includes(r.course_id)&&r.person).forEach(r=>{if(!m[r.person])m[r.person]={count:0,fs:0,cmp:0,courses:[]};m[r.person].count+=r.count||0;m[r.person].fs+=r.file_seg||0;m[r.person].cmp+=r.compress||0;const cn=C.find(c=>c.id===r.course_id)?.name;if(cn&&!m[r.person].courses.includes(cn))m[r.person].courses.push(cn)});return Object.entries(m).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count)}
+function contribBadge(pv,tt){if(tt<=0)return '';return `<div class="contrib"><i data-lucide="pie-chart" style="width:12px;height:12px"></i> ${Math.round((pv/tt)*100)}% contribution (${pv}/${tt})</div>`}
 function teamCards(data,done,avail,tipText){
-  const pendT=Math.max(0,avail-done);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const barW=avail>0?Math.round((p.val/avail)*100):0;const diff=p.val-(p.prev||0);
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3);white-space:nowrap">${done} / ${avail}</div><div class="pc-sl">Total Progress</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${updBadge(p.lastDate,diff)}<div class="tip">${tipText}</div></div>`});
+  else data.forEach(p=>{const barW=avail>0?Math.round((p.val/avail)*100):0;
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(3,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.val}</div><div class="pc-sl">Done</div></div><div class="pc-s"><div class="pc-sv" style="color:${Math.max(0,avail-done)>0?'var(--red)':'var(--green)'}">${Math.max(0,avail-done)}</div><div class="pc-sl">Team Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--text3)">${done} / ${avail}</div><div class="pc-sl">Total</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${contribBadge(p.val,done)}<div class="tip">${tipText}</div></div>`});
   h+=`</div>`;return h}
 function outCards(data,t){
-  const pendT=Math.max(0,t.vo-t.cmp);
   let h=`<div class="pg">`;
   if(!data.length)h+=`<div class="nd">No data yet</div>`;
-  else data.forEach(p=>{const barW=t.vo>0?Math.round((p.cmp/t.vo)*100):0;const diff=p.cmp-(p.prevCmp||0);
-    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:${pendT>0?'var(--red)':'var(--green)'}">${pendT}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${updBadge(p.lastDate,diff)}<div class="tip"><b>Flow:</b> VO done → Compress (<span class="n">${t.cmp}</span>) → File Seg (<span class="n">${t.fs}</span>). Pending: <span class="n">${pendT}</span></div></div>`});
+  else data.forEach(p=>{const barW=t.totalVo>0?Math.round((p.cmp/t.totalVo)*100):0;
+    h+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">${p.courses.join(' · ')}</div></div></div><div class="pc-st" style="grid-template-columns:repeat(4,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.count}</div><div class="pc-sl">Owl Coder</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cmp}</div><div class="pc-sl">Compressed</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.fs}</div><div class="pc-sl">File Seg</div></div><div class="pc-s"><div class="pc-sv" style="color:${Math.max(0,t.totalVo-t.cmp)>0?'var(--red)':'var(--green)'}">${Math.max(0,t.totalVo-t.cmp)}</div><div class="pc-sl">Pending</div></div></div><div class="pbar"><div class="pfill" style="width:${barW}%;background:${G(p.name)}"></div></div>${contribBadge(p.cmp,t.cmp)}<div class="tip"><b>Flow:</b> VO → Compress → File Seg</div></div>`});
   h+=`</div>`;return h}
 function tBdg(d,a,dep){return `<div class="tbadge"><div class="tbadge-v">${d} / ${a}</div><div class="tbadge-d">${dep}</div></div>`}
 
 function rA(){
   const t=T2(),pct=t.tot>0?((t.recv/t.tot)*100).toFixed(1):0,voA=Math.min(t.au,t.mk);
-  const pyP=Math.max(0,t.recv-t.cr),auP=Math.max(0,t.cr-t.au),mkP=Math.max(0,t.recv-t.mk),voP=Math.max(0,voA-t.vo),outP=Math.max(0,t.vo-t.cmp);
-
+  const pyP=Math.max(0,t.recv-t.cr),auP=Math.max(0,t.cr-t.au),mkP=Math.max(0,t.recv-t.mk),voP=Math.max(0,voA-t.vo),outP=Math.max(0,t.totalVo-t.cmp);
   const clr=(d,a)=>d>=a&&a>0?'var(--green)':d>0?'var(--yellow)':'var(--red)';
-  const ptxt=(pend)=>pend>0?`<span style="color:var(--red)">${pend} pending</span>`:`<span style="color:var(--green)">done</span>`;
-  const kUpd=(curr,prev,ld)=>{const d=curr-(prev||0);if(d>0)return `<div class="upd-status updated" style="margin-top:.4rem">↑${d} · ${fmtDate(ld)}</div>`;if(ld)return `<div class="upd-status stale" style="margin-top:.4rem">No update since ${fmtDate(ld)}</div>`;return ''};
-
+  const ptxt=p=>p>0?`<span style="color:var(--red)">${p} pending</span>`:`<span style="color:var(--green)">done</span>`;
   const uplP=Math.max(0,t.fs-t.upl),mapP2=Math.max(0,t.upl-t.map);
+  const ids=afI(),totSec=totalDurSec(ids),totHMS=secToHMS(totSec);
+  const newPct=t.tot>0?((t.vevo/t.tot)*100).toFixed(1):'0';
 
-  // Calculate total duration for filtered courses
-  const ids=afI();
-  const totSec=totalDurSec(ids);
-  const totHMS=secToHMS(totSec);
-  const durStr=fmtDurFull(totHMS.h,totHMS.m,totHMS.s);
-  const durNatural=fmtDur(totHMS.h,totHMS.m,totHMS.s);
-
-  // 9 KPIs — first one is Total Duration
   document.getElementById('kpi').innerHTML=`
-    <div class="sc" style="--sc-clr:var(--blue)"><div class="sc-l">Total Duration</div><div class="sc-v" style="font-size:2rem">${durStr}</div><div class="sc-s">${durNatural}</div></div>
+    <div class="sc" style="--sc-clr:var(--blue)"><div class="sc-l">Total Duration</div><div class="sc-v" style="font-size:2rem">${fmtDurFull(totHMS.h,totHMS.m,totHMS.s)}</div><div class="sc-s">${fmtDur(totHMS.h,totHMS.m,totHMS.s)}</div></div>
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Sent</div><div class="sc-v">${t.recv} ${diffB(t.recv,t.prevRecv)}</div><div class="sc-s">${pct}% of ${t.tot}</div>${kUpd(t.recv,t.prevRecv,t.ldVg)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code Received</div><div class="sc-v">${t.cr} ${diffB(t.cr,t.prevCr)}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div>${kUpd(t.cr,t.prevCr,t.ldPy)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script Done</div><div class="sc-v">${t.au} ${diffB(t.au,t.prevAu)}</div><div class="sc-s">${t.au} / ${t.cr}</div>${kUpd(t.au,t.prevAu,t.ldAu)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing Done</div><div class="sc-v">${t.mk} ${diffB(t.mk,t.prevMk)}</div><div class="sc-s">${t.mk} / ${t.recv}</div>${kUpd(t.mk,t.prevMk,t.ldMk)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over Done</div><div class="sc-v">${t.vo} ${diffB(t.vo,t.prevVo)}</div><div class="sc-s">${t.vo} / ${voA}</div>${kUpd(t.vo,t.prevVo,t.ldVo)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.upl,t.fs)}"><div class="sc-l">Uploaded to OneDrive</div><div class="sc-v">${t.upl} ${diffB(t.upl,t.prevUpl)}</div><div class="sc-s">${t.upl} / ${t.fs}</div>${kUpd(t.upl,t.prevUpl,t.ldMap)}</div>
-    <div class="sc" style="--sc-clr:${clr(t.map,t.upl)}"><div class="sc-l">Courses Mapped</div><div class="sc-v">${t.map} ${diffB(t.map,t.prevMap)}</div><div class="sc-s">${t.map} / ${t.upl}</div>${kUpd(t.map,t.prevMap,t.ldMap)}</div>`;
+    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">New Method</div><div class="sc-v">${t.vevo}</div><div class="sc-s">${newPct}% of ${t.tot} total</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Sent</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.totalVo,voA+t.vevo)}"><div class="sc-l">Voice Over (All)</div><div class="sc-v">${t.totalVo}</div><div class="sc-s">Old: ${t.vo} + New: ${t.vevo}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.upl,t.fs)}"><div class="sc-l">Uploaded</div><div class="sc-v">${t.upl}</div><div class="sc-s">${t.upl} / ${t.fs}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.map,t.upl)}"><div class="sc-l">Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.upl}</div></div>`;
 
-  // Pipeline
   document.getElementById('pipR').innerHTML=`
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${clr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${clr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${ptxt(t.pend)}</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${clr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${clr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${ptxt(pyP)}</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${clr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${clr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${ptxt(auP)}</div><div class="pip-d">needs .py file</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.mk,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(t.mk,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(t.mk,t.recv)}">${t.mk} / ${t.recv}</div><div class="pip-p">${ptxt(mkP)}</div><div class="pip-d">needs video</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.vo,voA)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.vo,voA)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.vo,voA)}">${t.vo} / ${voA}</div><div class="pip-p">${ptxt(voP)}</div><div class="pip-d">audio + masking</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.vo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.vo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.vo)}">${t.fs} / ${t.vo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.totalVo,voA+t.vevo)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.totalVo,voA+t.vevo)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.totalVo,voA+t.vevo)}">${t.totalVo} / ${voA+t.vevo}</div><div class="pip-p">${ptxt(Math.max(0,(voA+t.vevo)-t.totalVo))}</div><div class="pip-d">old + new</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.totalVo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.totalVo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.totalVo)}">${t.fs} / ${t.totalVo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.upl,t.fs)}"><i data-lucide="hard-drive-upload" style="width:20px;height:20px;color:${clr(t.upl,t.fs)}"></i></div><div class="pip-t">Upload</div><div class="pip-c" style="color:${clr(t.upl,t.fs)}">${t.upl} / ${t.fs}</div><div class="pip-p">${ptxt(uplP)}</div><div class="pip-d">to OneDrive</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.map,t.upl)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${clr(t.map,t.upl)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${clr(t.map,t.upl)}">${t.map} / ${t.upl}</div><div class="pip-p">${ptxt(mapP2)}</div><div class="pip-d">final step</div></div>`;
 
-  // Course filter
   let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All Courses <span class="cn">${C.reduce((s,c)=>s+c.total,0)}</span></button>`;
   C.forEach(c=>{cf+=`<button class="${aF===c.id?'active':''}" onclick="sAF('${c.id}')">${c.name} <span class="cn">${c.total}</span></button>`});
   document.getElementById('cfR').innerHTML=cf;
 
-  // Team 1 — VG Cards
+  // Team 1 VG
   const fv=VG.filter(r=>ids.includes(r.course_id));const pM={};
-  fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0,prevRecv:0,lastDate:''};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=Math.max(0,r.recv-r.code_recv);pM[r.person].prevRecv+=r.prev_recv||0;if(r.last_updated&&r.last_updated>pM[r.person].lastDate)pM[r.person].lastDate=r.last_updated});
+  fv.forEach(r=>{if(!r.person)return;if(!pM[r.person])pM[r.person]={count:0,recv:0,pend:0,cr:0,cp:0};pM[r.person].count+=r.count;pM[r.person].recv+=r.recv;pM[r.person].pend+=(r.count-r.recv);pM[r.person].cr+=r.code_recv;pM[r.person].cp+=Math.max(0,r.recv-r.code_recv)});
   const pA=Object.entries(pM).map(([n,d])=>({name:n,...d})).sort((a,b)=>b.count-a.count);
-  let ph='';pA.forEach(p=>{const pc2=p.count>0?Math.round((p.recv/p.count)*100):0,bc=pc2>=75?'var(--green)':pc2>=40?'var(--yellow)':'var(--red)';const vDiff=p.recv-(p.prevRecv||0);
-    ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st" style="grid-template-columns:repeat(5,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--text)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Sent</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cr}</div><div class="pc-sl">Py Code Recv</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--red)':'var(--green)'}">${p.cp}</div><div class="pc-sl">Py Code Pend</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div>${updBadge(p.lastDate,vDiff)}<div class="tip"><b>${p.name}</b> mapped to <span class="n">${p.count}</span> videos. Sent <span class="n">${p.recv}</span> (${pc2}%). Python code for <span class="n">${p.cr}</span>, pending <span class="n">${p.cp}</span>.</div></div>`});
+  const totalVgRecv=S(fv,'recv');
+  let ph='';pA.forEach(p=>{const pc2=p.count>0?Math.round((p.recv/p.count)*100):0,bc=pc2>=75?'var(--green)':pc2>=40?'var(--yellow)':'var(--red)';
+    ph+=`<div class="pc"><div class="pc-h"><div class="pc-av" style="background:${G(p.name)}">${I(p.name)}</div><div><div class="pc-n">${p.name}</div><div class="pc-r">Video Generation</div></div></div><div class="pc-st" style="grid-template-columns:repeat(5,1fr)"><div class="pc-s"><div class="pc-sv" style="color:var(--text)">${p.count}</div><div class="pc-sl">Count</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--green)">${p.recv}</div><div class="pc-sl">Sent</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--red)">${p.pend}</div><div class="pc-sl">Pending</div></div><div class="pc-s"><div class="pc-sv" style="color:var(--yellow)">${p.cr}</div><div class="pc-sl">Py Code</div></div><div class="pc-s"><div class="pc-sv" style="color:${p.cp>0?'var(--red)':'var(--green)'}">${p.cp}</div><div class="pc-sl">Py Pend</div></div></div><div class="pbar"><div class="pfill" style="width:${pc2}%;background:${bc}"></div></div>${contribBadge(p.recv,totalVgRecv)}<div class="tip"><b>${p.name}</b>: ${p.count} videos, ${p.recv} sent (${pc2}%), ${p.cr} .py received, ${p.cp} .py pending.</div></div>`});
   document.getElementById('vgC').innerHTML=ph;
 
-  // Teams 2-6
-  const ad=teamAgg(AG,'count','prev_count'),md=teamAgg(VE,'count','prev_count'),vd=teamAgg(VO,'count','prev_count'),od=outAgg(),cmd=teamAgg(CM,'complete','prev_complete');
-  document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code (.py files)')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> <span class="n">${t.cr}</span> .py files → <span class="n">${t.au}</span> done → <span class="n">${auP}</span> pending`);
-  document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Sent')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> <span class="n">${t.recv}</span> sent → <span class="n">${t.mk}</span> done → <span class="n">${mkP}</span> pending`);
-  document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking')+teamCards(vd,t.vo,voA,`<b>Voice Over:</b> min(audio <span class="n">${t.au}</span>, masking <span class="n">${t.mk}</span>) = <span class="n">${voA}</span> → <span class="n">${t.vo}</span> done → <span class="n">${voP}</span> pending`);
-  document.getElementById('t5').innerHTML=tBdg(t.fs,t.vo,'Compress → File Segregation')+outCards(od,t);
-  document.getElementById('t6').innerHTML=tBdg(t.map,t.upl,'Upload to OneDrive → Map to Website')+teamCards(cmd,t.map,t.upl,`<b>Mapping:</b> <span class="n">${t.upl}</span> uploaded to OneDrive → <span class="n">${t.map}</span> mapped → <span class="n">${mapP2}</span> pending`);
+  const ad=teamAgg(AG),md=teamAgg(VE),vd=teamAgg(VO),od=outAgg(),cmd=teamAgg(CM,'complete'),vevod=teamAgg(VEVO);
+  document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> ${t.cr} .py files → ${t.au} done`);
+  document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Sent')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> ${t.recv} sent → ${t.mk} done`);
+  document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking (Old Method)')+teamCards(vd,t.vo,voA,`<b>Voice Over (Old):</b> min(${t.au}, ${t.mk}) = ${voA} → ${t.vo} done`);
+  document.getElementById('tNew').innerHTML=`<div class="tbadge"><div class="tbadge-v" style="background:var(--purpleB);color:var(--purple)">${t.vevo}</div><div class="tbadge-d">Editing + Voice Over done simultaneously</div></div>`+teamCards(vevod,t.vevo,t.vevo,`<b>New Method:</b> Editing + VO parallel. ${t.vevo} completed.`);
+  document.getElementById('t5').innerHTML=tBdg(t.fs,t.totalVo,'Compress → File Segregation')+outCards(od,t);
+  document.getElementById('t6').innerHTML=tBdg(t.map,t.upl,'Upload → Map to Website')+teamCards(cmd,t.map,t.upl,`<b>Mapping:</b> ${t.upl} uploaded → ${t.map} mapped`);
   lucide.createIcons()}
 
 function sAF(id){aF=id;rA()}
