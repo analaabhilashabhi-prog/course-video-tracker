@@ -145,7 +145,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div id="t3"></div>
   <div class="sh"><h2><i data-lucide="mic" style="width:20px;height:20px"></i> Team 4 — Voice Over</h2></div>
   <div id="t4"></div>
-  <div class="sh"><h2><i data-lucide="zap" style="width:20px;height:20px"></i> Editing + Voice Over (New Method)</h2></div>
+  <div class="sh"><h2><i data-lucide="zap" style="width:20px;height:20px"></i> Video Editing + Voice Over</h2></div>
   <div id="tNew"></div>
   <div class="sh"><h2><i data-lucide="folder-output" style="width:20px;height:20px"></i> Team 5 — Output</h2></div>
   <div id="t5"></div>
@@ -221,7 +221,7 @@ function rT(){
     cvo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('voice_over',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('voice_over',${r.id},'count',this.value)"></td><td>${dateCell('voice_over',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('voice_over',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${voC} / ${voA}</td><td></td><td></td></tr></tbody></table></div></div>`;
     // NEW METHOD
-    h+=`<div class="stg" style="border-color:var(--purple);border-width:2px"><div class="stg-h"><span class="stg-l" style="color:var(--purple)"><i data-lucide="zap" style="width:16px;height:16px"></i> Editing + Voice Over (New Method)<span class="sub">(parallel workflow)</span></span><button class="btn-a" style="background:var(--purple)" onclick="aR('video_edit_vo','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
+    h+=`<div class="stg" style="border-color:var(--purple);border-width:2px"><div class="stg-h"><span class="stg-l" style="color:var(--purple)"><i data-lucide="zap" style="width:16px;height:16px"></i> Video Editing + Voice Over<span class="sub">(parallel workflow)</span></span><button class="btn-a" style="background:var(--purple)" onclick="aR('video_edit_vo','${c.id}')">+ Add</button></div><table><thead><tr><th>Person</th><th>Count</th><th>Date</th><th></th></tr></thead><tbody>`;
     cvevo.forEach(r=>{h+=`<tr><td><input class="i i-n" value="${r.person}" onchange="uS('video_edit_vo',${r.id},'person',this.value)"></td><td><input class="i i-d" type="number" min="0" value="${r.count}" onchange="uS('video_edit_vo',${r.id},'count',this.value)"></td><td>${dateCell('video_edit_vo',r.id,r.submit_date)}</td><td><button class="btn-x" onclick="dR('video_edit_vo',${r.id})">×</button></td></tr>`});
     h+=`<tr class="tot"><td>Total</td><td>${vevoC}</td><td></td><td></td></tr></tbody></table></div>`;
     // Output & Mapping
@@ -266,17 +266,17 @@ function rA(){
   const ptxt=p=>p>0?`<span style="color:var(--red)">${p} pending</span>`:`<span style="color:var(--green)">done</span>`;
   const uplP=Math.max(0,t.fs-t.upl),mapP2=Math.max(0,t.upl-t.map);
   const ids=afI(),totSec=totalDurSec(ids),totHMS=secToHMS(totSec);
-  const newPct=t.tot>0?((t.vevo/t.tot)*100).toFixed(1):'0';
 
+  // KPI Cards — reordered: Total Duration, Total Videos, Videos Sent, Python Code, Audio Script, Video Editing, Voice Over (old only), Video Editing + Voice Over, Uploaded, Mapped
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--blue)"><div class="sc-l">Total Duration</div><div class="sc-v" style="font-size:2rem">${fmtDurFull(totHMS.h,totHMS.m,totHMS.s)}</div><div class="sc-s">${fmtDur(totHMS.h,totHMS.m,totHMS.s)}</div></div>
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
-    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">New Method</div><div class="sc-v">${t.vevo}</div><div class="sc-s">${newPct}% of ${t.tot} total</div></div>
     <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Sent</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.totalVo,voA+t.vevo)}"><div class="sc-l">Voice Over (All)</div><div class="sc-v">${t.totalVo}</div><div class="sc-s">Old: ${t.vo} + New: ${t.vevo}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
+    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Video Editing + Voice Over</div><div class="sc-v">${t.vevo}</div><div class="sc-s">${t.vevo} of ${t.tot} total</div></div>
     <div class="sc" style="--sc-clr:${clr(t.upl,t.fs)}"><div class="sc-l">Uploaded</div><div class="sc-v">${t.upl}</div><div class="sc-s">${t.upl} / ${t.fs}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.map,t.upl)}"><div class="sc-l">Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.upl}</div></div>`;
 
@@ -307,7 +307,7 @@ function rA(){
   document.getElementById('t2').innerHTML=tBdg(t.au,t.cr,'Depends on Python Code')+teamCards(ad,t.au,t.cr,`<b>Audio Script:</b> ${t.cr} .py files → ${t.au} done`);
   document.getElementById('t3').innerHTML=tBdg(t.mk,t.recv,'Depends on Videos Sent')+teamCards(md,t.mk,t.recv,`<b>Video Editing:</b> ${t.recv} sent → ${t.mk} done`);
   document.getElementById('t4').innerHTML=tBdg(t.vo,voA,'Needs BOTH Audio + Masking (Old Method)')+teamCards(vd,t.vo,voA,`<b>Voice Over (Old):</b> min(${t.au}, ${t.mk}) = ${voA} → ${t.vo} done`);
-  document.getElementById('tNew').innerHTML=`<div class="tbadge"><div class="tbadge-v" style="background:var(--purpleB);color:var(--purple)">${t.vevo}</div><div class="tbadge-d">Editing + Voice Over done simultaneously</div></div>`+teamCards(vevod,t.vevo,t.vevo,`<b>New Method:</b> Editing + VO parallel. ${t.vevo} completed.`);
+  document.getElementById('tNew').innerHTML=`<div class="tbadge"><div class="tbadge-v" style="background:var(--purpleB);color:var(--purple)">${t.vevo}</div><div class="tbadge-d">Editing + Voice Over done simultaneously</div></div>`+teamCards(vevod,t.vevo,t.vevo,`<b>Video Editing + Voice Over:</b> Editing + VO parallel. ${t.vevo} completed.`);
   document.getElementById('t5').innerHTML=tBdg(t.fs,t.totalVo,'Compress → File Segregation')+outCards(od,t);
   document.getElementById('t6').innerHTML=tBdg(t.map,t.upl,'Upload → Map to Website')+teamCards(cmd,t.map,t.upl,`<b>Mapping:</b> ${t.upl} uploaded → ${t.map} mapped`);
   lucide.createIcons()}
