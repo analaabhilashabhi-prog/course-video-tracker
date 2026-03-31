@@ -267,25 +267,30 @@ function rA(){
   const uplP=Math.max(0,t.fs-t.upl),mapP2=Math.max(0,t.upl-t.map);
   const ids=afI(),totSec=totalDurSec(ids),totHMS=secToHMS(totSec);
 
-  // KPI Cards — reordered: Total Duration, Total Videos, Videos Sent, Python Code, Audio Script, Video Editing, Voice Over (old only), Video Editing + Voice Over, Uploaded, Mapped
+  // Total editing & voice over (combined old + new for pipeline)
+  const totalEditDone=t.mk+t.vevo;
+  const totalVoDone=t.vo+t.vevo;
+
+  // KPI Cards — separated old & new for Video Editing and Voice Over
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--blue)"><div class="sc-l">Total Duration</div><div class="sc-v" style="font-size:2rem">${fmtDurFull(totHMS.h,totHMS.m,totHMS.s)}</div><div class="sc-s">${fmtDur(totHMS.h,totHMS.m,totHMS.s)}</div></div>
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Total Videos</div><div class="sc-v">${t.tot}</div><div class="sc-s">${aF==='all'?C.length+' courses':afc()[0]?.name}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.recv,t.tot)}"><div class="sc-l">Videos Sent</div><div class="sc-v">${t.recv}</div><div class="sc-s">${pct}% of ${t.tot}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.cr,t.recv)}"><div class="sc-l">Python Code</div><div class="sc-v">${t.cr}</div><div class="sc-s">${pyP>0?pyP+' pending':'All done'}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.au,t.cr)}"><div class="sc-l">Audio Script</div><div class="sc-v">${t.au}</div><div class="sc-s">${t.au} / ${t.cr}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.mk+t.vevo,t.recv)}"><div class="sc-l">Video Editing</div><div class="sc-v">${t.mk+t.vevo}</div><div class="sc-s">${t.mk+t.vevo} / ${t.recv}</div></div>
-    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
-    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Video Editing + Voice Over</div><div class="sc-v">${t.vevo}</div><div class="sc-s">${t.vevo} of ${t.tot} total</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.mk,t.recv)}"><div class="sc-l">Video Editing (Old)</div><div class="sc-v">${t.mk}</div><div class="sc-s">${t.mk} / ${t.recv}</div></div>
+    <div class="sc" style="--sc-clr:${clr(t.vo,voA)}"><div class="sc-l">Voice Over (Old)</div><div class="sc-v">${t.vo}</div><div class="sc-s">${t.vo} / ${voA}</div></div>
+    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Video Editing + VO (New)</div><div class="sc-v">${t.vevo}</div><div class="sc-s">${t.vevo} of ${t.tot} total</div></div>
     <div class="sc" style="--sc-clr:${clr(t.upl,t.fs)}"><div class="sc-l">Uploaded</div><div class="sc-v">${t.upl}</div><div class="sc-s">${t.upl} / ${t.fs}</div></div>
     <div class="sc" style="--sc-clr:${clr(t.map,t.upl)}"><div class="sc-l">Mapped</div><div class="sc-v">${t.map}</div><div class="sc-s">${t.map} / ${t.upl}</div></div>`;
 
+  // Pipeline — combined totals for Video Editing and Voice Over
   document.getElementById('pipR').innerHTML=`
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.recv,t.tot)}"><i data-lucide="video" style="width:20px;height:20px;color:${clr(t.recv,t.tot)}"></i></div><div class="pip-t">Video Gen</div><div class="pip-c" style="color:${clr(t.recv,t.tot)}">${t.recv} / ${t.tot}</div><div class="pip-p">${ptxt(t.pend)}</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.cr,t.recv)}"><i data-lucide="file-code" style="width:20px;height:20px;color:${clr(t.cr,t.recv)}"></i></div><div class="pip-t">Python Code</div><div class="pip-c" style="color:${clr(t.cr,t.recv)}">${t.cr} / ${t.recv}</div><div class="pip-p">${ptxt(pyP)}</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.au,t.cr)}"><i data-lucide="file-audio" style="width:20px;height:20px;color:${clr(t.au,t.cr)}"></i></div><div class="pip-t">Audio Script</div><div class="pip-c" style="color:${clr(t.au,t.cr)}">${t.au} / ${t.cr}</div><div class="pip-p">${ptxt(auP)}</div><div class="pip-d">needs .py file</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.mk+t.vevo,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(t.mk+t.vevo,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(t.mk+t.vevo,t.recv)}">${t.mk+t.vevo} / ${t.recv}</div><div class="pip-p">${ptxt(Math.max(0,t.recv-(t.mk+t.vevo)))}</div><div class="pip-d">old + new method</div></div>
-    <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.totalVo,voA+t.vevo)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(t.totalVo,voA+t.vevo)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(t.totalVo,voA+t.vevo)}">${t.totalVo} / ${voA+t.vevo}</div><div class="pip-p">${ptxt(Math.max(0,(voA+t.vevo)-t.totalVo))}</div><div class="pip-d">old + new</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(totalEditDone,t.recv)}"><i data-lucide="scissors" style="width:20px;height:20px;color:${clr(totalEditDone,t.recv)}"></i></div><div class="pip-t">Video Editing</div><div class="pip-c" style="color:${clr(totalEditDone,t.recv)}">${totalEditDone} / ${t.recv}</div><div class="pip-p">${ptxt(Math.max(0,t.recv-totalEditDone))}</div><div class="pip-d">old (${t.mk}) + new (${t.vevo})</div></div>
+    <div class="pip-s"><div class="pip-i" style="border-color:${clr(totalVoDone,voA+t.vevo)}"><i data-lucide="mic" style="width:20px;height:20px;color:${clr(totalVoDone,voA+t.vevo)}"></i></div><div class="pip-t">Voice Over</div><div class="pip-c" style="color:${clr(totalVoDone,voA+t.vevo)}">${totalVoDone} / ${voA+t.vevo}</div><div class="pip-p">${ptxt(Math.max(0,(voA+t.vevo)-totalVoDone))}</div><div class="pip-d">old (${t.vo}) + new (${t.vevo})</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.fs,t.totalVo)}"><i data-lucide="folder-output" style="width:20px;height:20px;color:${clr(t.fs,t.totalVo)}"></i></div><div class="pip-t">Output</div><div class="pip-c" style="color:${clr(t.fs,t.totalVo)}">${t.fs} / ${t.totalVo}</div><div class="pip-p">${ptxt(outP)}</div><div class="pip-d">compress → file seg</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.upl,t.fs)}"><i data-lucide="hard-drive-upload" style="width:20px;height:20px;color:${clr(t.upl,t.fs)}"></i></div><div class="pip-t">Upload</div><div class="pip-c" style="color:${clr(t.upl,t.fs)}">${t.upl} / ${t.fs}</div><div class="pip-p">${ptxt(uplP)}</div><div class="pip-d">to OneDrive</div></div>
     <div class="pip-s"><div class="pip-i" style="border-color:${clr(t.map,t.upl)}"><i data-lucide="upload-cloud" style="width:20px;height:20px;color:${clr(t.map,t.upl)}"></i></div><div class="pip-t">Mapping</div><div class="pip-c" style="color:${clr(t.map,t.upl)}">${t.map} / ${t.upl}</div><div class="pip-p">${ptxt(mapP2)}</div><div class="pip-d">final step</div></div>`;
