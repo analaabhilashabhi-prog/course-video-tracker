@@ -112,21 +112,26 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .tbadge-d{font-size:.85rem;color:var(--text3);font-weight:600}
 .nd{padding:.7rem;color:var(--text3);font-size:.88rem;font-style:italic}
 .i-date{width:105px;font-family:'Inter';font-size:12px;font-weight:500}
-.chart-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:2rem}
-.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px}
+.chart-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
 .chart-hdr h3{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:8px}
 .chart-tog{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .chart-tog button{padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter';transition:.3s}
 .chart-tog button:hover{color:var(--text)}
 .chart-tog button.active{background:var(--green);color:#fff}
-.chart-bars{display:flex;flex-direction:column;gap:12px}
-.chart-row{display:flex;align-items:center;gap:12px}
-.chart-label{min-width:120px;font-size:.85rem;font-weight:700;color:var(--text2);text-align:right;white-space:nowrap}
-.chart-bar-wrap{flex:1;height:36px;background:var(--bg2);border-radius:8px;overflow:hidden;position:relative}
-.chart-bar-fill{height:100%;border-radius:8px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;min-width:fit-content}
-.chart-bar-text{font-family:'JetBrains Mono';font-size:.78rem;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
-.chart-bar-outside{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono';font-size:.78rem;font-weight:800;color:var(--text3);white-space:nowrap}
-.chart-count{min-width:90px;font-family:'JetBrains Mono';font-size:.85rem;font-weight:800;color:var(--text);text-align:left;white-space:nowrap}
+.chart-bars{display:flex;flex-direction:column;gap:20px}
+.chart-row{display:flex;align-items:center;gap:16px}
+.chart-icon{width:48px;height:48px;border-radius:50%;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:2;position:relative}
+.chart-pill-wrap{flex:1;position:relative;height:48px}
+.chart-pill-bg{position:absolute;top:0;left:-24px;right:0;height:100%;background:var(--bg2);border-radius:0 100px 100px 0;overflow:hidden}
+.chart-pill-fill{height:100%;border-radius:0 100px 100px 0;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;padding-left:32px;gap:8px;min-width:80px}
+.chart-pill-label{font-size:.95rem;font-weight:800;color:#fff;white-space:nowrap}
+.chart-pill-pct{font-family:'JetBrains Mono';font-size:.85rem;font-weight:700;color:rgba(255,255,255,0.85);white-space:nowrap}
+.chart-pill-dot{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;border:3px solid var(--card);z-index:2}
+.chart-info{min-width:140px;padding-left:20px;flex-shrink:0}
+.chart-info-title{font-size:.9rem;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.chart-info-sub{font-family:'JetBrains Mono';font-size:.8rem;font-weight:600;color:var(--text3)}
+@media(max-width:900px){.chart-info{display:none}.chart-pill-wrap{flex:1}}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 </style>
@@ -349,32 +354,38 @@ function rChart(){
   const t=T2(),voA=Math.min(t.au,t.mk);
   const totalEditDone=t.mk+t.vevo,totalVoDone=t.vo+t.vevo;
   const stages=chartMode==='stage'?[
-    {label:'Video Gen',done:t.recv,of:t.tot,clr:'var(--green)'},
-    {label:'Python Code',done:t.cr,of:t.recv,clr:'var(--yellow)'},
-    {label:'Audio Script',done:t.au,of:t.cr,clr:'var(--yellow)'},
-    {label:'Video Editing',done:totalEditDone,of:t.recv,clr:'var(--blue)'},
-    {label:'Voice Over',done:totalVoDone,of:voA+t.vevo,clr:'var(--purple)'},
-    {label:'Output',done:t.fs,of:t.totalVo,clr:'var(--green)'},
-    {label:'Upload',done:t.upl,of:t.fs,clr:'var(--blue)'},
-    {label:'Mapping',done:t.map,of:t.upl,clr:'var(--green)'}
+    {label:'Video Gen',done:t.recv,of:t.tot,clr:'#22c55e',icon:'video'},
+    {label:'Python Code',done:t.cr,of:t.recv,clr:'#eab308',icon:'file-code'},
+    {label:'Audio Script',done:t.au,of:t.cr,clr:'#f59e0b',icon:'file-audio'},
+    {label:'Video Editing',done:totalEditDone,of:t.recv,clr:'#3b82f6',icon:'scissors'},
+    {label:'Voice Over',done:totalVoDone,of:voA+t.vevo,clr:'#a855f7',icon:'mic'},
+    {label:'Output',done:t.fs,of:t.totalVo,clr:'#10b981',icon:'folder-output'},
+    {label:'Upload',done:t.upl,of:t.fs,clr:'#14b8a6',icon:'hard-drive-upload'},
+    {label:'Mapping',done:t.map,of:t.upl,clr:'#06b6d4',icon:'upload-cloud'}
   ]:[
-    {label:'Video Gen',done:t.recv,of:t.tot,clr:'var(--green)'},
-    {label:'Python Code',done:t.cr,of:t.tot,clr:'var(--yellow)'},
-    {label:'Audio Script',done:t.au,of:t.tot,clr:'var(--yellow)'},
-    {label:'Video Editing',done:totalEditDone,of:t.tot,clr:'var(--blue)'},
-    {label:'Voice Over',done:totalVoDone,of:t.tot,clr:'var(--purple)'},
-    {label:'Output',done:t.fs,of:t.tot,clr:'var(--green)'},
-    {label:'Upload',done:t.upl,of:t.tot,clr:'var(--blue)'},
-    {label:'Mapping',done:t.map,of:t.tot,clr:'var(--green)'}
+    {label:'Video Gen',done:t.recv,of:t.tot,clr:'#22c55e',icon:'video'},
+    {label:'Python Code',done:t.cr,of:t.tot,clr:'#eab308',icon:'file-code'},
+    {label:'Audio Script',done:t.au,of:t.tot,clr:'#f59e0b',icon:'file-audio'},
+    {label:'Video Editing',done:totalEditDone,of:t.tot,clr:'#3b82f6',icon:'scissors'},
+    {label:'Voice Over',done:totalVoDone,of:t.tot,clr:'#a855f7',icon:'mic'},
+    {label:'Output',done:t.fs,of:t.tot,clr:'#10b981',icon:'folder-output'},
+    {label:'Upload',done:t.upl,of:t.tot,clr:'#14b8a6',icon:'hard-drive-upload'},
+    {label:'Mapping',done:t.map,of:t.tot,clr:'#06b6d4',icon:'upload-cloud'}
   ];
   let h='';
   stages.forEach(s=>{
     const pct=s.of>0?Math.round((s.done/s.of)*100):0;
-    const barClr=pct>=100?'var(--green)':pct>=50?s.clr:'var(--red)';
-    const showInside=pct>=20;
-    h+=`<div class="chart-row"><div class="chart-label">${s.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:${Math.max(pct,2)}%;background:${barClr}">${showInside?`<span class="chart-bar-text">${pct}%</span>`:''}</div>${!showInside?`<span class="chart-bar-outside">${pct}%</span>`:''}</div><div class="chart-count">${s.done} / ${s.of}</div></div>`;
+    const fillW=Math.max(pct,8);
+    h+=`<div class="chart-row">
+      <div class="chart-icon" style="border-color:${s.clr}"><i data-lucide="${s.icon}" style="width:20px;height:20px;color:${s.clr}"></i></div>
+      <div class="chart-pill-wrap">
+        <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:${s.clr}"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
+        <div class="chart-pill-dot" style="left:calc(${fillW}% - 8px);background:${s.clr}"></div>
+      </div>
+      <div class="chart-info"><div class="chart-info-title">${s.label}</div><div class="chart-info-sub">${s.done} / ${s.of} completed</div></div>
+    </div>`;
   });
-  document.getElementById('chartBars').innerHTML=h}
+  document.getElementById('chartBars').innerHTML=h;lucide.createIcons()}
 
 function sAF(id){aF=id;rA()}
 function setupRT(){SB.channel('ch').on('postgres_changes',{event:'*',schema:'public'},()=>{load()}).subscribe()}
