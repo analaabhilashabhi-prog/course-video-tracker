@@ -349,32 +349,43 @@ function setChartMode(m){chartMode=m;document.querySelectorAll('.chart-tog butto
 function rChart(){
   const t=T2(),voA=Math.min(t.au,t.mk);
   const totalEditDone=t.mk+t.vevo,totalVoDone=t.vo+t.vevo;
+  const barColors=[
+    {c1:'#22c55e',c2:'#4ade80'},
+    {c1:'#65a30d',c2:'#84cc16'},
+    {c1:'#a3b820',c2:'#bef264'},
+    {c1:'#eab308',c2:'#facc15'},
+    {c1:'#f59e0b',c2:'#fbbf24'},
+    {c1:'#f97316',c2:'#fb923c'},
+    {c1:'#ef4444',c2:'#f87171'},
+    {c1:'#dc2626',c2:'#ef4444'}
+  ];
   const stages=chartMode==='stage'?[
-    {label:'Video Gen',done:t.recv,of:t.tot,c1:'#22c55e',c2:'#16a34a',icon:'video'},
-    {label:'Python Code',done:t.cr,of:t.recv,c1:'#eab308',c2:'#ca8a04',icon:'file-code'},
-    {label:'Audio Script',done:t.au,of:t.cr,c1:'#f59e0b',c2:'#d97706',icon:'file-audio'},
-    {label:'Video Editing',done:totalEditDone,of:t.recv,c1:'#3b82f6',c2:'#2563eb',icon:'scissors'},
-    {label:'Voice Over',done:totalVoDone,of:voA+t.vevo,c1:'#a855f7',c2:'#7c3aed',icon:'mic'},
-    {label:'Output',done:t.fs,of:t.totalVo,c1:'#10b981',c2:'#059669',icon:'folder-output'},
-    {label:'Upload',done:t.upl,of:t.fs,c1:'#14b8a6',c2:'#0d9488',icon:'hard-drive-upload'},
-    {label:'Mapping',done:t.map,of:t.upl,c1:'#06b6d4',c2:'#0891b2',icon:'upload-cloud'}
+    {label:'Video Gen',done:t.recv,of:t.tot,icon:'video'},
+    {label:'Python Code',done:t.cr,of:t.recv,icon:'file-code'},
+    {label:'Audio Script',done:t.au,of:t.cr,icon:'file-audio'},
+    {label:'Video Editing',done:totalEditDone,of:t.recv,icon:'scissors'},
+    {label:'Voice Over',done:totalVoDone,of:voA+t.vevo,icon:'mic'},
+    {label:'Output',done:t.fs,of:t.totalVo,icon:'folder-output'},
+    {label:'Upload',done:t.upl,of:t.fs,icon:'hard-drive-upload'},
+    {label:'Mapping',done:t.map,of:t.upl,icon:'upload-cloud'}
   ]:[
-    {label:'Video Gen',done:t.recv,of:t.tot,c1:'#22c55e',c2:'#16a34a',icon:'video'},
-    {label:'Python Code',done:t.cr,of:t.tot,c1:'#eab308',c2:'#ca8a04',icon:'file-code'},
-    {label:'Audio Script',done:t.au,of:t.tot,c1:'#f59e0b',c2:'#d97706',icon:'file-audio'},
-    {label:'Video Editing',done:totalEditDone,of:t.tot,c1:'#3b82f6',c2:'#2563eb',icon:'scissors'},
-    {label:'Voice Over',done:totalVoDone,of:t.tot,c1:'#a855f7',c2:'#7c3aed',icon:'mic'},
-    {label:'Output',done:t.fs,of:t.tot,c1:'#10b981',c2:'#059669',icon:'folder-output'},
-    {label:'Upload',done:t.upl,of:t.tot,c1:'#14b8a6',c2:'#0d9488',icon:'hard-drive-upload'},
-    {label:'Mapping',done:t.map,of:t.tot,c1:'#06b6d4',c2:'#0891b2',icon:'upload-cloud'}
+    {label:'Video Gen',done:t.recv,of:t.tot,icon:'video'},
+    {label:'Python Code',done:t.cr,of:t.tot,icon:'file-code'},
+    {label:'Audio Script',done:t.au,of:t.tot,icon:'file-audio'},
+    {label:'Video Editing',done:totalEditDone,of:t.tot,icon:'scissors'},
+    {label:'Voice Over',done:totalVoDone,of:t.tot,icon:'mic'},
+    {label:'Output',done:t.fs,of:t.tot,icon:'folder-output'},
+    {label:'Upload',done:t.upl,of:t.tot,icon:'hard-drive-upload'},
+    {label:'Mapping',done:t.map,of:t.tot,icon:'upload-cloud'}
   ];
   let h='';
-  stages.forEach(s=>{
+  stages.forEach((s,i)=>{
     const pct=s.of>0?Math.round((s.done/s.of)*100):0;
     const fillW=Math.max(pct,14);
-    const grad=`linear-gradient(90deg,${s.c1},${s.c2})`;
+    const bc=barColors[i];
+    const grad=`linear-gradient(90deg,${bc.c1},${bc.c2})`;
     h+=`<div class="chart-row">
-      <div class="chart-icon" style="border-color:${s.c1};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${s.c1}"></i></div>
+      <div class="chart-icon" style="border-color:${bc.c1};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${bc.c1}"></i></div>
       <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:${grad}"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
       <div class="chart-count">${s.done} / ${s.of}</div>
     </div>`;
