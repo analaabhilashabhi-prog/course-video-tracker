@@ -119,18 +119,15 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .chart-tog button{padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter';transition:.3s}
 .chart-tog button:hover{color:var(--text)}
 .chart-tog button.active{background:var(--green);color:#fff}
-.chart-bars{display:flex;flex-direction:column;gap:18px}
-.chart-row{display:flex;align-items:center;position:relative;height:32px}
-.chart-icon{width:32px;height:32px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:3;position:relative;background:var(--card)}
-.chart-pill-wrap{position:absolute;left:0;top:0;right:0;height:100%;display:flex;align-items:center}
-.chart-pill-bg{position:absolute;left:16px;right:160px;height:28px;background:var(--bg2);border-radius:100px;overflow:hidden}
-.chart-pill-fill{height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;padding-left:28px;gap:6px}
-.chart-pill-label{font-size:.78rem;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.25)}
-.chart-pill-pct{font-family:'JetBrains Mono';font-size:.72rem;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap}
-.chart-info{position:absolute;right:0;min-width:145px;flex-shrink:0}
-.chart-info-title{font-size:.82rem;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
-.chart-info-sub{font-family:'JetBrains Mono';font-size:.72rem;font-weight:600;color:var(--text3)}
-@media(max-width:900px){.chart-info{display:none}.chart-pill-bg{right:0}}
+.chart-bars{display:flex;flex-direction:column;gap:14px}
+.chart-row{display:flex;align-items:center;height:30px;position:relative}
+.chart-icon{width:30px;height:30px;border-radius:50%;border:2.5px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:3;position:absolute;left:0;top:0}
+.chart-pill-bg{margin-left:15px;flex:1;height:26px;background:var(--bg2);border-radius:100px;overflow:hidden;position:relative}
+.chart-pill-fill{height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;padding-left:24px;gap:6px}
+.chart-pill-label{font-size:.75rem;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.chart-pill-pct{font-family:'JetBrains Mono';font-size:.7rem;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap}
+.chart-count{min-width:80px;padding-left:12px;font-family:'JetBrains Mono';font-size:.75rem;font-weight:700;color:var(--text2);white-space:nowrap;flex-shrink:0}
+@media(max-width:900px){.chart-count{min-width:60px;font-size:.7rem}}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 </style>
@@ -374,15 +371,12 @@ function rChart(){
   let h='';
   stages.forEach(s=>{
     const pct=s.of>0?Math.round((s.done/s.of)*100):0;
-    const fillW=Math.max(pct,12);
+    const fillW=Math.max(pct,14);
     const grad=`linear-gradient(90deg,${s.c1},${s.c2})`;
-    const iconBg=`linear-gradient(135deg,${s.c1}20,${s.c2}20)`;
     h+=`<div class="chart-row">
-      <div class="chart-pill-wrap">
-        <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:${grad}"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
-      </div>
-      <div class="chart-icon" style="border-color:${s.c1};background:${iconBg}"><i data-lucide="${s.icon}" style="width:15px;height:15px;color:${s.c1}"></i></div>
-      <div class="chart-info"><div class="chart-info-title">${s.label}</div><div class="chart-info-sub">${s.done} / ${s.of} completed</div></div>
+      <div class="chart-icon" style="border-color:${s.c1};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${s.c1}"></i></div>
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:${grad}"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
+      <div class="chart-count">${s.done} / ${s.of}</div>
     </div>`;
   });
   document.getElementById('chartBars').innerHTML=h;lucide.createIcons()}
