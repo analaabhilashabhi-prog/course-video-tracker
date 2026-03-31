@@ -376,8 +376,8 @@ function rChart(){
     const tc=textColors[i];
     h+=`<div class="chart-row">
       <div class="chart-icon" style="border-color:${tc};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${tc}"></i></div>
-      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(148,163,184,0.3)"></div><span class="chart-pill-label" style="color:${tc}">${s.label}</span><span class="chart-pill-pct" style="color:${tc}">${pct}%</span></div>
-      <div class="chart-count" style="color:${tc}">${s.done} / ${s.of}</div>
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(148,163,184,0.45)"></div><span class="chart-pill-label" style="color:var(--text)">${s.label}</span><span class="chart-pill-pct" style="color:var(--text)">${pct}%</span></div>
+      <div class="chart-count" style="color:var(--text)">${s.done} / ${s.of}</div>
     </div>`;
   });
   document.getElementById('chartBars').innerHTML=h;lucide.createIcons()}
