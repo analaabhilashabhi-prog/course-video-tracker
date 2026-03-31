@@ -123,9 +123,9 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .chart-row{display:flex;align-items:center;height:30px;position:relative}
 .chart-icon{width:30px;height:30px;border-radius:50%;border:2.5px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:3;position:absolute;left:0;top:0}
 .chart-pill-bg{margin-left:15px;flex:1;height:26px;background:var(--bg2);border-radius:100px;overflow:hidden;position:relative;display:flex;align-items:center}
-.chart-pill-fill{position:absolute;left:0;top:0;height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
-.chart-pill-label{font-size:.75rem;font-weight:700;white-space:nowrap;position:relative;z-index:2;padding-left:24px}
-.chart-pill-pct{font-family:'JetBrains Mono';font-size:.7rem;font-weight:700;white-space:nowrap;position:relative;z-index:2;margin-left:6px}
+.chart-pill-fill{position:absolute;left:0;top:0;height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;justify-content:space-between;padding-left:24px;padding-right:10px}
+.chart-pill-label{font-size:.75rem;font-weight:700;white-space:nowrap;z-index:2}
+.chart-pill-pct{font-family:'JetBrains Mono';font-size:.7rem;font-weight:700;white-space:nowrap;z-index:2}
 .chart-count{min-width:80px;padding-left:12px;font-family:'JetBrains Mono';font-size:.75rem;font-weight:700;color:var(--text2);white-space:nowrap;flex-shrink:0}
 @media(max-width:900px){.chart-count{min-width:60px;font-size:.7rem}}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
@@ -375,8 +375,8 @@ function rChart(){
     const fillW=Math.max(pct,14);
     const tc=textColors[i];
     h+=`<div class="chart-row">
-      <div class="chart-icon" style="border-color:${tc};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${tc}"></i></div>
-      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(148,163,184,0.45)"></div><span class="chart-pill-label" style="color:var(--text)">${s.label}</span><span class="chart-pill-pct" style="color:var(--text)">${pct}%</span></div>
+      <div class="chart-icon" style="border-color:var(--text3);background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:var(--text)"></i></div>
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(148,163,184,0.45)"><span class="chart-pill-label" style="color:var(--text)">${s.label}</span><span class="chart-pill-pct" style="color:var(--text)">${pct}%</span></div></div>
       <div class="chart-count" style="color:var(--text)">${s.done} / ${s.of}</div>
     </div>`;
   });
