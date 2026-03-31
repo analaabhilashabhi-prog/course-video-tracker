@@ -122,10 +122,10 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .chart-bars{display:flex;flex-direction:column;gap:14px}
 .chart-row{display:flex;align-items:center;height:30px;position:relative}
 .chart-icon{width:30px;height:30px;border-radius:50%;border:2.5px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:3;position:absolute;left:0;top:0}
-.chart-pill-bg{margin-left:15px;flex:1;height:26px;background:var(--bg2);border-radius:100px;overflow:hidden;position:relative}
-.chart-pill-fill{height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;padding-left:24px;gap:6px}
-.chart-pill-label{font-size:.75rem;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
-.chart-pill-pct{font-family:'JetBrains Mono';font-size:.7rem;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap}
+.chart-pill-bg{margin-left:15px;flex:1;height:26px;background:var(--bg2);border-radius:100px;overflow:hidden;position:relative;display:flex;align-items:center}
+.chart-pill-fill{position:absolute;left:0;top:0;height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
+.chart-pill-label{font-size:.75rem;font-weight:700;white-space:nowrap;position:relative;z-index:2;padding-left:24px}
+.chart-pill-pct{font-family:'JetBrains Mono';font-size:.7rem;font-weight:700;white-space:nowrap;position:relative;z-index:2;margin-left:6px}
 .chart-count{min-width:80px;padding-left:12px;font-family:'JetBrains Mono';font-size:.75rem;font-weight:700;color:var(--text2);white-space:nowrap;flex-shrink:0}
 @media(max-width:900px){.chart-count{min-width:60px;font-size:.7rem}}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
@@ -349,16 +349,7 @@ function setChartMode(m){chartMode=m;document.querySelectorAll('.chart-tog butto
 function rChart(){
   const t=T2(),voA=Math.min(t.au,t.mk);
   const totalEditDone=t.mk+t.vevo,totalVoDone=t.vo+t.vevo;
-  const barColors=[
-    {c1:'#22c55e',c2:'#4ade80'},
-    {c1:'#65a30d',c2:'#84cc16'},
-    {c1:'#a3b820',c2:'#bef264'},
-    {c1:'#eab308',c2:'#facc15'},
-    {c1:'#f59e0b',c2:'#fbbf24'},
-    {c1:'#f97316',c2:'#fb923c'},
-    {c1:'#ef4444',c2:'#f87171'},
-    {c1:'#dc2626',c2:'#ef4444'}
-  ];
+  const textColors=['#22c55e','#4ade80','#a3e635','#eab308','#f59e0b','#f97316','#ef4444','#dc2626'];
   const stages=chartMode==='stage'?[
     {label:'Video Gen',done:t.recv,of:t.tot,icon:'video'},
     {label:'Python Code',done:t.cr,of:t.recv,icon:'file-code'},
@@ -382,12 +373,11 @@ function rChart(){
   stages.forEach((s,i)=>{
     const pct=s.of>0?Math.round((s.done/s.of)*100):0;
     const fillW=Math.max(pct,14);
-    const bc=barColors[i];
-    const grad=`linear-gradient(90deg,${bc.c1},${bc.c2})`;
+    const tc=textColors[i];
     h+=`<div class="chart-row">
-      <div class="chart-icon" style="border-color:${bc.c1};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${bc.c1}"></i></div>
-      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:${grad}"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
-      <div class="chart-count">${s.done} / ${s.of}</div>
+      <div class="chart-icon" style="border-color:${tc};background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:${tc}"></i></div>
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:var(--border)"></div><span class="chart-pill-label" style="color:${tc}">${s.label}</span><span class="chart-pill-pct" style="color:${tc}">${pct}%</span></div>
+      <div class="chart-count" style="color:${tc}">${s.done} / ${s.of}</div>
     </div>`;
   });
   document.getElementById('chartBars').innerHTML=h;lucide.createIcons()}
