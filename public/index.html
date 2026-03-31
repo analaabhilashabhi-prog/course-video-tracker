@@ -112,6 +112,21 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .tbadge-d{font-size:.85rem;color:var(--text3);font-weight:600}
 .nd{padding:.7rem;color:var(--text3);font-size:.88rem;font-style:italic}
 .i-date{width:105px;font-family:'Inter';font-size:12px;font-weight:500}
+.chart-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:2rem}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px}
+.chart-hdr h3{font-size:1.15rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.chart-tog{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.chart-tog button{padding:8px 18px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter';transition:.3s}
+.chart-tog button:hover{color:var(--text)}
+.chart-tog button.active{background:var(--green);color:#fff}
+.chart-bars{display:flex;flex-direction:column;gap:12px}
+.chart-row{display:flex;align-items:center;gap:12px}
+.chart-label{min-width:120px;font-size:.85rem;font-weight:700;color:var(--text2);text-align:right;white-space:nowrap}
+.chart-bar-wrap{flex:1;height:36px;background:var(--bg2);border-radius:8px;overflow:hidden;position:relative}
+.chart-bar-fill{height:100%;border-radius:8px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;min-width:fit-content}
+.chart-bar-text{font-family:'JetBrains Mono';font-size:.78rem;font-weight:800;color:#fff;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.chart-bar-outside{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono';font-size:.78rem;font-weight:800;color:var(--text3);white-space:nowrap}
+.chart-count{min-width:90px;font-family:'JetBrains Mono';font-size:.85rem;font-weight:800;color:var(--text);text-align:left;white-space:nowrap}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--text3);border-radius:3px}
 </style>
@@ -135,6 +150,17 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div class="sg" id="kpi"></div>
   <div class="sh"><h2><i data-lucide="git-branch" style="width:20px;height:20px"></i> Production Pipeline</h2></div>
   <div class="pip" id="pipR"></div>
+  <div class="sh"><h2><i data-lucide="activity" style="width:20px;height:20px"></i> Progress Chart</h2></div>
+  <div class="chart-sec">
+    <div class="chart-hdr">
+      <h3><i data-lucide="bar-chart-2" style="width:18px;height:18px"></i> Stage Completion</h3>
+      <div class="chart-tog">
+        <button class="active" onclick="setChartMode('stage')">Stage Progress</button>
+        <button onclick="setChartMode('overall')">Overall Progress</button>
+      </div>
+    </div>
+    <div class="chart-bars" id="chartBars"></div>
+  </div>
   <div class="sh"><h2><i data-lucide="filter" style="width:20px;height:20px"></i> Filter by Course</h2></div>
   <div class="cf" id="cfR"></div>
   <div class="sh"><h2><i data-lucide="video" style="width:20px;height:20px"></i> Team 1 — Video Generation</h2></div>
@@ -315,7 +341,40 @@ function rA(){
   document.getElementById('tNew').innerHTML=`<div class="tbadge"><div class="tbadge-v" style="background:var(--purpleB);color:var(--purple)">${t.vevo}</div><div class="tbadge-d">Editing + Voice Over done simultaneously</div></div>`+teamCards(vevod,t.vevo,t.vevo,`<b>Video Editing + Voice Over:</b> Editing + VO parallel. ${t.vevo} completed.`);
   document.getElementById('t5').innerHTML=tBdg(t.fs,t.totalVo,'Compress → File Segregation')+outCards(od,t);
   document.getElementById('t6').innerHTML=tBdg(t.map,t.upl,'Upload → Map to Website')+teamCards(cmd,t.map,t.upl,`<b>Mapping:</b> ${t.upl} uploaded → ${t.map} mapped`);
-  lucide.createIcons()}
+  lucide.createIcons();rChart()}
+
+let chartMode='stage';
+function setChartMode(m){chartMode=m;document.querySelectorAll('.chart-tog button').forEach(b=>{b.classList.remove('active');if((m==='stage'&&b.textContent.includes('Stage'))||(m==='overall'&&b.textContent.includes('Overall')))b.classList.add('active')});rChart()}
+function rChart(){
+  const t=T2(),voA=Math.min(t.au,t.mk);
+  const totalEditDone=t.mk+t.vevo,totalVoDone=t.vo+t.vevo;
+  const stages=chartMode==='stage'?[
+    {label:'Video Gen',done:t.recv,of:t.tot,clr:'var(--green)'},
+    {label:'Python Code',done:t.cr,of:t.recv,clr:'var(--yellow)'},
+    {label:'Audio Script',done:t.au,of:t.cr,clr:'var(--yellow)'},
+    {label:'Video Editing',done:totalEditDone,of:t.recv,clr:'var(--blue)'},
+    {label:'Voice Over',done:totalVoDone,of:voA+t.vevo,clr:'var(--purple)'},
+    {label:'Output',done:t.fs,of:t.totalVo,clr:'var(--green)'},
+    {label:'Upload',done:t.upl,of:t.fs,clr:'var(--blue)'},
+    {label:'Mapping',done:t.map,of:t.upl,clr:'var(--green)'}
+  ]:[
+    {label:'Video Gen',done:t.recv,of:t.tot,clr:'var(--green)'},
+    {label:'Python Code',done:t.cr,of:t.tot,clr:'var(--yellow)'},
+    {label:'Audio Script',done:t.au,of:t.tot,clr:'var(--yellow)'},
+    {label:'Video Editing',done:totalEditDone,of:t.tot,clr:'var(--blue)'},
+    {label:'Voice Over',done:totalVoDone,of:t.tot,clr:'var(--purple)'},
+    {label:'Output',done:t.fs,of:t.tot,clr:'var(--green)'},
+    {label:'Upload',done:t.upl,of:t.tot,clr:'var(--blue)'},
+    {label:'Mapping',done:t.map,of:t.tot,clr:'var(--green)'}
+  ];
+  let h='';
+  stages.forEach(s=>{
+    const pct=s.of>0?Math.round((s.done/s.of)*100):0;
+    const barClr=pct>=100?'var(--green)':pct>=50?s.clr:'var(--red)';
+    const showInside=pct>=20;
+    h+=`<div class="chart-row"><div class="chart-label">${s.label}</div><div class="chart-bar-wrap"><div class="chart-bar-fill" style="width:${Math.max(pct,2)}%;background:${barClr}">${showInside?`<span class="chart-bar-text">${pct}%</span>`:''}</div>${!showInside?`<span class="chart-bar-outside">${pct}%</span>`:''}</div><div class="chart-count">${s.done} / ${s.of}</div></div>`;
+  });
+  document.getElementById('chartBars').innerHTML=h}
 
 function sAF(id){aF=id;rA()}
 function setupRT(){SB.channel('ch').on('postgres_changes',{event:'*',schema:'public'},()=>{load()}).subscribe()}
