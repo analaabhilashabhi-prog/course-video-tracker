@@ -125,8 +125,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .chart-pill-bg{margin-left:15px;flex:1;height:26px;background:var(--bg2);border-radius:100px;position:relative;display:flex;align-items:center;overflow:hidden}
 .chart-pill-fill{position:absolute;left:0;top:0;height:100%;border-radius:100px;transition:width .6s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;justify-content:space-between;padding-left:24px;padding-right:10px}
 .chart-pill-label{font-size:.75rem;font-weight:700;white-space:nowrap;z-index:2;color:#fff}
-.chart-pill-pct-in{font-family:'JetBrains Mono';font-size:.85rem;font-weight:900;white-space:nowrap;color:#fff;z-index:2}
-.chart-pill-pct-out{font-family:'JetBrains Mono';font-size:1.1rem;font-weight:900;white-space:nowrap;color:var(--green);min-width:55px;padding-left:8px;flex-shrink:0}
+.chart-pill-pct{font-family:'JetBrains Mono';font-size:1.1rem;font-weight:900;white-space:nowrap;color:#fff;z-index:2}
 .chart-count{min-width:80px;padding-left:8px;font-family:'JetBrains Mono';font-size:.75rem;font-weight:700;white-space:nowrap;flex-shrink:0}
 @media(max-width:900px){.chart-count{min-width:60px;font-size:.7rem}}
 @media(max-width:768px){.wrap{padding:1rem}.nav{flex-direction:column;gap:8px;padding:10px}.sf{flex-direction:column}.pg{grid-template-columns:1fr}.pip{flex-wrap:wrap}.pip-s::after{display:none}.dur-card{flex-direction:column;align-items:flex-start}}
@@ -375,11 +374,9 @@ function rChart(){
     const pct=s.of>0?Math.round((s.done/s.of)*100):0;
     const fillW=Math.max(pct,14);
     const tc=textColors[i];
-    const inside=pct>=85;
     h+=`<div class="chart-row">
       <div class="chart-icon" style="border-color:var(--text3);background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:var(--text)"></i></div>
-      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(34,197,94,0.25)"><span class="chart-pill-label">${s.label}</span>${inside?`<span class="chart-pill-pct-in">${pct}%</span>`:''}</div></div>
-      ${!inside?`<span class="chart-pill-pct-out">${pct}%</span>`:''}
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(34,197,94,0.25)"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${pct}%</span></div></div>
       <div class="chart-count" style="color:var(--text)">${s.done} / ${s.of}</div>
     </div>`;
   });
