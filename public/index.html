@@ -376,7 +376,7 @@ function rChart(){
     const tc=textColors[i];
     h+=`<div class="chart-row">
       <div class="chart-icon" style="border-color:var(--text3);background:var(--card)"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:var(--text)"></i></div>
-      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(148,163,184,0.45)"><span class="chart-pill-label" style="color:var(--text)">${s.label}</span><span class="chart-pill-pct" style="color:var(--green)">${pct}%</span></div></div>
+      <div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:var(--green)"><span class="chart-pill-label" style="color:#fff">${s.label}</span><span class="chart-pill-pct" style="color:#1a2e1a;font-weight:800">${pct}%</span></div></div>
       <div class="chart-count" style="color:var(--text)">${s.done} / ${s.of}</div>
     </div>`;
   });
