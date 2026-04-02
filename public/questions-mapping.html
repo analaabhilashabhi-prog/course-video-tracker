@@ -157,7 +157,20 @@ async function load(){try{
   document.getElementById('ph').style.display='block';
 }catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}}
 
-function uM(id,f,v){const r=M.find(x=>x.id===id);if(!r)return;if(f==='name'){r.name=v;dbU('qm_modules',id,{name:v})}else{r[f]=Math.max(0,Number(v)||0);dbU('qm_modules',id,{[f]:r[f]})}rT()}
+function uM(id,f,v){const r=M.find(x=>x.id===id);if(!r)return;if(f==='name'){r.name=v;dbU('qm_modules',id,{name:v})}else{r[f]=Math.max(0,Number(v)||0);dbU('qm_modules',id,{[f]:r[f]})}updateTotals();}
+function updateTotals(){const sel=document.getElementById('cDrop').value;if(!sel)return;const cm=gg(M,sel);
+  // Update per-row totals
+  cm.forEach(m=>{const trT=m.trainer_easy+m.trainer_medium+m.trainer_hard;const teT=m.trainee_easy+m.trainee_medium+m.trainee_hard;const lT=m.lab_easy+m.lab_medium+m.lab_hard;
+    const el=document.getElementById('rt_'+m.id);if(el)el.innerHTML=trT;const el2=document.getElementById('re_'+m.id);if(el2)el2.innerHTML=teT;const el3=document.getElementById('rl_'+m.id);if(el3)el3.innerHTML=lT;});
+  // Update footer totals
+  const tTE=S(cm,'trainer_easy'),tTM=S(cm,'trainer_medium'),tTH=S(cm,'trainer_hard'),tTL=S(cm,'trainer_leet'),tTC=S(cm,'trainer_company'),tTMa=S(cm,'trainer_maya');
+  const tEE=S(cm,'trainee_easy'),tEM=S(cm,'trainee_medium'),tEH=S(cm,'trainee_hard'),tEL=S(cm,'trainee_leet'),tEC=S(cm,'trainee_company'),tEMa=S(cm,'trainee_maya');
+  const tLE=S(cm,'lab_easy'),tLM=S(cm,'lab_medium'),tLH=S(cm,'lab_hard');
+  const ids={ft_tgt:S(cm,'trainer_target'),ft_e:tTE,ft_m:tTM,ft_h:tTH,ft_t:tTE+tTM+tTH,ft_l:tTL,ft_c:tTC,ft_ma:tTMa,
+    fe_tgt:S(cm,'trainee_target'),fe_e:tEE,fe_m:tEM,fe_h:tEH,fe_t:tEE+tEM+tEH,fe_l:tEL,fe_c:tEC,fe_ma:tEMa,
+    fl_tgt:S(cm,'lab_target'),fl_e:tLE,fl_m:tLM,fl_h:tLH,fl_t:tLE+tLM+tLH,
+    fa_tgt:S(cm,'articles_target'),fa_a:S(cm,'articles_added'),fv_tgt:S(cm,'videos_target'),fv_a:S(cm,'videos_added')};
+  Object.entries(ids).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.innerHTML=v});}
 async function addMod(cid){const r=await dbI('qm_modules',{course_id:cid,name:'New Module',sort_order:M.length,trainer_target:0,trainer_easy:0,trainer_medium:0,trainer_hard:0,trainer_leet:0,trainer_company:0,trainer_maya:0,trainee_target:0,trainee_easy:0,trainee_medium:0,trainee_hard:0,trainee_leet:0,trainee_company:0,trainee_maya:0,lab_target:0,lab_easy:0,lab_medium:0,lab_hard:0,articles_target:0,articles_added:0,videos_target:0,videos_added:0});if(r){M.push(r);rT();lucide.createIcons()}}
 async function delMod(id){await dbD('qm_modules',id);M=M.filter(r=>r.id!==id);rT();lucide.createIcons()}
 
@@ -183,9 +196,9 @@ function rT(){
     const trT=m.trainer_easy+m.trainer_medium+m.trainer_hard,teT=m.trainee_easy+m.trainee_medium+m.trainee_hard,lT=m.lab_easy+m.lab_medium+m.lab_hard;
     const inp=(f,v,cls='')=>`<input class="i ${cls}" type="number" min="0" value="${v||0}" onchange="uM(${m.id},'${f}',this.value)">`;
     h+=`<tr><td>${i+1}</td><td><input class="i i-n" value="${m.name}" onchange="uM(${m.id},'name',this.value)"></td>`;
-    h+=`<td>${inp('trainer_target',m.trainer_target,'i-tgt')}</td><td>${inp('trainer_easy',m.trainer_easy)}</td><td>${inp('trainer_medium',m.trainer_medium)}</td><td>${inp('trainer_hard',m.trainer_hard)}</td><td class="vg">${trT}</td><td>${inp('trainer_leet',m.trainer_leet)}</td><td>${inp('trainer_company',m.trainer_company)}</td><td>${inp('trainer_maya',m.trainer_maya)}</td><td class="sep"></td>`;
-    h+=`<td>${inp('trainee_target',m.trainee_target,'i-tgt')}</td><td>${inp('trainee_easy',m.trainee_easy)}</td><td>${inp('trainee_medium',m.trainee_medium)}</td><td>${inp('trainee_hard',m.trainee_hard)}</td><td class="vg">${teT}</td><td>${inp('trainee_leet',m.trainee_leet)}</td><td>${inp('trainee_company',m.trainee_company)}</td><td>${inp('trainee_maya',m.trainee_maya)}</td><td class="sep"></td>`;
-    h+=`<td>${inp('lab_target',m.lab_target,'i-tgt')}</td><td>${inp('lab_easy',m.lab_easy)}</td><td>${inp('lab_medium',m.lab_medium)}</td><td>${inp('lab_hard',m.lab_hard)}</td><td class="vg">${lT}</td><td class="sep"></td>`;
+    h+=`<td>${inp('trainer_target',m.trainer_target,'i-tgt')}</td><td>${inp('trainer_easy',m.trainer_easy)}</td><td>${inp('trainer_medium',m.trainer_medium)}</td><td>${inp('trainer_hard',m.trainer_hard)}</td><td class="vg" id="rt_${m.id}">${trT}</td><td>${inp('trainer_leet',m.trainer_leet)}</td><td>${inp('trainer_company',m.trainer_company)}</td><td>${inp('trainer_maya',m.trainer_maya)}</td><td class="sep"></td>`;
+    h+=`<td>${inp('trainee_target',m.trainee_target,'i-tgt')}</td><td>${inp('trainee_easy',m.trainee_easy)}</td><td>${inp('trainee_medium',m.trainee_medium)}</td><td>${inp('trainee_hard',m.trainee_hard)}</td><td class="vg" id="re_${m.id}">${teT}</td><td>${inp('trainee_leet',m.trainee_leet)}</td><td>${inp('trainee_company',m.trainee_company)}</td><td>${inp('trainee_maya',m.trainee_maya)}</td><td class="sep"></td>`;
+    h+=`<td>${inp('lab_target',m.lab_target,'i-tgt')}</td><td>${inp('lab_easy',m.lab_easy)}</td><td>${inp('lab_medium',m.lab_medium)}</td><td>${inp('lab_hard',m.lab_hard)}</td><td class="vg" id="rl_${m.id}">${lT}</td><td class="sep"></td>`;
     h+=`<td>${inp('articles_target',m.articles_target,'i-tgt')}</td><td>${inp('articles_added',m.articles_added)}</td><td class="sep"></td>`;
     h+=`<td>${inp('videos_target',m.videos_target,'i-tgt')}</td><td>${inp('videos_added',m.videos_added)}</td>`;
     h+=`<td><button class="btn-x" onclick="delMod(${m.id})">×</button></td></tr>`;
@@ -196,10 +209,10 @@ function rT(){
   const tLT=S(cm,'lab_target'),tLE=S(cm,'lab_easy'),tLM=S(cm,'lab_medium'),tLH=S(cm,'lab_hard');
   const tAT=S(cm,'articles_target'),tAA=S(cm,'articles_added'),tVT=S(cm,'videos_target'),tVA=S(cm,'videos_added');
   h+=`<tr class="tot"><td></td><td>TOTAL</td>`;
-  h+=`<td>${tTT}</td><td>${tTE}</td><td>${tTM}</td><td>${tTH}</td><td>${tTE+tTM+tTH}</td><td>${tTL}</td><td>${tTC}</td><td>${tTMa}</td><td class="sep"></td>`;
-  h+=`<td>${tET}</td><td>${tEE}</td><td>${tEM}</td><td>${tEH}</td><td>${tEE+tEM+tEH}</td><td>${tEL}</td><td>${tEC}</td><td>${tEMa}</td><td class="sep"></td>`;
-  h+=`<td>${tLT}</td><td>${tLE}</td><td>${tLM}</td><td>${tLH}</td><td>${tLE+tLM+tLH}</td><td class="sep"></td>`;
-  h+=`<td>${tAT}</td><td>${tAA}</td><td class="sep"></td><td>${tVT}</td><td>${tVA}</td><td></td></tr>`;
+  h+=`<td id="ft_tgt">${tTT}</td><td id="ft_e">${tTE}</td><td id="ft_m">${tTM}</td><td id="ft_h">${tTH}</td><td id="ft_t">${tTE+tTM+tTH}</td><td id="ft_l">${tTL}</td><td id="ft_c">${tTC}</td><td id="ft_ma">${tTMa}</td><td class="sep"></td>`;
+  h+=`<td id="fe_tgt">${tET}</td><td id="fe_e">${tEE}</td><td id="fe_m">${tEM}</td><td id="fe_h">${tEH}</td><td id="fe_t">${tEE+tEM+tEH}</td><td id="fe_l">${tEL}</td><td id="fe_c">${tEC}</td><td id="fe_ma">${tEMa}</td><td class="sep"></td>`;
+  h+=`<td id="fl_tgt">${tLT}</td><td id="fl_e">${tLE}</td><td id="fl_m">${tLM}</td><td id="fl_h">${tLH}</td><td id="fl_t">${tLE+tLM+tLH}</td><td class="sep"></td>`;
+  h+=`<td id="fa_tgt">${tAT}</td><td id="fa_a">${tAA}</td><td class="sep"></td><td id="fv_tgt">${tVT}</td><td id="fv_a">${tVA}</td><td></td></tr>`;
   h+=`</tbody></table></div></div>`;
   document.getElementById('tc').innerHTML=h;lucide.createIcons();
 }
