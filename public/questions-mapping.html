@@ -268,7 +268,12 @@ function rA(){
   lucide.createIcons();
 }
 
-function setupRT(){SB.channel('qm').on('postgres_changes',{event:'*',schema:'public'},()=>{load().then(()=>{rT();if(document.getElementById('p-analytics').classList.contains('active'))rA()})}).subscribe()}
+function setupRT(){SB.channel('qm').on('postgres_changes',{event:'*',schema:'public'},()=>{
+  // Don't re-render if user is actively editing an input
+  const active=document.activeElement;
+  if(active&&(active.tagName==='INPUT'||active.tagName==='SELECT'))return;
+  load().then(()=>{rT();if(document.getElementById('p-analytics').classList.contains('active'))rA()})
+}).subscribe()}
 load().then(()=>{setupRT();lucide.createIcons()});
 </script>
 </body>
