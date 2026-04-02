@@ -65,6 +65,9 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .i-tgt:focus{border-color:var(--purple)}
 .btn-x{background:var(--rB);color:var(--red);border:none;border-radius:6px;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto}
 .btn-x:hover{background:var(--red);color:#fff}
+.act-cell{display:flex;align-items:center;gap:3px;justify-content:center}
+.btn-mv{background:var(--bg2);color:var(--text3);border:1px solid var(--border);border-radius:5px;width:20px;height:20px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:.2s}
+.btn-mv:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
 .vg{color:var(--green);font-family:'JetBrains Mono';font-size:13px;font-weight:800}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2rem}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem;transition:border .3s;cursor:default;position:relative;overflow:hidden}
@@ -173,12 +176,24 @@ function updateTotals(){const sel=document.getElementById('cDrop').value;if(!sel
   Object.entries(ids).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.innerHTML=v});}
 async function addMod(cid){const r=await dbI('qm_modules',{course_id:cid,name:'New Module',sort_order:M.length,trainer_target:0,trainer_easy:0,trainer_medium:0,trainer_hard:0,trainer_leet:0,trainer_company:0,trainer_maya:0,trainee_target:0,trainee_easy:0,trainee_medium:0,trainee_hard:0,trainee_leet:0,trainee_company:0,trainee_maya:0,lab_target:0,lab_easy:0,lab_medium:0,lab_hard:0,articles_target:0,articles_added:0,videos_target:0,videos_added:0});if(r){M.push(r);rT();lucide.createIcons()}}
 async function delMod(id){await dbD('qm_modules',id);M=M.filter(r=>r.id!==id);rT();lucide.createIcons()}
+async function moveMod(id,dir){
+  const sel=document.getElementById('cDrop').value;if(!sel)return;
+  const cm=gg(M,sel).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  const idx=cm.findIndex(x=>x.id===id);if(idx<0)return;
+  const swapIdx=dir==='up'?idx-1:idx+1;
+  if(swapIdx<0||swapIdx>=cm.length)return;
+  const a=cm[idx],b=cm[swapIdx];
+  const tmpSort=a.sort_order;a.sort_order=b.sort_order;b.sort_order=tmpSort;
+  await SB.from('qm_modules').update({sort_order:a.sort_order}).eq('id',a.id);
+  await SB.from('qm_modules').update({sort_order:b.sort_order}).eq('id',b.id);
+  rT();lucide.createIcons();
+}
 
 function rT(){
   const sel=document.getElementById('cDrop').value;
   if(!sel){document.getElementById('tc').innerHTML='<div class="placeholder"><i data-lucide="mouse-pointer-click" style="width:32px;height:32px;display:block;margin:0 auto .8rem"></i>Select a course from the dropdown to view data</div>';lucide.createIcons();return}
   const c=C.find(x=>x.id===sel);if(!c)return;
-  const cm=gg(M,c.id);
+  const cm=gg(M,c.id).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
   let h=`<div class="csec"><div class="chdr"><h2>${c.name}</h2><span class="badge badge-p">${cm.length} Modules</span><span class="badge badge-g" style="margin-left:6px">Mentor: ${c.mentor}</span></div>`;
   h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:var(--purple)"><i data-lucide="book-open" style="width:16px;height:16px"></i> Questions Mapping</span><button class="btn-a" onclick="addMod('${c.id}')">+ Add Module</button></div>`;
   h+=`<table><thead><tr><th rowspan="2">#</th><th rowspan="2">Module</th>`;
@@ -201,7 +216,7 @@ function rT(){
     h+=`<td>${inp('lab_target',m.lab_target,'i-tgt')}</td><td>${inp('lab_easy',m.lab_easy)}</td><td>${inp('lab_medium',m.lab_medium)}</td><td>${inp('lab_hard',m.lab_hard)}</td><td class="vg" id="rl_${m.id}">${lT}</td><td class="sep"></td>`;
     h+=`<td>${inp('articles_target',m.articles_target,'i-tgt')}</td><td>${inp('articles_added',m.articles_added)}</td><td class="sep"></td>`;
     h+=`<td>${inp('videos_target',m.videos_target,'i-tgt')}</td><td>${inp('videos_added',m.videos_added)}</td>`;
-    h+=`<td><button class="btn-x" onclick="delMod(${m.id})">×</button></td></tr>`;
+    h+=`<td><div class="act-cell"><button class="btn-mv" onclick="moveMod(${m.id},'up')" ${i===0?'disabled style="opacity:0.3"':''}>▲</button><button class="btn-mv" onclick="moveMod(${m.id},'down')" ${i===cm.length-1?'disabled style="opacity:0.3"':''}>▼</button><button class="btn-x" onclick="delMod(${m.id})">×</button></div></td></tr>`;
   });
 
   const tTT=S(cm,'trainer_target'),tTE=S(cm,'trainer_easy'),tTM=S(cm,'trainer_medium'),tTH=S(cm,'trainer_hard'),tTL=S(cm,'trainer_leet'),tTC=S(cm,'trainer_company'),tTMa=S(cm,'trainer_maya');
