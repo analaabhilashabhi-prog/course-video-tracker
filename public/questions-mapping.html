@@ -58,8 +58,10 @@ tr:hover{background:var(--bg2)}
 tr.tot{background:var(--gB)}
 tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border-top:2px solid var(--green);font-size:13px}
 .sep{width:4px;background:var(--bg);border:none;padding:0}
-.i{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 4px;color:var(--text);font-size:12px;text-align:center;outline:none;font-family:'JetBrains Mono';font-weight:600;transition:border .2s;width:44px}
+.i{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:5px 4px;color:var(--text);font-size:12px;text-align:center;outline:none;font-family:'JetBrains Mono';font-weight:600;transition:all .2s;width:44px}
 .i:focus{border-color:var(--green)}
+.i-zero{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:var(--red)}
+.i-has{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);color:var(--green)}
 .i-n{font-family:'Inter';width:150px;text-align:left;font-weight:600;font-size:12px}
 .i-tgt{background:rgba(168,85,247,0.08);border-color:rgba(168,85,247,0.2);width:50px}
 .i-tgt:focus{border-color:var(--purple)}
@@ -160,7 +162,7 @@ async function load(){try{
   document.getElementById('ph').style.display='block';
 }catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}}
 
-function uM(id,f,v){const r=M.find(x=>x.id===id);if(!r)return;if(f==='name'){r.name=v;dbU('qm_modules',id,{name:v})}else{r[f]=Math.max(0,Number(v)||0);dbU('qm_modules',id,{[f]:r[f]})}updateTotals();}
+function uM(id,f,v,el){const r=M.find(x=>x.id===id);if(!r)return;if(f==='name'){r.name=v;dbU('qm_modules',id,{name:v})}else{r[f]=Math.max(0,Number(v)||0);dbU('qm_modules',id,{[f]:r[f]});if(el&&!el.classList.contains('i-tgt')){el.classList.remove('i-zero','i-has');el.classList.add(Number(v)?'i-has':'i-zero')}}updateTotals();}
 function updateTotals(){const sel=document.getElementById('cDrop').value;if(!sel)return;const cm=gg(M,sel);
   // Update per-row totals
   cm.forEach(m=>{const trT=m.trainer_easy+m.trainer_medium+m.trainer_hard;const teT=m.trainee_easy+m.trainee_medium+m.trainee_hard;const lT=m.lab_easy+m.lab_medium+m.lab_hard;
@@ -209,7 +211,7 @@ function rT(){
 
   cm.forEach((m,i)=>{
     const trT=m.trainer_easy+m.trainer_medium+m.trainer_hard,teT=m.trainee_easy+m.trainee_medium+m.trainee_hard,lT=m.lab_easy+m.lab_medium+m.lab_hard;
-    const inp=(f,v,cls='')=>`<input class="i ${cls}" type="number" min="0" value="${v||0}" onchange="uM(${m.id},'${f}',this.value)">`;
+    const inp=(f,v,cls='')=>{const vc=cls.includes('i-tgt')?cls:cls+' '+(Number(v)?'i-has':'i-zero');return `<input class="i ${vc}" type="number" min="0" value="${v||0}" onchange="uM(${m.id},'${f}',this.value,this)">`};
     h+=`<tr><td>${i+1}</td><td><input class="i i-n" value="${m.name}" onchange="uM(${m.id},'name',this.value)"></td>`;
     h+=`<td>${inp('trainer_target',m.trainer_target,'i-tgt')}</td><td>${inp('trainer_easy',m.trainer_easy)}</td><td>${inp('trainer_medium',m.trainer_medium)}</td><td>${inp('trainer_hard',m.trainer_hard)}</td><td class="vg" id="rt_${m.id}">${trT}</td><td>${inp('trainer_leet',m.trainer_leet)}</td><td>${inp('trainer_company',m.trainer_company)}</td><td>${inp('trainer_maya',m.trainer_maya)}</td><td class="sep"></td>`;
     h+=`<td>${inp('trainee_target',m.trainee_target,'i-tgt')}</td><td>${inp('trainee_easy',m.trainee_easy)}</td><td>${inp('trainee_medium',m.trainee_medium)}</td><td>${inp('trainee_hard',m.trainee_hard)}</td><td class="vg" id="re_${m.id}">${teT}</td><td>${inp('trainee_leet',m.trainee_leet)}</td><td>${inp('trainee_company',m.trainee_company)}</td><td>${inp('trainee_maya',m.trainee_maya)}</td><td class="sep"></td>`;
