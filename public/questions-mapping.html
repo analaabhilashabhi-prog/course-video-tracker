@@ -280,6 +280,7 @@ function rA(){
 
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Total Modules</div><div class="sc-v">${fm.length}</div><div class="sc-s">${afC().length} courses</div></div>
+    <div class="sc" style="--sc-clr:var(--text)"><div class="sc-l">Total Questions</div><div class="sc-v">${allQ}</div><div class="sc-s">Trainer + Trainee + Lab</div></div>
     <div class="sc" style="--sc-clr:var(--blue)"><div class="sc-l">Trainer Problems</div><div class="sc-v">${trT}</div><div class="sc-s">${trT} / ${tTT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(trT,tTT)}%;background:var(--blue)"></div></div></div>
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Trainee Problems</div><div class="sc-v">${teT}</div><div class="sc-s">${teT} / ${tET} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(teT,tET)}%;background:var(--green)"></div></div></div>
     <div class="sc" style="--sc-clr:var(--orange)"><div class="sc-l">Lab Problems</div><div class="sc-v">${lbT}</div><div class="sc-s">${lbT} / ${tLT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(lbT,tLT)}%;background:var(--orange)"></div></div></div>
