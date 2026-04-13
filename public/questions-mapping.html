@@ -97,6 +97,20 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
 .cf button:hover{background:var(--card2);color:var(--text);border-color:var(--green)}
 .cf button.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}
 .cf button .cn{display:inline-block;margin-left:.35rem;padding:.1rem .45rem;background:rgba(0,0,0,0.15);border-radius:100px;font-size:.75rem;font-family:'JetBrains Mono';font-weight:700}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem}
+.bc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;transition:border .3s;overflow:hidden}
+.bc:hover{border-color:var(--green)}
+.bc-h{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+.bc-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:#fff}
+.bc-name{font-weight:800;font-size:1.15rem}
+.bc-role{font-size:.8rem;color:var(--text3);margin-top:2px}
+.bc-st{display:grid;gap:.4rem;text-align:center}
+.bc-s{padding:.45rem;background:var(--bg2);border-radius:8px}
+.bc-sv{font-family:'JetBrains Mono';font-weight:900;font-size:1.15rem;white-space:nowrap}
+.bc-sl{font-size:.72rem;color:var(--text3);text-transform:uppercase;margin-top:2px;font-weight:600}
+.bc-bar{width:100%;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;margin-top:.7rem}
+.bc-fill{height:100%;border-radius:3px;transition:width .5s}
+.bc-contrib{display:inline-flex;align-items:center;gap:4px;margin-top:.5rem;padding:.3rem .7rem;border-radius:6px;font-size:.78rem;font-weight:700;background:var(--purpleB);color:var(--purple)}
 .chart-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem 2rem;margin-bottom:2rem}
 .chart-bars{display:flex;flex-direction:column;gap:14px}
 .chart-row{display:flex;align-items:center;height:30px;position:relative}
@@ -134,6 +148,12 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div class="cf" id="cfR"></div>
   <div class="sh"><h2><i data-lucide="activity" style="width:20px;height:20px"></i> Content Progress</h2></div>
   <div class="chart-sec"><div class="chart-bars" id="chartBars"></div></div>
+  <div class="sh"><h2><i data-lucide="layers" style="width:20px;height:20px"></i> Complexity Breakdown</h2></div>
+  <div class="pg" id="complexCards"></div>
+  <div class="sh"><h2><i data-lucide="map-pin" style="width:20px;height:20px"></i> Source Mapping</h2></div>
+  <div class="pg" id="sourceCards"></div>
+  <div class="sh"><h2><i data-lucide="split" style="width:20px;height:20px"></i> Individual Section Complexity</h2></div>
+  <div class="pg" id="indivCards"></div>
 </div>
 </div>
 <script>
@@ -247,6 +267,16 @@ function rA(){
   const lbT=fm.reduce((s,m)=>s+m.lab_easy+m.lab_medium+m.lab_hard,0);
   const tTT=S(fm,'trainer_target'),tET=S(fm,'trainee_target'),tLT=S(fm,'lab_target');
   const tAT=S(fm,'articles_target'),tAA=S(fm,'articles_added'),tVT=S(fm,'videos_target'),tVA=S(fm,'videos_added');
+  // Complexity totals
+  const allE=S(fm,'trainer_easy')+S(fm,'trainee_easy')+S(fm,'lab_easy');
+  const allM=S(fm,'trainer_medium')+S(fm,'trainee_medium')+S(fm,'lab_medium');
+  const allH=S(fm,'trainer_hard')+S(fm,'trainee_hard')+S(fm,'lab_hard');
+  const allQ=allE+allM+allH;
+  // Source totals
+  const allLeet=S(fm,'trainer_leet')+S(fm,'trainee_leet');
+  const allCo=S(fm,'trainer_company')+S(fm,'trainee_company');
+  const allMaya=S(fm,'trainer_maya')+S(fm,'trainee_maya');
+  const allSrc=allLeet+allCo+allMaya;
 
   document.getElementById('kpi').innerHTML=`
     <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Total Modules</div><div class="sc-v">${fm.length}</div><div class="sc-s">${afC().length} courses</div></div>
@@ -254,9 +284,15 @@ function rA(){
     <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Trainee Problems</div><div class="sc-v">${teT}</div><div class="sc-s">${teT} / ${tET} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(teT,tET)}%;background:var(--green)"></div></div></div>
     <div class="sc" style="--sc-clr:var(--orange)"><div class="sc-l">Lab Problems</div><div class="sc-v">${lbT}</div><div class="sc-s">${lbT} / ${tLT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(lbT,tLT)}%;background:var(--orange)"></div></div></div>
     <div class="sc" style="--sc-clr:var(--yellow)"><div class="sc-l">Articles</div><div class="sc-v">${tAA}</div><div class="sc-s">${tAA} / ${tAT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(tAA,tAT)}%;background:var(--yellow)"></div></div></div>
-    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Videos</div><div class="sc-v">${tVA}</div><div class="sc-s">${tVA} / ${tVT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(tVA,tVT)}%;background:var(--purple)"></div></div></div>`;
+    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Videos</div><div class="sc-v">${tVA}</div><div class="sc-s">${tVA} / ${tVT} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(tVA,tVT)}%;background:var(--purple)"></div></div></div>
+    <div class="sc" style="--sc-clr:#22c55e"><div class="sc-l">Easy</div><div class="sc-v">${allE}</div><div class="sc-s">${pct(allE,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#eab308"><div class="sc-l">Medium</div><div class="sc-v">${allM}</div><div class="sc-s">${pct(allM,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#ef4444"><div class="sc-l">Hard</div><div class="sc-v">${allH}</div><div class="sc-s">${pct(allH,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#3b82f6"><div class="sc-l">LeetCode</div><div class="sc-v">${allLeet}</div><div class="sc-s">${pct(allLeet,allSrc)}% of ${allSrc}</div></div>
+    <div class="sc" style="--sc-clr:#a855f7"><div class="sc-l">Company</div><div class="sc-v">${allCo}</div><div class="sc-s">${pct(allCo,allSrc)}% of ${allSrc}</div></div>
+    <div class="sc" style="--sc-clr:#f97316"><div class="sc-l">Maya</div><div class="sc-v">${allMaya}</div><div class="sc-s">${pct(allMaya,allSrc)}% of ${allSrc}</div></div>`;
 
-  // Mentors - group by mentor
+  // Mentors
   const mentors={};C.forEach(c=>{if(!mentors[c.mentor])mentors[c.mentor]=[];mentors[c.mentor].push(c)});
   let mh='';Object.entries(mentors).forEach(([name,courses])=>{
     mh+=`<div class="mentor-card"><div class="mc-h"><div class="mc-av">${I(name)}</div><div><div class="mc-name">${name}</div><div class="mc-role">Course Mentor</div></div></div><div class="mc-courses">`;
@@ -265,10 +301,12 @@ function rA(){
   });
   document.getElementById('mentorGrid').innerHTML=mh;
 
+  // Filter
   let cf=`<button class="${aF==='all'?'active':''}" onclick="sAF('all')">All Courses <span class="cn">${M.length}</span></button>`;
   C.forEach(c=>{cf+=`<button class="${aF===c.id?'active':''}" onclick="sAF('${c.id}')">${c.name} <span class="cn">${gg(M,c.id).length}</span></button>`});
   document.getElementById('cfR').innerHTML=cf;
 
+  // Content progress chart
   const sections=[
     {label:'Trainer Problems',done:trT,of:tTT,icon:'brain'},
     {label:'Trainee Problems',done:teT,of:tET,icon:'graduation-cap'},
@@ -282,6 +320,60 @@ function rA(){
     ch+=`<div class="chart-row"><div class="chart-icon"><i data-lucide="${s.icon}" style="width:14px;height:14px;color:var(--text)"></i></div><div class="chart-pill-bg"><div class="chart-pill-fill" style="width:${fillW}%;background:rgba(34,197,94,0.25)"><span class="chart-pill-label">${s.label}</span><span class="chart-pill-pct">${p}%</span></div></div><div class="chart-count">${s.done} / ${s.of}</div></div>`;
   });
   document.getElementById('chartBars').innerHTML=ch;
+
+  // Complexity breakdown cards (Easy, Medium, Hard)
+  const trE=S(fm,'trainer_easy'),trM=S(fm,'trainer_medium'),trH=S(fm,'trainer_hard');
+  const teE=S(fm,'trainee_easy'),teM=S(fm,'trainee_medium'),teH=S(fm,'trainee_hard');
+  const lbE=S(fm,'lab_easy'),lbM=S(fm,'lab_medium'),lbH=S(fm,'lab_hard');
+  const cplx=[
+    {name:'Easy',val:allE,clr:'#22c55e',trn:trE,tee:teE,lab:lbE},
+    {name:'Medium',val:allM,clr:'#eab308',trn:trM,tee:teM,lab:lbM},
+    {name:'Hard',val:allH,clr:'#ef4444',trn:trH,tee:teH,lab:lbH}
+  ];
+  let cc='';
+  cplx.forEach(c=>{
+    const p=pct(c.val,allQ);
+    cc+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${c.clr}">${c.name[0]}</div><div><div class="bc-name">${c.name}</div><div class="bc-role">Complexity Level</div></div></div>`;
+    cc+=`<div class="bc-st" style="grid-template-columns:repeat(4,1fr)"><div class="bc-s"><div class="bc-sv" style="color:var(--blue)">${c.trn}</div><div class="bc-sl">Trainer</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--green)">${c.tee}</div><div class="bc-sl">Trainee</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--orange)">${c.lab}</div><div class="bc-sl">Lab</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${c.val}</div><div class="bc-sl">Total</div></div></div>`;
+    cc+=`<div class="bc-bar"><div class="bc-fill" style="width:${p}%;background:${c.clr}"></div></div>`;
+    cc+=`<div class="bc-contrib"><i data-lucide="pie-chart" style="width:12px;height:12px"></i> ${p}% contribution (${c.val}/${allQ})</div></div>`;
+  });
+  document.getElementById('complexCards').innerHTML=cc;
+
+  // Source mapping cards (LeetCode, Company, Maya)
+  const trL=S(fm,'trainer_leet'),trC=S(fm,'trainer_company'),trMa=S(fm,'trainer_maya');
+  const teL=S(fm,'trainee_leet'),teC=S(fm,'trainee_company'),teMa=S(fm,'trainee_maya');
+  const srcs=[
+    {name:'LeetCode',val:allLeet,clr:'#3b82f6',trn:trL,tee:teL},
+    {name:'Company',val:allCo,clr:'#a855f7',trn:trC,tee:teC},
+    {name:'Maya',val:allMaya,clr:'#f97316',trn:trMa,tee:teMa}
+  ];
+  let sc2='';
+  srcs.forEach(s=>{
+    const p=pct(s.val,allSrc);
+    sc2+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${s.clr}">${s.name[0]}</div><div><div class="bc-name">${s.name}</div><div class="bc-role">Question Source</div></div></div>`;
+    sc2+=`<div class="bc-st" style="grid-template-columns:repeat(3,1fr)"><div class="bc-s"><div class="bc-sv" style="color:var(--blue)">${s.trn}</div><div class="bc-sl">Trainer</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--green)">${s.tee}</div><div class="bc-sl">Trainee</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${s.val}</div><div class="bc-sl">Total</div></div></div>`;
+    sc2+=`<div class="bc-bar"><div class="bc-fill" style="width:${p}%;background:${s.clr}"></div></div>`;
+    sc2+=`<div class="bc-contrib"><i data-lucide="pie-chart" style="width:12px;height:12px"></i> ${p}% contribution (${s.val}/${allSrc})</div></div>`;
+  });
+  document.getElementById('sourceCards').innerHTML=sc2;
+
+  // Individual section complexity cards (Trainer, Trainee, Lab)
+  const indiv=[
+    {name:'Trainer',total:trT,clr:'var(--blue)',e:trE,m:trM,h:trH},
+    {name:'Trainee',total:teT,clr:'var(--green)',e:teE,m:teM,h:teH},
+    {name:'Lab',total:lbT,clr:'var(--orange)',e:lbE,m:lbM,h:lbH}
+  ];
+  let ic='';
+  indiv.forEach(v=>{
+    ic+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${v.clr}">${v.name[0]}</div><div><div class="bc-name">${v.name}</div><div class="bc-role">Section Breakdown</div></div></div>`;
+    ic+=`<div class="bc-st" style="grid-template-columns:repeat(4,1fr)"><div class="bc-s"><div class="bc-sv" style="color:#22c55e">${v.e}</div><div class="bc-sl">Easy</div></div><div class="bc-s"><div class="bc-sv" style="color:#eab308">${v.m}</div><div class="bc-sl">Medium</div></div><div class="bc-s"><div class="bc-sv" style="color:#ef4444">${v.h}</div><div class="bc-sl">Hard</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${v.total}</div><div class="bc-sl">Total</div></div></div>`;
+    const ep=pct(v.e,v.total),mp=pct(v.m,v.total),hp=pct(v.h,v.total);
+    ic+=`<div style="display:flex;gap:2px;height:5px;border-radius:3px;overflow:hidden;margin-top:.7rem"><div style="width:${ep}%;background:#22c55e;border-radius:3px 0 0 3px"></div><div style="width:${mp}%;background:#eab308"></div><div style="width:${hp}%;background:#ef4444;border-radius:0 3px 3px 0"></div></div>`;
+    ic+=`<div style="display:flex;gap:8px;margin-top:.5rem;font-size:.72rem;font-weight:600;color:var(--text3)"><span style="color:#22c55e">${ep}% E</span><span style="color:#eab308">${mp}% M</span><span style="color:#ef4444">${hp}% H</span></div></div>`;
+  });
+  document.getElementById('indivCards').innerHTML=ic;
+
   lucide.createIcons();
 }
 
