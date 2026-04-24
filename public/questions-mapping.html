@@ -129,7 +129,7 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div class="nav-brand"><div class="nav-logo"><i data-lucide="book-open" style="width:20px;height:20px;color:#fff"></i></div><div><h1>Questions Mapping</h1><small>Questions Mapping Dashboard</small></div></div>
   <div class="nav-r">
     <a href="index.html" class="back-link"><i data-lucide="home" style="width:14px;height:14px"></i> Home</a>
-    <div class="tog"><button class="active" onclick="sp('tables')"><i data-lucide="table" style="width:14px;height:14px"></i> Data Tables</button><button onclick="sp('analytics')"><i data-lucide="bar-chart-3" style="width:14px;height:14px"></i> Analytics</button></div>
+    <div class="tog"><button class="active" onclick="sp('tables')"><i data-lucide="table" style="width:14px;height:14px"></i> Questions Mapping</button><button onclick="sp('selflearn')"><i data-lucide="book-marked" style="width:14px;height:14px"></i> Self Learning</button><button onclick="sp('analytics')"><i data-lucide="bar-chart-3" style="width:14px;height:14px"></i> Analytics</button></div>
     <button class="thm" onclick="toggleTheme()" title="Toggle Theme"><i data-lucide="sun" style="width:18px;height:18px" id="thI"></i></button>
     <span class="sync saved" id="ss"><i data-lucide="check-circle" style="width:12px;height:12px"></i> Synced</span>
   </div>
@@ -140,7 +140,12 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div class="loading" id="tl"><div class="spinner"></div>Loading from database...</div>
   <div id="tc"><div class="placeholder" id="ph"><i data-lucide="mouse-pointer-click" style="width:32px;height:32px;display:block;margin:0 auto .8rem"></i>Select a course from the dropdown to view data</div></div>
 </div>
+<div id="p-selflearn" class="page">
+  <div id="slc"></div>
+</div>
 <div id="p-analytics" class="page">
+  <div style="margin-bottom:1.5rem"><div class="tog" id="aTog"><button class="active" onclick="setAMode('qm')"><i data-lucide="table" style="width:14px;height:14px"></i> Questions Mapping</button><button onclick="setAMode('sl')"><i data-lucide="book-marked" style="width:14px;height:14px"></i> Self Learning</button></div></div>
+  <div id="aQM">
   <div class="sg" id="kpi"></div>
   <div class="sh"><h2><i data-lucide="users" style="width:20px;height:20px"></i> Mentor Assignments</h2></div>
   <div class="mentor-grid" id="mentorGrid"></div>
@@ -154,15 +159,27 @@ tr.tot td{font-weight:800;font-family:'JetBrains Mono';color:var(--green);border
   <div class="pg" id="sourceCards"></div>
   <div class="sh"><h2><i data-lucide="split" style="width:20px;height:20px"></i> Individual Section Complexity</h2></div>
   <div class="pg" id="indivCards"></div>
+  </div>
+  <div id="aSL" style="display:none">
+    <div class="sg" id="slKpi"></div>
+    <div class="sh"><h2><i data-lucide="layers" style="width:20px;height:20px"></i> Complexity Breakdown</h2></div>
+    <div class="pg" id="slComplexCards"></div>
+    <div class="sh"><h2><i data-lucide="map-pin" style="width:20px;height:20px"></i> Source Mapping</h2></div>
+    <div class="pg" id="slSourceCards"></div>
+    <div class="sh"><h2><i data-lucide="split" style="width:20px;height:20px"></i> Level-wise Complexity</h2></div>
+    <div class="pg" id="slLevelCards"></div>
+  </div>
 </div>
 </div>
 <script>
 function toggleTheme(){const h=document.documentElement,c=h.getAttribute('data-theme');h.setAttribute('data-theme',c==='dark'?'light':'dark');document.getElementById('thI').setAttribute('data-lucide',c==='dark'?'moon':'sun');lucide.createIcons()}
-function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Tables'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='analytics')rA();lucide.createIcons()}
+function sp(pg){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+pg).classList.add('active');document.querySelectorAll('.nav .tog button').forEach(b=>{b.classList.remove('active');if((pg==='tables'&&b.textContent.includes('Questions'))||(pg==='selflearn'&&b.textContent.includes('Self'))||(pg==='analytics'&&b.textContent.includes('Analytics')))b.classList.add('active')});if(pg==='selflearn')rSL();if(pg==='analytics'){if(aMode==='sl')rSLA();else rA()}lucide.createIcons()}
+let aMode='qm';
+function setAMode(m){aMode=m;document.querySelectorAll('#aTog button').forEach(b=>{b.classList.remove('active');if((m==='qm'&&b.textContent.includes('Questions'))||(m==='sl'&&b.textContent.includes('Self')))b.classList.add('active')});document.getElementById('aQM').style.display=m==='qm'?'block':'none';document.getElementById('aSL').style.display=m==='sl'?'block':'none';if(m==='sl')rSLA();else rA();lucide.createIcons()}
 
 let SB;try{const s=window.supabase||window.Supabase;SB=s.createClient('https://fsiqglbfrxmseetbbztf.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzaXFnbGJmcnhtc2VldGJienRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNDExODQsImV4cCI6MjA4ODcxNzE4NH0.QbQ0X6wVs6uJqDuxYTw7VuC9K0t-T4PH0u0f1XEmT5M')}catch(e){document.getElementById('tl').innerHTML='<div style="color:var(--red)">'+e.message+'</div>'}
 
-let C=[],M=[];
+let C=[],M=[],SL=[];
 const sy=s=>{const e=document.getElementById('ss');e.className='sync '+s;e.innerHTML=s==='saving'?'Saving...':'<i data-lucide="check-circle" style="width:12px;height:12px"></i> Synced';lucide.createIcons()};
 let st;const dbU=async(t,id,d)=>{sy('saving');clearTimeout(st);await SB.from(t).update(d).eq('id',id);st=setTimeout(()=>sy('saved'),500)};
 const dbI=async(t,d)=>{sy('saving');const{data:r}=await SB.from(t).insert(d).select();sy('saved');return r?.[0]};
@@ -173,9 +190,9 @@ const pct=(a,b)=>b>0?Math.round((a/b)*100):0;
 const I=n=>n?n.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase():'?';
 
 async function load(){try{
-  const a=await SB.from('qm_courses').select('*').order('sort_order'),b=await SB.from('qm_modules').select('*').order('sort_order');
+  const a=await SB.from('qm_courses').select('*').order('sort_order'),b=await SB.from('qm_modules').select('*').order('sort_order'),c=await SB.from('sl_modules').select('*').order('sort_order');
   if(a.error)throw new Error(a.error.message);
-  C=a.data||[];M=b.data||[];
+  C=a.data||[];M=b.data||[];SL=c.data||[];
   const dd=document.getElementById('cDrop');dd.innerHTML='<option value="">Select a Course</option>';
   C.forEach(c=>{dd.innerHTML+=`<option value="${c.id}">${c.name}</option>`});
   document.getElementById('tl').style.display='none';
@@ -379,11 +396,88 @@ function rA(){
 }
 
 function setupRT(){SB.channel('qm').on('postgres_changes',{event:'*',schema:'public'},()=>{
-  // Don't re-render if user is actively editing an input
   const active=document.activeElement;
   if(active&&(active.tagName==='INPUT'||active.tagName==='SELECT'))return;
-  load().then(()=>{rT();if(document.getElementById('p-analytics').classList.contains('active'))rA()})
+  load().then(()=>{rT();rSL();if(document.getElementById('p-analytics').classList.contains('active')){if(aMode==='sl')rSLA();else rA()}})
 }).subscribe()}
+
+// ═══ SELF BASED LEARNING ═══
+function uSL(id,f,v,el){const r=SL.find(x=>x.id===id);if(!r)return;if(f==='name'){r.name=v;dbU('sl_modules',id,{name:v})}else{r[f]=Math.max(0,Number(v)||0);dbU('sl_modules',id,{[f]:r[f]});if(el){el.classList.remove('i-zero','i-has');el.classList.add(Number(v)?'i-has':'i-zero')}}updateSLTotals()}
+function updateSLTotals(){['beginner','intermediate','advanced'].forEach(lv=>{const items=SL.filter(x=>x.level===lv);
+  items.forEach(m=>{const t=m.easy+m.medium+m.hard;const el=document.getElementById('slt_'+m.id);if(el)el.innerHTML=t});
+  const tE=S(items,'easy'),tM=S(items,'medium'),tH=S(items,'hard'),tL=S(items,'leet'),tC=S(items,'company'),tMa=S(items,'maya'),tTgt=S(items,'target');
+  const ids2={['sf_tgt_'+lv]:tTgt,['sf_e_'+lv]:tE,['sf_m_'+lv]:tM,['sf_h_'+lv]:tH,['sf_t_'+lv]:tE+tM+tH,['sf_l_'+lv]:tL,['sf_c_'+lv]:tC,['sf_ma_'+lv]:tMa};
+  Object.entries(ids2).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.innerHTML=v})})}
+
+async function addSLMod(lv){const r=await dbI('sl_modules',{level:lv,name:'New Module',sort_order:SL.length,target:0,easy:0,medium:0,hard:0,leet:0,company:0,maya:0});if(r){SL.push(r);rSL();lucide.createIcons()}}
+async function delSLMod(id){await dbD('sl_modules',id);SL=SL.filter(r=>r.id!==id);rSL();lucide.createIcons()}
+async function moveSLMod(id,dir){const m=SL.find(x=>x.id===id);if(!m)return;const lvItems=SL.filter(x=>x.level===m.level).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));const idx=lvItems.findIndex(x=>x.id===id);const swapIdx=dir==='up'?idx-1:idx+1;if(swapIdx<0||swapIdx>=lvItems.length)return;const a=lvItems[idx],b=lvItems[swapIdx];const tmp=a.sort_order;a.sort_order=b.sort_order;b.sort_order=tmp;await SB.from('sl_modules').update({sort_order:a.sort_order}).eq('id',a.id);await SB.from('sl_modules').update({sort_order:b.sort_order}).eq('id',b.id);rSL();lucide.createIcons()}
+
+function rSL(){
+  const levels=[{key:'beginner',label:'Beginner',clr:'var(--green)',icon:'seedling'},{key:'intermediate',label:'Intermediate',clr:'var(--yellow)',icon:'flame'},{key:'advanced',label:'Advanced',clr:'var(--red)',icon:'rocket'}];
+  let h='';
+  levels.forEach(lv=>{
+    const items=SL.filter(x=>x.level===lv.key).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+    h+=`<div class="csec"><div class="chdr"><h2 style="color:${lv.clr}">${lv.label}</h2><span class="badge" style="background:${lv.clr}20;color:${lv.clr}">${items.length} Modules</span></div>`;
+    h+=`<div class="stg"><div class="stg-h"><span class="stg-l" style="color:${lv.clr}"><i data-lucide="${lv.icon}" style="width:16px;height:16px"></i> ${lv.label} Problems</span><button class="btn-a" onclick="addSLMod('${lv.key}')">+ Add Module</button></div>`;
+    h+=`<table><thead><tr><th>#</th><th>Module</th><th>Target</th><th>E</th><th>M</th><th>H</th><th>Total</th><td class="sep"></td><th>Leet</th><th>Co.</th><th>Maya</th><th></th></tr></thead><tbody>`;
+    items.forEach((m,i)=>{
+      const t=m.easy+m.medium+m.hard;
+      const inp=(f,v,cls='')=>{const vc=cls.includes('i-tgt')?cls:cls+' '+(Number(v)?'i-has':'i-zero');return `<input class="i ${vc}" type="number" min="0" value="${v||0}" onchange="uSL(${m.id},'${f}',this.value,this)">`};
+      h+=`<tr><td>${i+1}</td><td><input class="i i-n" value="${m.name}" onchange="uSL(${m.id},'name',this.value)"></td>`;
+      h+=`<td>${inp('target',m.target,'i-tgt')}</td><td>${inp('easy',m.easy)}</td><td>${inp('medium',m.medium)}</td><td>${inp('hard',m.hard)}</td><td class="vg" id="slt_${m.id}">${t}</td><td class="sep"></td>`;
+      h+=`<td>${inp('leet',m.leet)}</td><td>${inp('company',m.company)}</td><td>${inp('maya',m.maya)}</td>`;
+      h+=`<td><div class="act-cell"><button class="btn-mv" onclick="moveSLMod(${m.id},'up')" ${i===0?'disabled style="opacity:0.3"':''}>▲</button><button class="btn-mv" onclick="moveSLMod(${m.id},'down')" ${i===items.length-1?'disabled style="opacity:0.3"':''}>▼</button><button class="btn-x" onclick="delSLMod(${m.id})">×</button></div></td></tr>`;
+    });
+    const tTgt=S(items,'target'),tE=S(items,'easy'),tM=S(items,'medium'),tH=S(items,'hard'),tL=S(items,'leet'),tC=S(items,'company'),tMa=S(items,'maya');
+    h+=`<tr class="tot"><td></td><td>TOTAL</td><td id="sf_tgt_${lv.key}">${tTgt}</td><td id="sf_e_${lv.key}">${tE}</td><td id="sf_m_${lv.key}">${tM}</td><td id="sf_h_${lv.key}">${tH}</td><td id="sf_t_${lv.key}">${tE+tM+tH}</td><td class="sep"></td><td id="sf_l_${lv.key}">${tL}</td><td id="sf_c_${lv.key}">${tC}</td><td id="sf_ma_${lv.key}">${tMa}</td><td></td></tr>`;
+    h+=`</tbody></table></div></div>`;
+  });
+  document.getElementById('slc').innerHTML=h;lucide.createIcons();
+}
+
+// ═══ SELF LEARNING ANALYTICS ═══
+function rSLA(){
+  const allE=S(SL,'easy'),allM=S(SL,'medium'),allH=S(SL,'hard');
+  const allQ=allE+allM+allH;
+  const allLeet=S(SL,'leet'),allCo=S(SL,'company'),allMaya=S(SL,'maya');
+  const allSrc=allLeet+allCo+allMaya;
+  const allTgt=S(SL,'target');
+  const beg=SL.filter(x=>x.level==='beginner'),inter=SL.filter(x=>x.level==='intermediate'),adv=SL.filter(x=>x.level==='advanced');
+  const begT=beg.reduce((s,m)=>s+m.easy+m.medium+m.hard,0),interT=inter.reduce((s,m)=>s+m.easy+m.medium+m.hard,0),advT=adv.reduce((s,m)=>s+m.easy+m.medium+m.hard,0);
+
+  document.getElementById('slKpi').innerHTML=`
+    <div class="sc" style="--sc-clr:var(--purple)"><div class="sc-l">Total Modules</div><div class="sc-v">${SL.length}</div><div class="sc-s">3 levels</div></div>
+    <div class="sc" style="--sc-clr:var(--text)"><div class="sc-l">Total Questions</div><div class="sc-v">${allQ}</div><div class="sc-s">${allQ} / ${allTgt} target</div><div class="sc-bar"><div class="sc-fill" style="width:${pct(allQ,allTgt)}%;background:var(--green)"></div></div></div>
+    <div class="sc" style="--sc-clr:var(--green)"><div class="sc-l">Beginner</div><div class="sc-v">${begT}</div><div class="sc-s">${beg.length} modules</div></div>
+    <div class="sc" style="--sc-clr:var(--yellow)"><div class="sc-l">Intermediate</div><div class="sc-v">${interT}</div><div class="sc-s">${inter.length} modules</div></div>
+    <div class="sc" style="--sc-clr:var(--red)"><div class="sc-l">Advanced</div><div class="sc-v">${advT}</div><div class="sc-s">${adv.length} modules</div></div>
+    <div class="sc" style="--sc-clr:#22c55e"><div class="sc-l">Easy</div><div class="sc-v">${allE}</div><div class="sc-s">${pct(allE,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#eab308"><div class="sc-l">Medium</div><div class="sc-v">${allM}</div><div class="sc-s">${pct(allM,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#ef4444"><div class="sc-l">Hard</div><div class="sc-v">${allH}</div><div class="sc-s">${pct(allH,allQ)}% of ${allQ}</div></div>
+    <div class="sc" style="--sc-clr:#3b82f6"><div class="sc-l">LeetCode</div><div class="sc-v">${allLeet}</div><div class="sc-s">${pct(allLeet,allSrc)}% of ${allSrc}</div></div>
+    <div class="sc" style="--sc-clr:#a855f7"><div class="sc-l">Company</div><div class="sc-v">${allCo}</div><div class="sc-s">${pct(allCo,allSrc)}% of ${allSrc}</div></div>
+    <div class="sc" style="--sc-clr:#f97316"><div class="sc-l">Maya</div><div class="sc-v">${allMaya}</div><div class="sc-s">${pct(allMaya,allSrc)}% of ${allSrc}</div></div>`;
+
+  // Complexity cards
+  const cplx=[{name:'Easy',clr:'#22c55e',beg:S(beg,'easy'),inter:S(inter,'easy'),adv:S(adv,'easy'),val:allE},{name:'Medium',clr:'#eab308',beg:S(beg,'medium'),inter:S(inter,'medium'),adv:S(adv,'medium'),val:allM},{name:'Hard',clr:'#ef4444',beg:S(beg,'hard'),inter:S(inter,'hard'),adv:S(adv,'hard'),val:allH}];
+  let cc='';cplx.forEach(c=>{const p=pct(c.val,allQ);
+    cc+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${c.clr}">${c.name[0]}</div><div><div class="bc-name">${c.name}</div><div class="bc-role">Complexity Level</div></div></div><div class="bc-st" style="grid-template-columns:repeat(4,1fr)"><div class="bc-s"><div class="bc-sv" style="color:var(--green)">${c.beg}</div><div class="bc-sl">Beginner</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--yellow)">${c.inter}</div><div class="bc-sl">Intermediate</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--red)">${c.adv}</div><div class="bc-sl">Advanced</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${c.val}</div><div class="bc-sl">Total</div></div></div><div class="bc-bar"><div class="bc-fill" style="width:${p}%;background:${c.clr}"></div></div><div class="bc-contrib"><i data-lucide="pie-chart" style="width:12px;height:12px"></i> ${p}% contribution (${c.val}/${allQ})</div></div>`;
+  });document.getElementById('slComplexCards').innerHTML=cc;
+
+  // Source cards
+  const srcs=[{name:'LeetCode',clr:'#3b82f6',beg:S(beg,'leet'),inter:S(inter,'leet'),adv:S(adv,'leet'),val:allLeet},{name:'Company',clr:'#a855f7',beg:S(beg,'company'),inter:S(inter,'company'),adv:S(adv,'company'),val:allCo},{name:'Maya',clr:'#f97316',beg:S(beg,'maya'),inter:S(inter,'maya'),adv:S(adv,'maya'),val:allMaya}];
+  let sc2='';srcs.forEach(s=>{const p=pct(s.val,allSrc);
+    sc2+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${s.clr}">${s.name[0]}</div><div><div class="bc-name">${s.name}</div><div class="bc-role">Question Source</div></div></div><div class="bc-st" style="grid-template-columns:repeat(4,1fr)"><div class="bc-s"><div class="bc-sv" style="color:var(--green)">${s.beg}</div><div class="bc-sl">Beginner</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--yellow)">${s.inter}</div><div class="bc-sl">Intermediate</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--red)">${s.adv}</div><div class="bc-sl">Advanced</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${s.val}</div><div class="bc-sl">Total</div></div></div><div class="bc-bar"><div class="bc-fill" style="width:${p}%;background:${s.clr}"></div></div><div class="bc-contrib"><i data-lucide="pie-chart" style="width:12px;height:12px"></i> ${p}% contribution (${s.val}/${allSrc})</div></div>`;
+  });document.getElementById('slSourceCards').innerHTML=sc2;
+
+  // Level cards
+  const lvls=[{name:'Beginner',clr:'var(--green)',items:beg,total:begT},{name:'Intermediate',clr:'var(--yellow)',items:inter,total:interT},{name:'Advanced',clr:'var(--red)',items:adv,total:advT}];
+  let lc='';lvls.forEach(v=>{const e=S(v.items,'easy'),m=S(v.items,'medium'),h=S(v.items,'hard');const ep=pct(e,v.total),mp=pct(m,v.total),hp=pct(h,v.total);
+    lc+=`<div class="bc"><div class="bc-h"><div class="bc-av" style="background:${v.clr}">${v.name[0]}</div><div><div class="bc-name">${v.name}</div><div class="bc-role">Level Breakdown</div></div></div><div class="bc-st" style="grid-template-columns:repeat(4,1fr)"><div class="bc-s"><div class="bc-sv" style="color:#22c55e">${e}</div><div class="bc-sl">Easy</div></div><div class="bc-s"><div class="bc-sv" style="color:#eab308">${m}</div><div class="bc-sl">Medium</div></div><div class="bc-s"><div class="bc-sv" style="color:#ef4444">${h}</div><div class="bc-sl">Hard</div></div><div class="bc-s"><div class="bc-sv" style="color:var(--text)">${v.total}</div><div class="bc-sl">Total</div></div></div><div style="display:flex;gap:2px;height:5px;border-radius:3px;overflow:hidden;margin-top:.7rem"><div style="width:${ep}%;background:#22c55e;border-radius:3px 0 0 3px"></div><div style="width:${mp}%;background:#eab308"></div><div style="width:${hp}%;background:#ef4444;border-radius:0 3px 3px 0"></div></div><div style="display:flex;gap:8px;margin-top:.5rem;font-size:.72rem;font-weight:600;color:var(--text3)"><span style="color:#22c55e">${ep}% E</span><span style="color:#eab308">${mp}% M</span><span style="color:#ef4444">${hp}% H</span></div></div>`;
+  });document.getElementById('slLevelCards').innerHTML=lc;
+  lucide.createIcons();
+}
 load().then(()=>{setupRT();lucide.createIcons()});
 </script>
 </body>
